@@ -87,5 +87,9 @@ dependencies {
     implementation(libs.auth.kt)
     implementation(libs.storage.kt)
 
+    // MVVM
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+
     implementation(libs.ktor.client.android)
 }
