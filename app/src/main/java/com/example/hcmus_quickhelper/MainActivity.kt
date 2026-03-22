@@ -14,34 +14,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-
-        testPaymentFragment()
-//        testSupabaseConnection()
-    }
-
-    private fun testPaymentFragment() {
-        val paymentFragment = PaymentFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frameLayout, paymentFragment)
-            .commit()
-    }
-    private fun testSupabaseConnection() {
-        lifecycleScope.launch {
-            try {
-                val data = SupabaseClient.client
-                    .from("users")
-                    .select()
-                    .decodeList<User>()
-
-                if (data.isNotEmpty()) {
-                    Log.d("SUPABASE_TEST", "Thành công! User đầu tiên: ${data[0].fullname} - Email: ${data[0].email}")
-                } else {
-                    Log.d("SUPABASE_TEST", "Kết nối OK nhưng bảng 'users' hiện đang trống.")
-                }
-            } catch (e: Exception) {
-                Log.e("SUPABASE_TEST", "Lỗi: ${e.message}")
-                e.printStackTrace()
-            }
-        }
     }
 }
