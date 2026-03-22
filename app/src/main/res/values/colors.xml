@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+<!--    <color name="purple_200">#FFBB86FC</color>-->
+<!--    <color name="purple_500">#FF6200EE</color>-->
+<!--    <color name="purple_700">#FF3700B3</color>-->
+<!--    <color name="teal_200">#FF03DAC5</color>-->
+<!--    <color name="teal_700">#FF018786</color>-->
     <color name="black">#FF000000</color>
+    <color name="black_light">#33383d</color>
+
     <color name="white">#FFFFFFFF</color>
-    <color name="orange_primary">#FF9800</color>
+
+    <color name="orange_primary">#FF7A33</color>   <!-- main -->
+    <color name="orange_dark">#E55A1F</color>     <!-- variant -->
+    <color name="orange_light">#FFE4D6</color>
+
+    <color name="green">#4CAF50</color>
+    <color name="green_light">#dcfce7</color>
+    <color name="blue">#2563eb</color>
+    <color name="blue_light_300">#dbeafe</color>
+    <color name="blue_light_100">#e8f2f7</color>
+    <color name="red">#E54C4C</color>
+    <color name="red_light">#f27d81</color>
+    <color name="purple">#9f49ec</color>
+    <color name="purple_light">#F0E2FF</color>
+
     <color name="gray_hint">#9E9E9E</color>
-    <color name="gray_light">#F5F5F5</color>
+    <color name="gray_light">#dbdee0</color>
 </resources>
