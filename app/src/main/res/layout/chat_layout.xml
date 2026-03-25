@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
-    tools:context=".ChatActivity">
+    android:background="#FAFAFA">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutHeader"
@@ -31,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Chị Lan (Helper)"
+            android:text="User"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -46,7 +45,7 @@
             android:gravity="end"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ivAvatar"
+            app:layout_constraintEnd_toStartOf="@id/avtarPlaceholder"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -64,16 +63,24 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/ivAvatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_background"
-            android:scaleType="centerCrop"
-            android:src="@drawable/sample_avatar"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/avtarPlaceholder"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="5dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" >
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/circle_background"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -87,15 +94,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
-        tools:listitem="@layout/item_chat_left" /> <HorizontalScrollView
-    android:id="@+id/layoutQuickActions"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="8dp"
-    android:scrollbars="none"
-    app:layout_constraintBottom_toTopOf="@id/layoutInputBar">
+        tools:listitem="@layout/item_message_incoming" />
+
+    <HorizontalScrollView
+        android:id="@+id/layoutQuickActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/layoutInputBar">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -106,27 +115,31 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_quick_action"
-            android:drawableLeft="@drawable/ic_location"
-            android:paddingHorizontal="12dp"
+            android:paddingHorizontal="16dp"
             android:text="Gửi vị trí"
-            android:textColor="#FF7043"
-            android:textSize="12sp" />
+            android:textAllCaps="false"
+            android:background="@drawable/bg_quick_action"
+            android:textColor="@color/color_quick_action"
+            android:drawablePadding="8dp"
+            app:backgroundTint="@null"
+            app:drawableTint="@color/color_quick_action" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_quick_action"
-            android:drawableLeft="@drawable/ic_camera"
-            android:paddingHorizontal="12dp"
+            android:paddingHorizontal="16dp"
             android:text="Chụp ảnh"
-            android:textColor="#555555"
-            android:textSize="12sp" />
+            android:textAllCaps="false"
+            android:background="@drawable/bg_quick_action"
+            android:textColor="@color/color_quick_action"
+            android:drawablePadding="8dp"
+            app:backgroundTint="@null"
+            app:drawableTint="@color/color_quick_action" />
 
     </LinearLayout>
-</HorizontalScrollView>
 
+</HorizontalScrollView>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutInputBar"
         android:layout_width="match_parent"
@@ -142,7 +155,7 @@
             android:layout_marginEnd="12dp"
             android:background="@drawable/bg_chat_input"
             android:hint="Nhập tin nhắn..."
-            android:paddingStart="40dp"
+            android:paddingStart="45dp"
             android:paddingEnd="40dp"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
