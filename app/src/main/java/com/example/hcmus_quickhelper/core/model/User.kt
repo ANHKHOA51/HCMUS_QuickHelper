@@ -10,6 +10,7 @@ data class User(
     val username: String? = null,
     val email: String,
     val phone: String,
+    val password: String,
     val role: String,
 
     @SerialName("avatar_url")

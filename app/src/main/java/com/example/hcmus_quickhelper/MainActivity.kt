@@ -9,10 +9,17 @@ import com.example.hcmus_quickhelper.core.model.User
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.launch
 
+// testing
+import android.content.Intent
+import com.example.hcmus_quickhelper.features.service_browsing.ui.ServiceListActivity
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        //setContentView(R.layout.main_activity)
+        setContentView(R.layout.home_activity)
+//        val intent = Intent(this, ServiceListActivity::class.java)
+//        startActivity(intent)
 
         testSupabaseConnection()
     }
