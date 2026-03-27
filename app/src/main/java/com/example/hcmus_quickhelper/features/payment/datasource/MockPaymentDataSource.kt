@@ -1,9 +1,10 @@
-package com.example.hcmus_quickhelper.features.payment.repository
+package com.example.hcmus_quickhelper.features.payment.datasource
 
 import com.example.hcmus_quickhelper.features.payment.model.Payment
 
-class MockPaymentRepository {
-    fun getPaymentById(id: String): Payment {
+class MockPaymentDataSource {
+
+    suspend fun getPaymentById(id: String): Payment {
         return Payment(
             id = id,
             amount = 250000,
