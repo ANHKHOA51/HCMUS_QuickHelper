@@ -44,7 +44,7 @@
             android:layout_height="50dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Notification button"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_bell" />
     </LinearLayout>
 
     <ScrollView
