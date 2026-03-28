@@ -64,7 +64,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         // 1. Thông tin dịch vụ và người giúp việc
         view.findViewById<TextView>(R.id.tvServiceName).text = payment.service
         view.findViewById<TextView>(R.id.tvHelperName).text = payment.helper
-        view.findViewById<TextView>(R.id.tvAddressBooking).text = payment.address
+//        view.findViewById<TextView>(R.id.tvAddressBooking).text = payment.address
 
         // 2. Xử lý Ngày và Giờ (Sử dụng ISO_LOCAL_DATE_TIME hoặc format tùy chỉnh)
         try {
