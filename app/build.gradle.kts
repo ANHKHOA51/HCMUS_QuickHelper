@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.cardview)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,8 +91,14 @@ dependencies {
     implementation(libs.storage.kt)
 
     // MVVM
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+
+    // Đảm bảo có fragment-ktx để hỗ trợ ViewModel trong Fragment
+    implementation("androidx.fragment:fragment-ktx:1.8.5")
+
+    implementation("io.coil-kt:coil:2.7.0")
 
     implementation(libs.ktor.client.android)
 }
