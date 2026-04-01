@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/btnBack"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -38,13 +38,6 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Notification button"
-            android:src="@drawable/ic_bell" />
     </LinearLayout>
 
     <ScrollView
@@ -83,11 +76,6 @@
                         android:orientation="horizontal"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_launcher_background" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -108,7 +96,7 @@
                             android:id="@+id/imageView6"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
-                            android:src="@drawable/ic_launcher_background"
+                            android:src="@drawable/ic_clean_orange"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,12 +173,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/imageView7"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_launcher_background" />
-
                         <TextView
                             android:id="@+id/textView9"
                             android:layout_width="0dp"
@@ -211,6 +193,9 @@
                         android:orientation="horizontal"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
@@ -219,7 +204,7 @@
                             android:id="@+id/imageView9"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_launcher_background" />
+                            android:src="@drawable/ic_voucher_ticket" />
 
                         <TextView
                             android:id="@+id/textView11"
@@ -233,7 +218,7 @@
                             android:id="@+id/imageView10"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_launcher_background" />
+                            android:src="@drawable/ic_arrow_right" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -309,12 +294,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/imageView13"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_launcher_background" />
 
                         <TextView
                             android:id="@+id/textView14"

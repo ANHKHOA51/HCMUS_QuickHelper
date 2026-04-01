@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.voucher.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,10 @@ class VoucherViewModel (
     private val _vouchers = MutableLiveData<List<Voucher>>()
     val vouchers: LiveData<List<Voucher>> = _vouchers
 
+    private val _voucher = MutableLiveData<Voucher>()
+    val voucher: LiveData<Voucher> = _voucher
+
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -23,6 +28,7 @@ class VoucherViewModel (
 
             try {
                 val data = repository.getAll()
+                Log.d("TEST", "$data")
                 _vouchers.value = data
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -33,4 +39,7 @@ class VoucherViewModel (
         }
     }
 
+    fun setVoucher(voucher: Voucher) {
+        _voucher.value = voucher
+    }
 }

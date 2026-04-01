@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id ("org.jetbrains.kotlin.plugin.serialization")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -93,6 +94,8 @@ dependencies {
     // MVVM
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     implementation(libs.ktor.client.android)
 }

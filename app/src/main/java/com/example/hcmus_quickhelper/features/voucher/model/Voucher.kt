@@ -1,5 +1,9 @@
 package com.example.hcmus_quickhelper.features.voucher.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Voucher(
     val id: String,
     val name: String,
@@ -9,4 +13,4 @@ data class Voucher(
     val discount: Double,
     val minPrice: Int,
     val expiredAt: String
-)
+) : Parcelable
