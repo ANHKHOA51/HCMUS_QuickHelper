@@ -15,12 +15,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-
-        val fragment = PaymentFragment() // Khởi tạo Fragment của bạn
-        val transaction = supportFragmentManager.beginTransaction()
-
-        transaction.replace(R.id.fragmentContainerView, fragment) // Thay thế nội dung trong khung bằng Fragment mới
-        transaction.addToBackStack(null) // (Tùy chọn) Cho phép nhấn nút Back để quay lại Fragment trước đó
-        transaction.commit()
     }
 }
