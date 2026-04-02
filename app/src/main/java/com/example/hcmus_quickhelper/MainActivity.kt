@@ -9,17 +9,24 @@ import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.payment.ui.PaymentFragment
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.launch
+import com.example.hcmus_quickhelper.features.service_browsing.ui.ServiceListFragment
 
 // testing
 import android.content.Intent
-import com.example.hcmus_quickhelper.features.service_browsing.ui.ServiceListActivity
+import com.example.hcmus_quickhelper.features.service_browsing.ui.HomeFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        val intent = Intent(this, ServiceListActivity::class.java)
-        startActivity(intent)
+        if (savedInstanceState == null) {
+            val fragment = HomeFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                // Lưu ý: Mở màn hình đầu tiên thì không cần .addToBackStack(null)
+                // vì bấm Back ở màn hình đầu tiên là thoát app luôn.
+                .commit()
+        }
     }
 }

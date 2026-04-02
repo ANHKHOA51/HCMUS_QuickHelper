@@ -1,10 +1,13 @@
 package com.example.hcmus_quickhelper.features.service_browsing.ui
+
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,21 +17,25 @@ import com.example.hcmus_quickhelper.features.service_browsing.datasource.Servic
 import com.example.hcmus_quickhelper.features.service_browsing.repository.ServiceListRepository
 import com.example.hcmus_quickhelper.features.service_browsing.viewmodel.ServiceListViewModel
 
-class ServiceListActivity : AppCompatActivity() {
-
+class ServiceListFragment : Fragment() {
     private lateinit var viewModel: ServiceListViewModel
     private lateinit var adapter: ServiceListHelperAdapter
-
     private lateinit var rvHelpers: RecyclerView
     private lateinit var tvResultCount: TextView
     private lateinit var btnBack: ImageView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.service_list_activity)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.service_list_activity, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setupDependencies()
-        initViews()
+        initViews(view)
         setupRecyclerView()
         observeViewModel()
 
@@ -37,7 +44,6 @@ class ServiceListActivity : AppCompatActivity() {
     }
 
     private fun setupDependencies() {
-        // Manual Dependency Injection (Nếu có Hilt/Koin thì bỏ phần này)
         val localDataSource = ServiceListLocalDataSource()
         val repository = ServiceListRepository(localDataSource)
 
@@ -49,34 +55,31 @@ class ServiceListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[ServiceListViewModel::class.java]
     }
 
-    private fun initViews() {
-        rvHelpers = findViewById(R.id.rvExperts)
-        tvResultCount = findViewById(R.id.tvResultCount)
-        btnBack = findViewById(R.id.btnBack)
+    private fun initViews(view: View) {
+        rvHelpers = view.findViewById(R.id.rvExperts)
+        tvResultCount = view.findViewById(R.id.tvResultCount)
+        btnBack = view.findViewById(R.id.btnBack)
 
         btnBack.setOnClickListener {
-            finish()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun setupRecyclerView() {
-        adapter =  ServiceListHelperAdapter { helper ->
-            // Xử lý sự kiện khi bấm nút "Đặt"
-            Toast.makeText(this, "Đang đặt lịch với ${helper.name}", Toast.LENGTH_SHORT).show()
+        adapter = ServiceListHelperAdapter { helper ->
+            Toast.makeText(requireContext(), "Đang đặt lịch với ${helper.name}", Toast.LENGTH_SHORT).show()
         }
-        rvHelpers.layoutManager = LinearLayoutManager(this)
+        rvHelpers.layoutManager = LinearLayoutManager(requireContext())
         rvHelpers.adapter = adapter
     }
 
     private fun observeViewModel() {
-        // Observe danh sách chuyên gia
-        viewModel.helpers.observe(this) { helpers ->
+        viewModel.helpers.observe(viewLifecycleOwner) { helpers ->
             adapter.updateData(helpers)
             tvResultCount.text = "Tìm thấy ${helpers.size} chuyên gia phù hợp"
         }
 
-        // Observe loading
-        viewModel.isLoading.observe(this) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 // tvResultCount.text = "Đang tìm kiếm..."
             }
