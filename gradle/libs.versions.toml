@@ -10,6 +10,7 @@ espressoCore = "3.7.0"
 appcompat = "1.7.1"
 kotlinxSerializationJson = "1.10.0"
 ktorClientAndroid = "3.4.1"
+lifecycleExtensions = "2.2.0"
 material = "1.13.0"
 activity = "1.13.0"
 constraintlayout = "2.2.1"
@@ -19,6 +20,7 @@ navigationUiKtx = "2.9.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensions" }
 auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
 bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

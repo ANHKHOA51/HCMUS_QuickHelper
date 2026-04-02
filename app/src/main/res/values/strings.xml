@@ -21,4 +21,6 @@
     <string name="google">Google</string>
     <string name="touch_id">Touch ID</string>
     <string name="terms_note">By continuing, you agree to our Terms of Service</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

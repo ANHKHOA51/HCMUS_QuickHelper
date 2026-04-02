@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id ("org.jetbrains.kotlin.plugin.serialization")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -91,12 +92,13 @@ dependencies {
     implementation(libs.storage.kt)
 
     // MVVM
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-
-    // Đảm bảo có fragment-ktx để hỗ trợ ViewModel trong Fragment
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
+    implementation(libs.androidx.lifecycle.extensions)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 
     implementation("io.coil-kt:coil:2.7.0")
 

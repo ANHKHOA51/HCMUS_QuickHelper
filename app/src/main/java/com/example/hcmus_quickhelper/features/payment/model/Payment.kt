@@ -1,6 +1,6 @@
 package com.example.hcmus_quickhelper.features.payment.model
 
-data class PaymentModel (
+data class Payment (
     val id: String,
     val amount: Int,
     val method: String,
