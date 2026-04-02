@@ -1,6 +1,7 @@
 package com.example.hcmus_quickhelper.features.chat.ui
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -55,8 +56,30 @@ class ChatListAdapter(
         } else {
             holder.binding.ivUnreadBadge.visibility = View.VISIBLE
         }
+
         holder.itemView.setOnClickListener {
-            holder.itemView.findNavController().navigate(R.id.action_chatList_to_chat)
+            var senderAvtUrl: String?
+            var senderName: String?
+
+            if (item.customerId == currentUserId) {
+                senderName = item.helperName
+                senderAvtUrl = item.helperAvt
+            } else if (item.helperId == currentUserId) {
+                senderName = item.customerName
+                senderAvtUrl = item.customerAvt
+            } else {
+                senderName = "Unknown"
+                senderAvtUrl = null
+            }
+
+            val bundle = Bundle().apply {
+                putInt("senderId", item.senderId)
+                putString("senderName", senderName)
+                putString("senderAvtUrl", senderAvtUrl)
+                putInt("conversationId", item.conversationId)
+            }
+
+            holder.itemView.findNavController().navigate(R.id.action_chatList_to_chat, bundle)
         }
     }
 
