@@ -25,5 +25,16 @@
         android:id="@+id/community_fragment"
         android:name="com.example.hcmus_quickhelper.features.community.ui.CommunityFragment"
         tools:layout="@layout/fragment_feed">
+
+        <action
+            android:id="@+id/action_community_to_feedDetail"
+            app:destination="@id/feed_detail_fragment"
+            tools:layout="@layout/fragment_feed_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/feed_detail_fragment"
+        android:name="com.example.hcmus_quickhelper.features.community.ui.FeedDetailFragment"
+        tools:layout="@layout/fragment_feed_detail">
     </fragment>
 </navigation>

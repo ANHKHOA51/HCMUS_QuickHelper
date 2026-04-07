@@ -47,17 +47,21 @@ class FeedAdapter (
 
         if (item.isLiked) {
             holder.binding.ivHeart.setImageResource(R.drawable.ic_heart_filled)
+        } else {
+            holder.binding.ivHeart.setImageResource(R.drawable.ic_heart)
         }
 
         holder.binding.tvHeart.text = item.likeCount.toString()
         holder.binding.tvCmt.text = item.commentCount.toString()
 
-//        holder.itemView.setOnClickListener {
-//
-//            }
+        holder.itemView.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("feedId", item.id)
+            }
 
-//            holder.itemView.findNavController().navigate()
-//        }
+            holder.itemView.findNavController().navigate(R.id.action_community_to_feedDetail, bundle)
+        }
+
     }
 
     override fun getItemCount(): Int = items.size
