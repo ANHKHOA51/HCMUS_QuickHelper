@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
@@ -16,13 +18,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PaymentViewModel (
-    private val paymentRepository: PaymentRepository
+    private val paymentRepository: PaymentRepository,
+    private val bookingRepository: BookingRepository
 ) : ViewModel() {
     private val _payment = MutableLiveData<Payment?>(null)
     val payment: LiveData<Payment?> = _payment
 
     private val _voucher = MutableLiveData<Voucher?>(null)
-    var voucher: LiveData<Voucher?> = _voucher
+    val voucher: LiveData<Voucher?> = _voucher
+
+    private  val _booking = MutableLiveData<Booking?>(null)
+    val booking: LiveData<Booking?> = _booking
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -32,9 +38,11 @@ class PaymentViewModel (
             _isLoading.value = true
 
             try {
-                val data = paymentRepository.getPaymentById(id)
-                Log.d("DATA", data.toString())
-                _payment.value = data
+                val paymentData = paymentRepository.getPaymentById(id)
+                val bookingData = bookingRepository.getBookingById(paymentData.bookingId)
+
+                _payment.value = paymentData
+                _booking.value = bookingData
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -50,5 +58,15 @@ class PaymentViewModel (
             currentPayment.voucherId = voucher?.id
             _payment.value = currentPayment
         }
+    }
+
+    fun calcTotalPrice(): Double {
+        val servicePrice = _booking.value?.totalPrice ?: 0.0
+
+        val discount = _voucher.value?.discount ?: 0.0
+
+        val total = servicePrice - discount
+
+        return total.coerceAtLeast(0.0)
     }
 }

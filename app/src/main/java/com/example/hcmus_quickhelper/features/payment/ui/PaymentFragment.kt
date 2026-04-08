@@ -17,8 +17,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
+import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.FragmentPaymentBinding
 import com.example.hcmus_quickhelper.databinding.FragmentRatingBinding
+import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
@@ -74,13 +77,14 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun setupViewModel() {
-        val dataSource = PaymentDataSource()
-        val repository = PaymentRepository(dataSource)
+        val paymentRepository = PaymentRepository(PaymentDataSource())
+        val bookingRepository = BookingRepository(BookingDataSource())
+
 
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return PaymentViewModel(repository) as T
+                return PaymentViewModel(paymentRepository, bookingRepository) as T
             }
         }
         viewModel = ViewModelProvider(this, factory)[PaymentViewModel::class.java]
@@ -111,6 +115,19 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             } else {
                 binding.layoutVoucher.visibility = View.GONE
                 binding.tvVoucherDiscount.text = "${MoneyUtils.formatVietnameseCurrency(0.0)}"
+            }
+
+            binding.tvTotalPrice.text = MoneyUtils.formatVietnameseCurrency(viewModel.calcTotalPrice())
+        }
+
+        viewModel.booking.observe(viewLifecycleOwner) {booking ->
+            booking?.let {
+                binding.tvAddress.text = it.address
+                binding.tvDateBooking.text = it.schedule.toSmartTime()
+
+                binding.tvServicePrice.text = MoneyUtils.formatVietnameseCurrency(it.totalPrice)
+
+                binding.tvTotalPrice.text = MoneyUtils.formatVietnameseCurrency(viewModel.calcTotalPrice())
             }
         }
 
