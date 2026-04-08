@@ -95,16 +95,22 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         viewModel.voucher.observe(viewLifecycleOwner) {voucher ->
             if (voucher != null) {
+                viewModel.payment
+
                 binding.layoutVoucher.visibility = View.VISIBLE
 
                 binding.tvCodeVoucher.text = voucher.code
                 binding.tvVoucherItemDiscount.text = "giảm ${MoneyUtils.formatVietnameseCurrency(voucher.discount)}"
+
+
+                binding.tvVoucherDiscount.text = "-${MoneyUtils.formatVietnameseCurrency(voucher.discount)}"
 
                 binding.btnCancelVoucher.setOnClickListener {
                     viewModel.setVoucher(null)
                 }
             } else {
                 binding.layoutVoucher.visibility = View.GONE
+                binding.tvVoucherDiscount.text = "${MoneyUtils.formatVietnameseCurrency(0.0)}"
             }
         }
 

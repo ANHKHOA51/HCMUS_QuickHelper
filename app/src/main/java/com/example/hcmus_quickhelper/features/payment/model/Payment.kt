@@ -21,7 +21,7 @@ data class Payment (
     val bookingId: Int,
 
     @SerialName("voucher_id")
-    val voucherId: Int?,
+    var voucherId: Int?,
 
     @SerialName("created_at")
     val createdAt: String,

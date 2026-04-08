@@ -45,5 +45,10 @@ class PaymentViewModel (
 
     fun setVoucher(voucher: Voucher?) {
         _voucher.value = voucher
+        val currentPayment = _payment.value
+        if (currentPayment != null) {
+            currentPayment.voucherId = voucher?.id
+            _payment.value = currentPayment
+        }
     }
 }

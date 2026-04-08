@@ -327,6 +327,7 @@
 
                     <TextView
                         android:id="@+id/textView17"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -336,6 +337,7 @@
 
                     <TextView
                         android:id="@+id/tvPlatformPrice"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="15.000đ"
@@ -344,6 +346,7 @@
 
                     <TextView
                         android:id="@+id/textView19"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -353,6 +356,7 @@
 
                     <TextView
                         android:id="@+id/tvInsurancePrice"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5.000đ"
@@ -401,6 +405,7 @@
 
             <TextView
                 android:id="@+id/textView27"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -411,6 +416,7 @@
 
             <TextView
                 android:id="@+id/tvResultPrice"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="235.000đ"
