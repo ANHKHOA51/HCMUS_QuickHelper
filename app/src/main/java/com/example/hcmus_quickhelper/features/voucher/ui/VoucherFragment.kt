@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
@@ -86,12 +87,7 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
     }
 
     private fun handleBack() {
-        Log.d("DEBUG", "Back button clicked")
-        if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            activity?.onBackPressedDispatcher?.onBackPressed()
-        }
+        findNavController().popBackStack()
     }
 
     private fun handleSubmit(selectedVoucher: Voucher?) {
@@ -101,6 +97,6 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
 
         parentFragmentManager.setFragmentResult("VOUCHER_SELECTION", result)
 
-        parentFragmentManager.popBackStack()
+        findNavController().popBackStack()
     }
 }

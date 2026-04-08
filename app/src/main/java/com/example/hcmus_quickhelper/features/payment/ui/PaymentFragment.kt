@@ -14,10 +14,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentPaymentBinding
 import com.example.hcmus_quickhelper.databinding.FragmentRatingBinding
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
+import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
@@ -49,24 +51,21 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         return binding.root
     }
 
+    private var paymentId: Int = 1
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupViewModel()
         setupObservers()
+        updateUI()
 
         binding.layoutVoucherPicker.setOnClickListener { showVoucherPicker() }
         binding.btnBack.setOnClickListener { handleBack() }
-
-        setFragmentResultListener("VOUCHER_SELECTION") { requestKey, bundle ->
-            val voucher = bundle.getParcelable<Voucher>("SELECTED_VOUCHER")
-
-            Log.d("TEST", "$voucher")
-        }
     }
 
     private fun setupViewModel() {
-        val dataSource = MockPaymentDataSource()
+        val dataSource = PaymentDataSource()
         val repository = PaymentRepository(dataSource)
 
         val factory = object : ViewModelProvider.Factory {
@@ -79,32 +78,26 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun setupObservers() {
+        viewModel.payment.observe(viewLifecycleOwner) { payment ->
+            payment?.let {
 
+            }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isVisible ->
+            // loading
+        }
     }
 
     private fun updateUI() {
-
+        viewModel.loadPayment(paymentId)
     }
 
     private fun showVoucherPicker() {
-        val voucherFragment = VoucherFragment()
-
-        parentFragmentManager.beginTransaction()
-            // Thay thế nội dung hiện tại bằng Fragment mới
-            // Lưu ý: Thay 'R.id.fragment_container' bằng ID thực tế của FrameLayout chứa Fragment trong Activity của bạn
-            .replace(R.id.nav_host, voucherFragment)
-            // Lưu Fragment hiện tại vào lịch sử để khi ấn nút Back trên điện thoại có thể quay lại được
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_payment_fragment_to_voucher_fragment)
     }
 
     private fun handleBack() {
-        Log.d("DEBUG", "Back button clicked")
-        if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            // Nếu không còn Fragment nào, đóng Activity chứa nó
-            activity?.onBackPressedDispatcher?.onBackPressed()
-        }
+        Log.d("DEBUG", "BACK")
     }
 }

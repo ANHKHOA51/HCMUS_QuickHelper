@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.payment.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,12 +23,13 @@ class PaymentViewModel (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun loadPayment(id: String) {
+    fun loadPayment(id: Int) {
         viewModelScope.launch {
             _isLoading.value = true
 
             try {
                 val data = paymentRepository.getPaymentById(id)
+                Log.d("DATA", data.toString())
                 _payment.value = data
             } catch (e: Exception) {
                 e.printStackTrace()
