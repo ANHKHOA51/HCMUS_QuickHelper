@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
+import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +20,9 @@ class PaymentViewModel (
 ) : ViewModel() {
     private val _payment = MutableLiveData<Payment?>(null)
     val payment: LiveData<Payment?> = _payment
+
+    private val _voucher = MutableLiveData<Voucher?>(null)
+    var voucher: LiveData<Voucher?> = _voucher
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -37,5 +41,9 @@ class PaymentViewModel (
                 _isLoading.value = false
             }
         }
+    }
+
+    fun setVoucher(voucher: Voucher?) {
+        _voucher.value = voucher
     }
 }

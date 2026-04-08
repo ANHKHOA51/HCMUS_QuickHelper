@@ -13,8 +13,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.databinding.FragmentVoucherBinding
-import com.example.hcmus_quickhelper.features.voucher.datasource.MockVoucherDataSource
+import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
 import com.example.hcmus_quickhelper.features.voucher.viewmodel.VoucherViewModel
@@ -48,7 +49,7 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
     }
 
     private fun setupViewModel() {
-        val dataSource = MockVoucherDataSource()
+        val dataSource = VoucherDataSource()
         val repository = VoucherRepository(dataSource)
 
         val factory = object : ViewModelProvider.Factory {
@@ -76,11 +77,13 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
         viewModel.vouchers.observe(viewLifecycleOwner) { list ->
             list?.let {
                 adapter.updateData(it)
+                binding.tvQuantity.text = "Tất cả (${it.size})"
             }
         }
 
         viewModel.voucher.observe(viewLifecycleOwner) {voucher ->
             adapter.updateSelectedVoucher(voucher.id)
+            binding.tvDiscount.text = MoneyUtils.formatVietnameseCurrency(voucher.discount)
         }
 
         viewModel.loadVouchers()
@@ -91,12 +94,9 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
     }
 
     private fun handleSubmit(selectedVoucher: Voucher?) {
-        val result = Bundle().apply {
-            putParcelable("SELECTED_VOUCHER", selectedVoucher)
-        }
+        val savedStateHandle = findNavController().previousBackStackEntry?.savedStateHandle
 
-        parentFragmentManager.setFragmentResult("VOUCHER_SELECTION", result)
-
+        savedStateHandle?.set("selected_voucher", selectedVoucher)
         findNavController().popBackStack()
     }
 }

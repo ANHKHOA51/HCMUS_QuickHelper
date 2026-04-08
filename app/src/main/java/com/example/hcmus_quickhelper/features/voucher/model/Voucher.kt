@@ -3,6 +3,7 @@ package com.example.hcmus_quickhelper.features.voucher.model
 import android.os.Parcelable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.io.Serializable as JavaSerializable
 
 @Serializable
 data class Voucher(
@@ -26,4 +27,4 @@ data class Voucher(
 
     @SerialName("created_at")
     val createdAt: String
-)
+): JavaSerializable
