@@ -15,4 +15,8 @@ class PaymentRepository (
     suspend fun getAllPayments(): List<Payment> {
         return paymentDataSource.getAll()
     }
+
+    suspend fun insertPayment(payment: Payment): Payment {
+        return paymentDataSource.insert(payment)
+    }
 }

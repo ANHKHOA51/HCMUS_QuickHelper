@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Payment (
     @SerialName("id")
-    val id: Int,
+    val id: Int? = null,
 
     @SerialName("amount")
     val amount: Double,
@@ -27,5 +27,12 @@ data class Payment (
     var voucherId: Int?,
 
     @SerialName("created_at")
-    val createdAt: String,
+    val createdAt: String? = null
 ): Parcelable
+
+enum class PaymentStatus {
+    PENDING,
+    SUCCESS,
+    FAILED,
+    CANCELED
+}

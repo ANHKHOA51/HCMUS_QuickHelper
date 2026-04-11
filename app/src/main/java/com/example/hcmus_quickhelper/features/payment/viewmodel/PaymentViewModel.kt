@@ -33,15 +33,13 @@ class PaymentViewModel (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun loadPayment(id: Int) {
+    fun loadBooking(id: Int) {
         viewModelScope.launch {
             _isLoading.value = true
 
             try {
-                val paymentData = paymentRepository.getPaymentById(id)
-                val bookingData = bookingRepository.getBookingById(paymentData.bookingId)
+                val bookingData = bookingRepository.getBookingById(id)
 
-                _payment.value = paymentData
                 _booking.value = bookingData
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -68,5 +66,23 @@ class PaymentViewModel (
         val total = servicePrice - discount
 
         return total.coerceAtLeast(0.0)
+    }
+
+    fun savePayment(method: String) {
+        viewModelScope.launch {
+            val newPayment = Payment(
+                id = null,
+                amount = calcTotalPrice(),
+                method = method,
+                bookingId = _booking.value?.id ?: 0,
+                voucherId = _voucher.value?.id ?: 0,
+                status = "pending",
+                createdAt = null
+            )
+
+            _payment.value = paymentRepository.insertPayment(newPayment)
+
+            Log.d("TEST", "${_payment.value}")
+        }
     }
 }

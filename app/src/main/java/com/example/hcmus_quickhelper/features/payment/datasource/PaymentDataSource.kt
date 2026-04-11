@@ -18,4 +18,10 @@ class PaymentDataSource {
         Log.d("TEST", "TEST")
         return SupabaseClient.client.from("payments").select().decodeList<Payment>()
     }
+
+    suspend fun insert(payment: Payment): Payment {
+        return SupabaseClient.client.from("payments").insert(payment) {
+            select()
+        }.decodeSingle<Payment>()
+    }
 }

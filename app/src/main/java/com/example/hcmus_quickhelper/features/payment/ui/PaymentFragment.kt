@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -26,6 +27,7 @@ import com.example.hcmus_quickhelper.features.booking.repository.BookingReposito
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
@@ -64,7 +66,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         return binding.root
     }
 
-    private var paymentId: Int = 1
+    private var bookingId: Int = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,7 +97,6 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     private fun setupObservers() {
         viewModel.payment.observe(viewLifecycleOwner) { payment ->
             payment?.let {
-
             }
         }
 
@@ -139,7 +140,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun updateUI() {
-        viewModel.loadPayment(paymentId)
+        viewModel.loadBooking(bookingId)
     }
 
     private fun showVoucherPicker() {
@@ -151,6 +152,14 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun submitPayment(payment: Payment?, booking: Booking?, voucher: Voucher?) {
+
+        val selectedId = binding.radioGroupPaymentMethod.checkedRadioButtonId
+        if (selectedId != -1) {
+            val radioButton: RadioButton = binding.root.findViewById(selectedId)
+            val method = radioButton.text.toString()
+
+            viewModel.savePayment(method)
+        }
 
         val navController = findNavController()
 
