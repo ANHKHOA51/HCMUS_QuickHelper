@@ -2,8 +2,11 @@ package com.example.hcmus_quickhelper.core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 @Serializable
+@Parcelize
 data class Booking (
     @SerialName("id")
     val id: Int,
@@ -37,4 +40,4 @@ data class Booking (
 
     @SerialName("created_at")
     val createdAt: String,
-)
+): Parcelable

@@ -2,8 +2,11 @@ package com.example.hcmus_quickhelper.features.payment.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 @Serializable
+@Parcelize
 data class Payment (
     @SerialName("id")
     val id: Int,
@@ -25,4 +28,4 @@ data class Payment (
 
     @SerialName("created_at")
     val createdAt: String,
-)
+): Parcelable

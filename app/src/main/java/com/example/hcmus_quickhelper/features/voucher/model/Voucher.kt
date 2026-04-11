@@ -1,11 +1,12 @@
 package com.example.hcmus_quickhelper.features.voucher.model
 
-import android.os.Parcelable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.io.Serializable as JavaSerializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 @Serializable
+@Parcelize
 data class Voucher(
     @SerialName("id")
     val id: Int,
@@ -27,4 +28,4 @@ data class Voucher(
 
     @SerialName("created_at")
     val createdAt: String
-): JavaSerializable
+): Parcelable

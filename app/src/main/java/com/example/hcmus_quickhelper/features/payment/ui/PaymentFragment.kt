@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.FragmentPaymentBinding
@@ -74,6 +75,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         binding.layoutVoucherPicker.setOnClickListener { showVoucherPicker() }
         binding.btnBack.setOnClickListener { handleBack() }
+        binding.btnConfirmPayment.setOnClickListener{ submitPayment(viewModel.payment.value, viewModel.booking.value, viewModel.voucher.value) }
     }
 
     private fun setupViewModel() {
@@ -147,4 +149,18 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     private fun handleBack() {
         Log.d("DEBUG", "BACK")
     }
+
+    private fun submitPayment(payment: Payment?, booking: Booking?, voucher: Voucher?) {
+
+        val navController = findNavController()
+
+        val bundle = Bundle().apply {
+            putParcelable("payment_info", payment)
+            putParcelable("booking_info", booking)
+            putParcelable("voucher_info", voucher)
+        }
+
+        navController.navigate(R.id.action_payment_fragment_to_receipt_fragment, bundle)
+    }
+
 }

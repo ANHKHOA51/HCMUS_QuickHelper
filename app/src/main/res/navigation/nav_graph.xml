@@ -29,8 +29,8 @@
             android:id="@+id/action_payment_fragment_to_voucher_fragment"
             app:destination="@id/voucher_fragment" />
         <action
-            android:id="@+id/action_payment_fragment_to_rating_fragment"
-            app:destination="@id/rating_fragment" />
+            android:id="@+id/action_payment_fragment_to_receipt_fragment"
+            app:destination="@id/receipt_fragment" />
     </fragment>
     <fragment
         android:id="@+id/voucher_fragment"
@@ -42,4 +42,13 @@
         android:name="com.example.hcmus_quickhelper.features.rating.ui.RatingFragment"
         android:label="fragment_rating"
         tools:layout="@layout/fragment_rating" />
+    <fragment
+        android:id="@+id/receipt_fragment"
+        android:name="com.example.hcmus_quickhelper.features.receipt.ui.ReceiptFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_receipt_fragment_to_rating_fragment"
+            app:destination="@id/rating_fragment" />
+    </fragment>
 </navigation>
