@@ -12,16 +12,16 @@ data class Payment (
     val id: Int? = null,
 
     @SerialName("amount")
-    val amount: Double,
+    var amount: Double,
 
     @SerialName("method")
-    val method: String,
+    var method: String,
 
     @SerialName("status")
-    val status: String,
+    var status: String,
 
     @SerialName("booking_id")
-    val bookingId: Int,
+    var bookingId: Int,
 
     @SerialName("voucher_id")
     var voucherId: Int?,

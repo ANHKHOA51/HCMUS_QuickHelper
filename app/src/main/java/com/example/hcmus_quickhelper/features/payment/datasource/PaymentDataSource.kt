@@ -19,9 +19,26 @@ class PaymentDataSource {
         return SupabaseClient.client.from("payments").select().decodeList<Payment>()
     }
 
+    suspend fun getByBookingId(id: Int): Payment {
+        return SupabaseClient.client.from("payments")
+            .select{
+                filter { eq("booking_id", id) }
+            }
+            .decodeSingle<Payment>()
+    }
+
     suspend fun insert(payment: Payment): Payment {
         return SupabaseClient.client.from("payments").insert(payment) {
             select()
+        }.decodeSingle<Payment>()
+    }
+
+    suspend fun update(payment: Payment): Payment {
+        return SupabaseClient.client.from("payments").update(payment){
+            select()
+            filter {
+                eq("id", payment.id!!)
+            }
         }.decodeSingle<Payment>()
     }
 }

@@ -9,6 +9,7 @@ import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,14 +34,16 @@ class PaymentViewModel (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun loadBooking(id: Int) {
+    fun loadBooking(bookingId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
 
             try {
-                val bookingData = bookingRepository.getBookingById(id)
+                val bookingData = bookingRepository.getBookingById(bookingId)
+                val paymentData = paymentRepository.getPaymentByBookingId(bookingId)
 
                 _booking.value = bookingData
+                _payment.value = paymentData
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -51,10 +54,9 @@ class PaymentViewModel (
 
     fun setVoucher(voucher: Voucher?) {
         _voucher.value = voucher
-        val currentPayment = _payment.value
-        if (currentPayment != null) {
-            currentPayment.voucherId = voucher?.id
-            _payment.value = currentPayment
+        _payment.value?.let{
+            it.voucherId = voucher?.id
+            _payment.value = it
         }
     }
 
@@ -70,19 +72,12 @@ class PaymentViewModel (
 
     fun savePayment(method: String) {
         viewModelScope.launch {
-            val newPayment = Payment(
-                id = null,
-                amount = calcTotalPrice(),
-                method = method,
-                bookingId = _booking.value?.id ?: 0,
-                voucherId = _voucher.value?.id ?: 0,
-                status = "pending",
-                createdAt = null
-            )
-
-            _payment.value = paymentRepository.insertPayment(newPayment)
-
-            Log.d("TEST", "${_payment.value}")
+            _payment.value?.let{
+                it.method = method;
+                it.amount = calcTotalPrice()
+                it.status = PaymentStatus.SUCCESS.toString()
+                paymentRepository.updatePayment(it)
+            }
         }
     }
 }

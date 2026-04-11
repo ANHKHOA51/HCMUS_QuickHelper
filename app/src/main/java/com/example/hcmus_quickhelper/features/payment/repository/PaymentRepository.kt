@@ -12,11 +12,19 @@ class PaymentRepository (
         return paymentDataSource.getById(id)
     }
 
+    suspend fun getPaymentByBookingId(id: Int): Payment {
+        return paymentDataSource.getByBookingId(id)
+    }
+
     suspend fun getAllPayments(): List<Payment> {
         return paymentDataSource.getAll()
     }
 
     suspend fun insertPayment(payment: Payment): Payment {
         return paymentDataSource.insert(payment)
+    }
+
+    suspend fun updatePayment(payment: Payment): Payment {
+        return paymentDataSource.update(payment)
     }
 }
