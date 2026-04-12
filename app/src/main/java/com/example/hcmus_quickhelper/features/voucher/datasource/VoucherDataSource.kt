@@ -8,4 +8,11 @@ class VoucherDataSource {
     suspend fun getAll(): List<Voucher> {
         return SupabaseClient.client.from("vouchers").select().decodeList<Voucher>()
     }
+
+    suspend fun getById(id: Int): Voucher? {
+        return SupabaseClient.client.from("vouchers").select {
+            filter { eq("id", id) }
+        }
+            .decodeSingleOrNull<Voucher>()
+    }
 }

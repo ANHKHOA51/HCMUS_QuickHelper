@@ -36,3 +36,16 @@ enum class PaymentStatus {
     FAILED,
     CANCELED
 }
+
+enum class PaymentMethod(val displayName: String) {
+    CASH("Tiền mặt"),
+    BANK_TRANSFER("Chuyển khoản ngân hàng"),
+    CREDIT_CARD("Thẻ tín dụng"),
+    MOMO("Ví MoMo");
+
+    companion object {
+        fun fromString(value: String): PaymentMethod {
+            return entries.find { it.name.equals(value, ignoreCase = true) } ?: CASH
+        }
+    }
+}

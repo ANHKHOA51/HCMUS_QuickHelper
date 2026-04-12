@@ -1,13 +1,23 @@
 package com.example.hcmus_quickhelper.features.receipt.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
+import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
+import kotlinx.coroutines.launch
 
-class ReceiptViewModel() : ViewModel() {
+class ReceiptViewModel(
+    private val paymentRepository: PaymentRepository,
+    private val bookingRepository: BookingRepository,
+    private val voucherRepository: VoucherRepository
+) : ViewModel() {
     private val _payment = MutableLiveData<Payment?>(null)
     val payment: LiveData<Payment?> = _payment
 
@@ -20,16 +30,29 @@ class ReceiptViewModel() : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun setPayment(payment: Payment?) {
-        _payment.value = payment
-    }
+    fun loadData(paymentId: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val paymentData = paymentRepository.getPaymentById(paymentId)
+            _payment.value = paymentData
 
-    fun setBooking(booking: Booking?) {
-        _booking.value = booking
-    }
+            paymentData?.let {
+                val bookingData = bookingRepository.getBookingById(it.bookingId)
+                _booking.value = bookingData
 
-    fun setVoucher(voucher: Voucher?) {
-        _voucher.value = voucher
+                it.voucherId?.let {
+                    val voucherData = voucherRepository.getVoucherById(it)
+                    _voucher.value = voucherData
+                }
+            }
+
+            try {
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 
     fun calcTotalPrice(): Double {

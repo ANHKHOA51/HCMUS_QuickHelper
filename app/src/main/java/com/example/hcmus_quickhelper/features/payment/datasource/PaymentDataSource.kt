@@ -6,12 +6,12 @@ import com.example.hcmus_quickhelper.features.payment.model.Payment
 import io.github.jan.supabase.postgrest.from
 
 class PaymentDataSource {
-    suspend fun getById(id: Int): Payment {
+    suspend fun getById(id: Int): Payment? {
         return SupabaseClient.client.from("payments")
             .select {
                 filter { eq("id", id) }
             }
-            .decodeSingle<Payment>()
+            .decodeSingleOrNull<Payment>()
     }
 
     suspend fun getAll(): List<Payment> {
@@ -19,12 +19,12 @@ class PaymentDataSource {
         return SupabaseClient.client.from("payments").select().decodeList<Payment>()
     }
 
-    suspend fun getByBookingId(id: Int): Payment {
+    suspend fun getByBookingId(id: Int): Payment? {
         return SupabaseClient.client.from("payments")
             .select{
                 filter { eq("booking_id", id) }
             }
-            .decodeSingle<Payment>()
+            .decodeSingleOrNull<Payment>()
     }
 
     suspend fun insert(payment: Payment): Payment {

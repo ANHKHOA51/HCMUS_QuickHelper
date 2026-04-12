@@ -9,6 +9,7 @@ import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentMethod
 import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
@@ -40,9 +41,22 @@ class PaymentViewModel (
 
             try {
                 val bookingData = bookingRepository.getBookingById(bookingId)
-                val paymentData = paymentRepository.getPaymentByBookingId(bookingId)
-
                 _booking.value = bookingData
+
+                var paymentData = paymentRepository.getPaymentByBookingId(bookingId)
+
+                if (paymentData == null) {
+                    paymentData = Payment(
+                        id = null,
+                        bookingId = bookingId,
+                        amount = bookingData.totalPrice,
+                        status = PaymentStatus.PENDING.toString(),
+                        method = PaymentMethod.CASH.toString(),
+                        voucherId = null,
+                        createdAt = null
+                    )
+                }
+
                 _payment.value = paymentData
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -75,6 +89,7 @@ class PaymentViewModel (
             _payment.value?.let{
                 it.method = method;
                 it.amount = calcTotalPrice()
+                it.voucherId = _voucher.value?.id
                 it.status = PaymentStatus.SUCCESS.toString()
                 paymentRepository.updatePayment(it)
             }

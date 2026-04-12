@@ -27,6 +27,7 @@ import com.example.hcmus_quickhelper.features.booking.repository.BookingReposito
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentMethod
 import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
@@ -156,7 +157,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         val selectedId = binding.radioGroupPaymentMethod.checkedRadioButtonId
         if (selectedId != -1) {
             val radioButton: RadioButton = binding.root.findViewById(selectedId)
-            val method = radioButton.text.toString()
+            val method = PaymentMethod.fromString(radioButton.text.toString()).toString()
 
             viewModel.savePayment(method)
         }
@@ -164,9 +165,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         val navController = findNavController()
 
         val bundle = Bundle().apply {
-            putParcelable("payment_info", payment)
-            putParcelable("booking_info", booking)
-            putParcelable("voucher_info", voucher)
+            putInt("payment_id", payment?.id ?: -1)
         }
 
         navController.navigate(R.id.action_payment_fragment_to_receipt_fragment, bundle)

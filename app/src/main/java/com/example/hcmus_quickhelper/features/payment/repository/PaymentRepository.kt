@@ -8,11 +8,11 @@ import com.example.hcmus_quickhelper.features.payment.model.Payment
 class PaymentRepository (
     val paymentDataSource: PaymentDataSource
 ) {
-    suspend fun getPaymentById(id: Int): Payment {
+    suspend fun getPaymentById(id: Int): Payment? {
         return paymentDataSource.getById(id)
     }
 
-    suspend fun getPaymentByBookingId(id: Int): Payment {
+    suspend fun getPaymentByBookingId(id: Int): Payment? {
         return paymentDataSource.getByBookingId(id)
     }
 

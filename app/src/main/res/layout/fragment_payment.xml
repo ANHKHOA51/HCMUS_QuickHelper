@@ -388,19 +388,27 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:text="Tiền mặt"
-                            android:checked="true" /> <RadioButton
-                        android:id="@+id/rbMoMo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="Ví điện tử MoMo" />
+                            android:checked="true" />
+                        <RadioButton
+                            android:id="@+id/rbMoMo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Ví MoMo" />
 
                         <RadioButton
                             android:id="@+id/rbBankTransfer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Chuyển khoản Ngân hàng" />
+                            android:text="Chuyển khoản ngân hàng" />
+
+                        <RadioButton
+                            android:id="@+id/rbCreditCard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Thẻ tín dụng" />
 
                     </RadioGroup>
 

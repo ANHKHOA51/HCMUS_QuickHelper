@@ -9,4 +9,8 @@ class VoucherRepository (
     suspend fun getAll(): List<Voucher> {
         return voucherDataSource.getAll()
     }
+
+    suspend fun getVoucherById(id: Int): Voucher? {
+        return voucherDataSource.getById(id)
+    }
 }
