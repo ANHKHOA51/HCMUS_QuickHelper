@@ -8,6 +8,9 @@ data class Message (
     @SerialName("id")
     val messageId: Int,
 
+    @SerialName("conversation_id")
+    val conversationId: Int,
+
     @SerialName("sender_id")
     val senderId: Int,
 

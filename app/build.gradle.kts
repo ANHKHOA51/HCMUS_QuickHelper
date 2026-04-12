@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id ("org.jetbrains.kotlin.plugin.serialization")
     id ("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -87,9 +88,18 @@ dependencies {
     implementation(platform(libs.bom))
     implementation(libs.kotlinx.serialization.json)
 
+    implementation("io.ktor:ktor-client-okhttp:3.4.2")
+    implementation("io.ktor:ktor-client-core:3.4.2")
+    implementation("io.ktor:ktor-client-content-negotiation:3.4.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.2")
+    implementation("io.ktor:ktor-client-plugins:3.1.1")
+    implementation(libs.ktor.client.android)
+
     implementation(libs.postgrest.kt)
     implementation(libs.auth.kt)
     implementation(libs.storage.kt)
+    implementation(libs.postgrest.kt.v200)
+    implementation(libs.realtime.kt)
 
     // MVVM
     implementation(libs.androidx.lifecycle.extensions)
@@ -102,5 +112,6 @@ dependencies {
 
     implementation("io.coil-kt:coil:2.7.0")
 
-    implementation(libs.ktor.client.android)
+    implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
+    implementation("com.google.firebase:firebase-messaging:25.0.1")
 }

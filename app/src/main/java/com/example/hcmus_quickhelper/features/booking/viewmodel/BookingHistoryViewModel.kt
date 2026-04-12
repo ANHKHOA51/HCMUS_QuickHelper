@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.features.booking.model.BookingHistory
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepositoryTmp
 import kotlinx.coroutines.launch
 
 
 enum class BookingTab {
     ONGOING, COMPLETED, CANCELLED
 }
-class BookingHistoryViewModel(private val repository: BookingRepository) : ViewModel() {
+class BookingHistoryViewModel(private val repository: BookingRepositoryTmp) : ViewModel() {
 
     private val allHistories = mutableListOf<BookingHistory>()
 

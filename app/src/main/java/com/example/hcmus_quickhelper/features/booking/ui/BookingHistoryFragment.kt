@@ -17,6 +17,7 @@ import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingHistoryVi
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingLocalDataSource
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepositoryTmp
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingTab
 
 class BookingHistoryFragment : Fragment() {
@@ -54,7 +55,7 @@ class BookingHistoryFragment : Fragment() {
 
     private fun setupDependencies() {
         val dataSource = BookingLocalDataSource()
-        val repository = BookingRepository(dataSource)
+        val repository = BookingRepositoryTmp(dataSource)
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return BookingHistoryViewModel(repository) as T

@@ -1,21 +1,29 @@
 package com.example.hcmus_quickhelper.features.chat.ui
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.hcmus_quickhelper.R
-import com.example.hcmus_quickhelper.features.chat.model.Message           // Dùng đúng model này
+import com.example.hcmus_quickhelper.features.chat.model.Message
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.ItemMessageIncomingBinding
 import com.example.hcmus_quickhelper.databinding.ItemMessageOutgoingBinding
+import androidx.recyclerview.widget.DiffUtil
 
 class MessageAdapter(
     private var items: List<Message>,
     private val currentUserId: Int,
     private val senderAvtUrl: String?,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return items[position].messageId.toLong()
+    }
 
     private val VIEW_TYPE_SENT = 1
     private val VIEW_TYPE_RECEIVED = 2
@@ -68,9 +76,26 @@ class MessageAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newMessages: List<Message>) {
-        this.items = newMessages
-        notifyDataSetChanged()
+
+        val diffCallback = object : DiffUtil.Callback() {
+
+            override fun getOldListSize() = items.size
+            override fun getNewListSize() = newMessages.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition].messageId ==
+                        newMessages[newItemPosition].messageId
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition] == newMessages[newItemPosition]
+            }
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        items = newMessages
+        diffResult.dispatchUpdatesTo(this)
     }
 }

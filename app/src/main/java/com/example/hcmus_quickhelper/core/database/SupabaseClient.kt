@@ -4,6 +4,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.auth.Auth
 import com.example.hcmus_quickhelper.core.database.SupabaseConfig
+import io.github.jan.supabase.realtime.Realtime
 
 object SupabaseClient {
 
@@ -13,5 +14,6 @@ object SupabaseClient {
     ) {
         install(Postgrest)
         install(Auth)
+        install(Realtime)
     }
 }

@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentRatingBinding
 import com.example.hcmus_quickhelper.databinding.FragmentReceiptBinding
+import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
@@ -27,11 +29,16 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
     private var _binding: FragmentRatingBinding? = null
     private val binding get() = _binding!!
 
+    private var bookingId: Int = -1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRatingBinding.inflate(inflater, container, false)
+
+        bookingId = arguments?.getInt("booking_id", -1) ?: -1
+
         return binding.root
     }
 
@@ -40,18 +47,19 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
 
         setupViewModel()
         setupObservers()
+        loadData()
 
         binding.btnSendRating.setOnClickListener { sendRating() }
     }
 
     fun setupViewModel() {
-        val dataSource = RatingDataSource()
-        val repository = RatingRepository(dataSource)
+        val ratingRepository = RatingRepository(RatingDataSource())
+        val bookingRepository = BookingRepository(BookingDataSource())
 
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return RatingViewModel(repository) as T
+                return RatingViewModel(ratingRepository, bookingRepository) as T
             }
         }
         viewModel = ViewModelProvider(this, factory)[RatingViewModel::class.java]
@@ -64,13 +72,24 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
                 binding.ratingBar.rating = rating.point.toFloat()
             }
         }
+
+        viewModel.booking.observe(viewLifecycleOwner) {booking ->
+            if (booking != null) {
+                binding.tvServiceId.text = "Mã dịch vụ: #${booking.serviceId}"
+
+            }
+        }
+    }
+
+    fun loadData() {
+        viewModel.loaData(bookingId)
     }
 
     fun sendRating() {
         val point = binding.ratingBar.rating.toInt()
-        val comment = binding.etComment.text
+        val comment = binding.etComment.text.toString()
 
-        Log.d("DEBUG", "Point: $point, Comment: $comment")
+        viewModel.submitRating(point, comment)
     }
 
     override fun onDestroyView() {
