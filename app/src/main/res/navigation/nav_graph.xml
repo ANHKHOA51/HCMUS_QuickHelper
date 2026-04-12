@@ -3,13 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/chat_list_fragment">
+    app:startDestination="@id/login_fragment">
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.example.hcmus_quickhelper.features.auth.ui.LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/register_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/register_fragment"
+        android:name="com.example.hcmus_quickhelper.features.auth.ui.RegisterFragment"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_otp"
+            app:destination="@id/otp_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/otp_fragment"
+        android:name="com.example.hcmus_quickhelper.features.auth.ui.OTPFragment"
+        tools:layout="@layout/fragment_otp">
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/chat_list_fragment"
         android:name="com.example.hcmus_quickhelper.features.chat.ui.ChatListFragment"
         tools:layout="@layout/fragment_chat_list">
-
         <action
             android:id="@+id/action_chatList_to_chat"
             app:destination="@id/chat_fragment"

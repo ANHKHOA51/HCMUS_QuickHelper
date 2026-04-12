@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentLoginBinding
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
@@ -63,6 +65,10 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.tvTabRegister.setOnClickListener {
+            findNavController().navigate(R.id.action_login_to_register)
+        }
     }
 
     private fun observeViewModel() {
@@ -72,21 +78,16 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
-            result?.onSuccess {
-                Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                // Navigate to home screen
+            result?.onSuccess { user ->
+                Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.chat_list_fragment)
             }?.onFailure { error ->
-                // To better look at error messages:
-                // 1. Log the full stack trace for development debugging
                 Log.e("AUTH_ERROR", "Login failed", error)
-                
-                // 2. Format a detailed message including the exception type
-                // This helps identify if it's a network error, invalid credentials, or server issue.
-                val exceptionType = error::class.simpleName
-                val message = error.localizedMessage ?: error.message ?: "Unknown error"
-                val detailedErrorMessage = "[$exceptionType] $message"
-                
-                Toast.makeText(context, detailedErrorMessage, Toast.LENGTH_LONG).show()
+                val message = when {
+                    error.message?.contains("401") == true || error.message?.contains("Invalid email or password") == true -> "Invalid email or password"
+                    else -> error.localizedMessage ?: "Connection error"
+                }
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             }
         }
     }

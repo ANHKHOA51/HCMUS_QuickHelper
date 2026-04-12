@@ -1,37 +1,35 @@
-md
-# Login Implementation Changes
+# Custom Authentication Implementation Plan
 
-## Summary
-Implemented the Login feature using Supabase Auth, following the Feature-based Architecture and MVVM pattern. Successfully resolved resource linking and View Binding issues.
+## Problem
+The current implementation uses `supabase.auth`, which relies on the internal `auth.users` table. This causes `AuthRestException` when users only exist in the custom `public.users` table.
 
-## Changes Made
+## Solution
+Transition to a custom database-driven authentication system using the `public.users` table via Postgrest.
 
-### 1. Feature: `auth`
-- Created `features/auth` package structure:
-    - `datasource/AuthRemoteDataSource.kt`: Interacts with Supabase Auth using `SupabaseClient.client.auth.signInWith(Email)`.
-    - `repository/AuthRepository.kt`: Bridge between Data Source and ViewModel, wraps calls in Kotlin's `Result` type for consistent error handling.
-    - `viewmodel/AuthViewModel.kt`: Manages UI state (Loading/Result) using `MutableLiveData` and `viewModelScope`.
-    - `ui/LoginFragment.kt`: UI layer handling user interaction, observing ViewModel state, and performing input validation.
+## Step-by-Step Implementation
 
-### 2. UI & Resources (Fixes)
-- **View Binding**: Enabled `viewBinding = true` in `build.gradle.kts` to resolve "Unresolved reference: databinding".
-- **Resource Definitions**:
-    - Added missing colors in `colors.xml` (`orange_primary`, `gray_hint`, `gray_light`).
-    - Added full Vietnamese/English string set in `strings.xml` covering the login title, subtitles, input labels, hints, and social login buttons.
-    - Created `bg_input_field.xml` drawable for consistent input styling.
-- **Layout**: Implemented `fragment_login.xml` using `ConstraintLayout` to handle complex UI elements like tab switchers and social buttons.
+### 1. Data Layer: `AuthRemoteDataSource.kt`
+- **Remove**: Calls to `supabase.auth.signInWith(Email)` and `supabase.auth.signUp(Email)`.
+- **Add**: 
+    - `loginWithDatabase(email, password)`: Query `public.users` where email and password match.
+    - `registerInDatabase(userMap)`: Insert a new row directly into `public.users`.
 
-### 3. Architecture & Patterns
-- **Manual Dependency Injection**: Implemented a custom `ViewModelProvider.Factory` inside `LoginFragment` to inject `AuthRepository` and `AuthRemoteDataSource` without using external DI libraries (Hilt/Koin) yet.
-- **Coroutines**: Used `viewModelScope` for thread-safe asynchronous calls to Supabase.
-- **State Management**: Used `LiveData` to communicate between ViewModel and View, ensuring the UI remains responsive during network calls.
+### 2. Domain Layer: `AuthRepository.kt`
+- Update methods to handle database results instead of `AuthSession`.
+- Map Postgrest exceptions to custom domain errors.
 
-### 4. Technical Details
-- **Supabase Integration**: Utilized the `auth-kt` library with `Email` provider.
-- **Naming Conventions**: Adhered to `AuthViewModel`, `AuthRepository`, and `AuthRemoteDataSource` as per `android-feature-template.md`.
-- **Error Handling**: Implemented `.onSuccess` and `.onFailure` blocks in the Fragment to handle Supabase authentication errors (e.g., invalid credentials).
+### 3. Logic Layer: `AuthViewModel.kt`
+- Update `login` and `register` functions to trigger the new repository methods.
+- Store user session data locally (e.g., in SharedPreferences) since Supabase Auth will no longer manage the session automatically.
 
-## Next Steps
-- [ ] Implement the "Register" tab functionality.
-- [ ] Integrate Google Sign-In logic.
-- [ ] Setup Navigation Component to transition from Login to Home after successful auth.
+### 4. UI Layer: `LoginFragment.kt` & `RegisterFragment.kt`
+- **LoginFragment**: Update `observeViewModel` to handle standard database exceptions instead of `AuthRestException`.
+- **RegisterFragment**: Ensure registration fields match the `public.users` table schema exactly.
+
+### 5. Manual ID Management (Fix for Duplicate Key 0)
+- **Problem**: Inserting into `public.users` fails because the app sends `id: 0`.
+- **Solution**: 
+    1. Query the `public.users` table for the record with the maximum `id`.
+    2. Increment that value by 1.
+    3. Use this new ID for the registration insert.
+- **Note**: This is a workaround. The ideal fix is setting the `id` column in Supabase to `IDENTITY`.

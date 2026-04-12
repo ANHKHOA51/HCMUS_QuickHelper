@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.databinding.FragmentRegisterBinding
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
@@ -67,7 +68,11 @@ class RegisterFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            // Navigation would go here, but implemented in isolation as requested
+            findNavController().popBackStack()
+        }
+
+        binding.tvTabLogin.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -79,11 +84,11 @@ class RegisterFragment : Fragment() {
 
         viewModel.registerResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess {
-                Toast.makeText(context, "Registration Successful. Please check your email for confirmation.", Toast.LENGTH_LONG).show()
-                // Navigate to login or home
+                Toast.makeText(context, "Account created successfully!", Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack() // Go back to login
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Registration failed", error)
-                val message = error.localizedMessage ?: error.message ?: "Unknown error"
+                val message = error.localizedMessage ?: "Could not create account"
                 Toast.makeText(context, "Error: $message", Toast.LENGTH_LONG).show()
             }
         }
