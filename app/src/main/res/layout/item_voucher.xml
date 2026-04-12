@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/ic_voucher_ticket" />
 
         <View
             android:id="@+id/divider"
@@ -40,7 +40,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvCode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -66,9 +66,9 @@
             android:text="Giảm 50% tối đa 50k cho đơn hàng đầu tiên của bạn"
             android:textColor="#616161"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@id/tvName"
-            app:layout_constraintStart_toStartOf="@id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+            app:layout_constraintEnd_toEndOf="@id/tvCode"
+            app:layout_constraintStart_toStartOf="@id/tvCode"
+            app:layout_constraintTop_toBottomOf="@+id/tvCode" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -78,8 +78,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tvName"
-            app:layout_constraintStart_toStartOf="@id/tvName"
+            app:layout_constraintEnd_toEndOf="@id/tvCode"
+            app:layout_constraintStart_toStartOf="@id/tvCode"
             app:layout_constraintTop_toBottomOf="@id/tvDescription">
 
             <ImageView

@@ -5,15 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.ItemVoucherBinding
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class VoucherAdapter(
     private var vouchers: List<Voucher> = emptyList(),
     var onVoucherClick: (Voucher) -> Unit
 ) : RecyclerView.Adapter<VoucherAdapter.ViewHolder>() {
 
-    private var selectedVoucherId: String? = null
+    private var selectedVoucherId: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemVoucherBinding.inflate(
@@ -36,7 +39,7 @@ class VoucherAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateSelectedVoucher(id: String) {
+    fun updateSelectedVoucher(id: Int) {
         val oldSelectedId = selectedVoucherId
         selectedVoucherId = id
 
@@ -52,9 +55,8 @@ class VoucherAdapter(
 
         fun bind(voucher: Voucher, isSelected: Boolean) {
             binding.apply {
-                tvName.text = voucher.name
-                tvDescription.text = voucher.description
-                tvExpire.text = voucher.expiredAt
+                tvCode.text = voucher.code
+                tvExpire.text = voucher.expiredAt.toSmartTime()
 
                 container.isSelected = isSelected
 
@@ -64,6 +66,19 @@ class VoucherAdapter(
                     updateSelectedVoucher(voucher.id)
                     onVoucherClick(voucher)
                 }
+            }
+        }
+
+        private fun formatTime(time: String): String {
+            return try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                val outputFormat = SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault())
+
+                val date = inputFormat.parse(time)
+                if (date != null) outputFormat.format(date) else time
+            } catch (e: Exception) {
+                e.printStackTrace()
+                time
             }
         }
     }
