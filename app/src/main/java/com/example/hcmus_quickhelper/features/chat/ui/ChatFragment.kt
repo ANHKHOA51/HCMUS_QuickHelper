@@ -39,6 +39,7 @@ class ChatFragment : Fragment() {
 
         if (conversationId != null) {
             viewModel.fetchMessage(conversationId)
+            viewModel.subscribeMessages(conversationId)
         }
     }
 
@@ -62,7 +63,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val senderId = arguments?.getInt("senderId")
+//        val senderId = arguments?.getInt("senderId")
         val senderName = arguments?.getString("senderName")
         val senderAvtUrl = arguments?.getString("senderAvtUrl")
 
@@ -86,11 +87,30 @@ class ChatFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             view?.findNavController()?.navigateUp()
         }
+
+        binding.btnSend.setOnClickListener {
+
+            val conversationId = arguments?.getInt("conversationId") ?: return@setOnClickListener
+            val currentUserId = 3
+            val content = binding.etMessage.text.toString().trim()
+
+            if (content.isEmpty()) return@setOnClickListener
+
+            viewModel.sendMessage(
+                conversationId,
+                currentUserId,
+                content
+            )
+
+            binding.etMessage.text?.clear()
+        }
     }
 
     private fun observeViewModel() {
         viewModel.messageList.observe(viewLifecycleOwner) { list ->
             messageAdapter.updateData(list)
+
+            binding.recyclerViewChat.scrollToPosition(list.size - 1)
         }
     }
 

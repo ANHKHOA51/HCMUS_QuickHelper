@@ -11,7 +11,8 @@ import com.example.hcmus_quickhelper.features.chat.repository.ChatRepository
 import com.example.hcmus_quickhelper.features.chat.viewmodel.ConversationViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.hcmus_quickhelper.databinding.FragmentChatListBinding
-
+import androidx.navigation.findNavController
+import com.example.hcmus_quickhelper.R
 
 class ChatListFragment : Fragment() {
     private var _binding: FragmentChatListBinding? = null
@@ -34,6 +35,7 @@ class ChatListFragment : Fragment() {
         observeViewModel()
 
         viewModel.fetchConversations(3)
+        viewModel.subscribeAllMessages()
     }
 
     private lateinit var viewModel: ConversationViewModel
@@ -59,7 +61,32 @@ class ChatListFragment : Fragment() {
     private fun setupRecyclerView() {
         val currentUserId = 3
 
-        chatAdapter = ChatListAdapter(emptyList(), currentUserId)
+        chatAdapter = ChatListAdapter(
+            emptyList(),
+            currentUserId
+        ) { item ->
+
+            val senderName: String
+            val senderAvtUrl: String?
+
+            if (item.customerId == currentUserId) {
+                senderName = item.helperName
+                senderAvtUrl = item.helperAvt
+            } else {
+                senderName = item.customerName
+                senderAvtUrl = item.customerAvt
+            }
+
+            val bundle = Bundle().apply {
+                putInt("conversationId", item.conversationId)
+                putInt("senderId", item.senderId)
+                putString("senderName", senderName)
+                putString("senderAvtUrl", senderAvtUrl)
+            }
+
+            view?.findNavController()
+                ?.navigate(R.id.action_chatList_to_chat, bundle)
+        }
 
         binding.rvMessages.apply {
             adapter = chatAdapter
@@ -71,6 +98,8 @@ class ChatListFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.conversationList.observe(viewLifecycleOwner) { list ->
             chatAdapter.updateData(list)
+
+            binding.rvMessages.scrollToPosition(0)
         }
     }
 

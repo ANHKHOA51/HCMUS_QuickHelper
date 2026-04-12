@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import android.view.View
-import androidx.navigation.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.ItemChatBinding
 import com.example.hcmus_quickhelper.features.chat.model.ConversationItem
+import androidx.recyclerview.widget.DiffUtil
 
 class ChatListAdapter(
     private var items: List<ConversationItem>,
-    private val currentUserId: Int
+    private val currentUserId: Int,
+    private val onClick: (ConversationItem) -> Unit
 ) : RecyclerView.Adapter<ChatListAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root)
@@ -58,36 +59,31 @@ class ChatListAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            var senderAvtUrl: String?
-            var senderName: String?
-
-            if (item.customerId == currentUserId) {
-                senderName = item.helperName
-                senderAvtUrl = item.helperAvt
-            } else if (item.helperId == currentUserId) {
-                senderName = item.customerName
-                senderAvtUrl = item.customerAvt
-            } else {
-                senderName = "Unknown"
-                senderAvtUrl = null
-            }
-
-            val bundle = Bundle().apply {
-                putInt("senderId", item.senderId)
-                putString("senderName", senderName)
-                putString("senderAvtUrl", senderAvtUrl)
-                putInt("conversationId", item.conversationId)
-            }
-
-            holder.itemView.findNavController().navigate(R.id.action_chatList_to_chat, bundle)
+            onClick(item)
         }
     }
 
     override fun getItemCount(): Int = items.size
 
-    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<ConversationItem>) {
-        this.items = newItems
-        notifyDataSetChanged()
+        val diffCallback = object : DiffUtil.Callback() {
+
+            override fun getOldListSize() = items.size
+            override fun getNewListSize() = newItems.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition].conversationId ==
+                        newItems[newItemPosition].conversationId
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition] == newItems[newItemPosition]
+            }
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
     }
 }
