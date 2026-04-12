@@ -18,6 +18,8 @@ class ChatListFragment : Fragment() {
     private var _binding: FragmentChatListBinding? = null
     private val binding get() = _binding!!
 
+    val currentUserId = 5
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +36,7 @@ class ChatListFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
 
-        viewModel.fetchConversations(3)
+        viewModel.fetchConversations(currentUserId)
         viewModel.subscribeAllMessages()
     }
 
@@ -59,7 +61,7 @@ class ChatListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val currentUserId = 3
+
 
         chatAdapter = ChatListAdapter(
             emptyList(),

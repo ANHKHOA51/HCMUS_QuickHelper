@@ -19,6 +19,8 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
+    val currentUserId = 5
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,8 +69,6 @@ class ChatFragment : Fragment() {
         val senderName = arguments?.getString("senderName")
         val senderAvtUrl = arguments?.getString("senderAvtUrl")
 
-        val currentUserId = 3
-
         messageAdapter = MessageAdapter(emptyList(), currentUserId, senderAvtUrl)
 
         binding.ivAvatar.load(senderAvtUrl) {
@@ -91,7 +91,7 @@ class ChatFragment : Fragment() {
         binding.btnSend.setOnClickListener {
 
             val conversationId = arguments?.getInt("conversationId") ?: return@setOnClickListener
-            val currentUserId = 3
+
             val content = binding.etMessage.text.toString().trim()
 
             if (content.isEmpty()) return@setOnClickListener
