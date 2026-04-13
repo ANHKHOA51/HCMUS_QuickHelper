@@ -18,11 +18,11 @@ data class Message (
     val message: String,
 
     @SerialName("message_type")
-    val messageType: String,
+    val messageType: String = "TEXT",
 
     @SerialName("is_read")
-    val isRead: Boolean,
+    val isRead: Boolean = false,
 
     @SerialName("created_at")
-    val createdAt: String
+    val createdAt: String = ""
 )

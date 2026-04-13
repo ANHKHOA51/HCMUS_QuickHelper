@@ -16,6 +16,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 class ChatRemoteDataSource {
     suspend fun getChatList(userId: Int): List<ConversationItem> {
@@ -39,16 +41,21 @@ class ChatRemoteDataSource {
         conversationId: Int,
         senderId: Int,
         content: String
-    ) {
-        SupabaseClient.client.postgrest
+    ): Message {
+        val message = SupabaseClient.client.postgrest
             .from("chat_messages")
             .insert(
-                mapOf(
-                    "conversation_id" to conversationId,
-                    "sender_id" to senderId,
-                    "message" to content
-                )
-            )
+                buildJsonObject {
+                    put("conversation_id", conversationId)
+                    put("sender_id", senderId)
+                    put("message", content)
+                }
+            ) {
+                select()
+            }
+            .decodeSingle<Message>()
+
+        return message
     }
 
     fun subscribeMessages(conversationId: Int): Flow<Message> = callbackFlow {

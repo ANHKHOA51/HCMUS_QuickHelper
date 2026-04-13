@@ -30,10 +30,10 @@ class ChatRepository(
         conversationId: Int,
         senderId: Int,
         content: String
-    ): Result<Unit> {
+    ): Result<Message> {
         return try {
-            dataSource.sendMessage(conversationId, senderId, content)
-            Result.success(Unit)
+            val message = dataSource.sendMessage(conversationId, senderId, content)
+            Result.success(message)
         } catch (e: Exception) {
             Result.failure(e)
         }

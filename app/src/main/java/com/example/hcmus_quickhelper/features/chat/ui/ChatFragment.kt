@@ -19,7 +19,9 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-    val currentUserId = 5
+    val currentUserId = 3
+
+    var conversationId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +39,11 @@ class ChatFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
 
-        val conversationId = arguments?.getInt("conversationId")
+        conversationId = arguments?.getInt("conversationId")
 
         if (conversationId != null) {
-            viewModel.fetchMessage(conversationId)
-            viewModel.subscribeMessages(conversationId)
+            viewModel.fetchMessage(conversationId!!)
+            viewModel.subscribeMessages(conversationId!!)
         }
     }
 
@@ -89,21 +91,34 @@ class ChatFragment : Fragment() {
         }
 
         binding.btnSend.setOnClickListener {
+            if (conversationId == null) return@setOnClickListener
 
-            val conversationId = arguments?.getInt("conversationId") ?: return@setOnClickListener
+//            val conversationId = arguments?.getInt("conversationId") ?: return@setOnClickListener
 
             val content = binding.etMessage.text.toString().trim()
 
             if (content.isEmpty()) return@setOnClickListener
 
             viewModel.sendMessage(
-                conversationId,
+                conversationId!!,
                 currentUserId,
                 content
             )
 
             binding.etMessage.text?.clear()
         }
+
+        binding.recyclerViewChat.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                binding.recyclerViewChat.postDelayed({
+                    val adapter = binding.recyclerViewChat.adapter
+                    if (adapter != null && adapter.itemCount > 0) {
+                        binding.recyclerViewChat.smoothScrollToPosition(adapter.itemCount - 1)
+                    }
+                }, 100)
+            }
+        }
+
     }
 
     private fun observeViewModel() {

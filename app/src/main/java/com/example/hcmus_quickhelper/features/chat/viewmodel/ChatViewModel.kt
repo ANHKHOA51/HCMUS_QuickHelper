@@ -42,13 +42,19 @@ class ChatViewModel(
         }
     }
 
-    fun sendMessage(
-        conversationId: Int,
-        senderId: Int,
-        content: String
-    ) {
+    fun sendMessage(conversationId: Int, senderId: Int, content: String) {
         viewModelScope.launch {
-            repository.sendMessage(conversationId, senderId, content)
+
+            val result = repository.sendMessage(conversationId, senderId, content)
+
+            result.onSuccess { newMessage ->
+
+                val current = messageList.value?.toMutableList() ?: mutableListOf()
+
+                current.add(newMessage)
+
+                messageList.value = current
+            }
         }
     }
 
