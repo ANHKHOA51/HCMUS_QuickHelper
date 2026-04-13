@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
@@ -67,7 +68,7 @@ class ServiceListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ServiceListHelperAdapter { helper ->
-            Toast.makeText(requireContext(), "Đang đặt lịch với ${helper.name}", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_service_to_booking)
         }
         rvHelpers.layoutManager = LinearLayoutManager(requireContext())
         rvHelpers.adapter = adapter

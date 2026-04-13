@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.features.service_browsing.model.Helper

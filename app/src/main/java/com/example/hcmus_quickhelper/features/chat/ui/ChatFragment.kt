@@ -19,7 +19,7 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-    val currentUserId = 3
+    val currentUserId = 5
 
     var conversationId: Int? = null
 

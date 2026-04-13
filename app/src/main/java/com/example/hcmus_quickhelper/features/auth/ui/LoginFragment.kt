@@ -80,7 +80,7 @@ class LoginFragment : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
                 Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.chat_list_fragment)
+                findNavController().navigate(R.id.home_fragment)
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)
                 val message = when {

@@ -5,9 +5,11 @@ import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 
 class BookingFragment : Fragment(R.layout.fragment_booking) {
@@ -16,6 +18,7 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
     private lateinit var edtSearch: EditText
     private lateinit var tvLocationName: TextView
     private lateinit var tvLocationAddress: TextView
+    private lateinit var confirmBtn: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,6 +27,7 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         edtSearch = view.findViewById(R.id.edtSearch)
         tvLocationName = view.findViewById(R.id.tvLocationName)
         tvLocationAddress = view.findViewById(R.id.tvLocationAddress)
+        confirmBtn = view.findViewById(R.id.confirmBtn)
 
 
         webView.settings.javaScriptEnabled = true
@@ -42,6 +46,10 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                 webView.loadUrl("javascript:searchLocation('$query')")
             }
             true
+        }
+
+        confirmBtn.setOnClickListener {
+            findNavController().navigate(R.id.payment_fragment)
         }
     }
 

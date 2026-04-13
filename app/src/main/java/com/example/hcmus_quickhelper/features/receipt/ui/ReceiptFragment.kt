@@ -59,6 +59,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
 
         binding.btnGoToRating.setOnClickListener { handleGoToRating(viewModel.booking.value) }
         binding.btnBack.setOnClickListener { handleBack() }
+        binding.btnBackToHome.setOnClickListener { findNavController().navigate(R.id.home_fragment) }
     }
 
     private fun setupViewModel() {

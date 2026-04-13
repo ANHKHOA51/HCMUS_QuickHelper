@@ -18,7 +18,7 @@ class ChatListFragment : Fragment() {
     private var _binding: FragmentChatListBinding? = null
     private val binding get() = _binding!!
 
-    val currentUserId = 3
+    val currentUserId = 5
 
     override fun onCreateView(
         inflater: LayoutInflater,
