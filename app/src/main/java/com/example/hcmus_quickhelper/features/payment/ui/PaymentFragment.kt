@@ -1,46 +1,28 @@
 package com.example.hcmus_quickhelper.features.payment.ui
 
-import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.FragmentPaymentBinding
-import com.example.hcmus_quickhelper.databinding.FragmentRatingBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
-import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.model.PaymentMethod
-import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
-import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
-import com.example.hcmus_quickhelper.features.voucher.ui.VoucherFragment
-import com.example.hcmus_quickhelper.features.voucher.viewmodel.VoucherViewModel
-import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeFormat
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
 class PaymentFragment : Fragment(R.layout.fragment_payment) {
