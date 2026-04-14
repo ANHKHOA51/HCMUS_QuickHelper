@@ -24,7 +24,7 @@ class CollectVoucherFragment : Fragment() {
     private lateinit var viewModel: CollectVoucherViewModel
     private val collectAdapter by lazy {
         CollectVoucherAdapter(vouchers = emptyList()) {voucher ->
-            viewModel.collectVoucher(userId, voucher.id)
+            viewModel.collectVoucher(voucher.id, userId)
         }
     }
     private val selectAdapter by lazy {
@@ -36,7 +36,7 @@ class CollectVoucherFragment : Fragment() {
     private var _binding: FragmentCollectVoucherBinding? = null
     private val binding get() = _binding!!
 
-    private var userId: Int = 2 // MOCK
+    private var userId: Int = 4 // MOCK
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

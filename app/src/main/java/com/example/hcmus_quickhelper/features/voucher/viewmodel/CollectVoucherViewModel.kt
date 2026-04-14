@@ -96,11 +96,12 @@ class CollectVoucherViewModel (
 
                 val response = voucherRepository.collectVoucher(voucherId, userId)
                 if(response.success) {
-                    Log.d("TEST", "SUCCESS")
+                    loadCollectibleVouchers(userId)
+                    loadMyVouchers(userId)
                 }
                 else {
                     // Notify failed
-                    Log.d("TEST", "FAILED")
+                    Log.d("TEST", response.message)
                 }
             } catch (err: Exception) {
                 Log.d("ERROR", err.toString())
