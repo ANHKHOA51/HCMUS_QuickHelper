@@ -15,6 +15,10 @@ class VoucherRepository (
         return voucherDataSource.getCollectible(userId)
     }
 
+    suspend fun getVouchersByUserId(userId: Int): List<Voucher> {
+        return voucherDataSource.getByOwner(userId)
+    }
+
     suspend fun getVoucherById(id: Int): Voucher? {
         return voucherDataSource.getById(id)
     }

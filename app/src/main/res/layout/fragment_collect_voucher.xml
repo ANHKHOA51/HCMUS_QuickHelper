@@ -95,7 +95,7 @@
             android:padding="4dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvTabOngoing"
+                android:id="@+id/cvTabCollect"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
@@ -115,7 +115,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvTabCompleted"
+                android:id="@+id/cvTabStorage"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"

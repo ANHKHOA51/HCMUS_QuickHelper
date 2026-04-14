@@ -19,6 +19,13 @@ class VoucherDataSource {
         ).decodeList<Voucher>()
     }
 
+    suspend fun getByOwner(userId: Int): List<Voucher> {
+        return SupabaseClient.client.postgrest.rpc(
+            "get_vouchers_of_user",
+            mapOf("p_user_id" to userId)
+        ).decodeList<Voucher>()
+    }
+
     suspend fun getById(id: Int): Voucher? {
         return SupabaseClient.client.from("vouchers").select {
             filter { eq("id", id) }

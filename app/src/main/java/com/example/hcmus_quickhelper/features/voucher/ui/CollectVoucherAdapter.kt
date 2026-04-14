@@ -49,6 +49,8 @@ class CollectVoucherAdapter(
 
         fun bind(voucher: Voucher) {
             binding.apply {
+                binding.tvCode.text = voucher.code
+                binding.tvExpire.text = voucher.expiredAt.toSmartTime()
 
                 binding.btnCollect.setOnClickListener { onCollectVoucher(voucher) }
             }
