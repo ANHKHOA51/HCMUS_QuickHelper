@@ -40,17 +40,15 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView6"
+        android:id="@+id/cardViewTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:cardBackgroundColor="#F2F2F2"
-        app:cardCornerRadius="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="@color/gray_light"
+        app:cardCornerRadius="25dp"
         app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <LinearLayout
@@ -60,60 +58,60 @@
             android:padding="4dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvTabOngoing"
+                android:id="@+id/cvTabNewest"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp">
 
                 <TextView
-                    android:id="@+id/tvTabOngoing"
+                    android:id="@+id/tvTabNewest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Đang thực hiện"
-                    android:textColor="#8D4F28"
+                    android:text="Mới nhất"
+                    android:textColor="@color/orange_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvTabCompleted"
+                android:id="@+id/cvTabUpcoming"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
 
                 <TextView
-                    android:id="@+id/tvTabCompleted"
+                    android:id="@+id/tvTabUpcoming"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Đã hoàn thành"
-                    android:textColor="#888888"
+                    android:text="Sắp tới"
+                    android:textColor="@color/black_light"
                     android:textSize="13sp" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvTabCancelled"
+                android:id="@+id/cvTabHistory"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
 
                 <TextView
-                    android:id="@+id/tvTabCancelled"
+                    android:id="@+id/tvTabHistory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Đã hủy"
-                    android:textColor="#888888"
+                    android:text="Lịch sử"
+                    android:textColor="@color/black_light"
                     android:textSize="13sp" />
             </androidx.cardview.widget.CardView>
 
@@ -131,7 +129,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView6"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewTab"
         tools:listitem="@layout/item_booking_request" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
