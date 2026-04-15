@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentBookingRequestListBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.MockBookingRequestDataSource
+import com.example.hcmus_quickhelper.features.booking.model.BookingStatus
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRequestRepository
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestTab
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestViewModel
@@ -30,10 +31,17 @@ class BookingRequestListFragment : Fragment() {
             val bundle = Bundle().apply {
                 putInt("bookingId", booking.id)
             }
-            findNavController().navigate(
-                R.id.action_booking_request_list_fragment_to_booking_request_detail_fragment2, // Nên dùng ID action trong NavGraph
-                bundle
-            )
+            if(booking.status == BookingStatus.PENDING.toString()) {
+                findNavController().navigate(
+                    R.id.action_booking_request_list_fragment_to_booking_request_detail_fragment2, // Nên dùng ID action trong NavGraph
+                    bundle
+                )
+            } else {
+                findNavController().navigate(
+                    R.id.action_booking_request_list_fragment_to_booking_process_helper_fragment, // Nên dùng ID action trong NavGraph
+                    bundle
+                )
+            }
         }
     }
 
