@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.hcmus_quickhelper.R
 
-class BookingRequestHelperFragment : Fragment() {
-
+class BookingRequestListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_booking_request_helper, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_booking_request_list, container, false)
     }
-
 }
