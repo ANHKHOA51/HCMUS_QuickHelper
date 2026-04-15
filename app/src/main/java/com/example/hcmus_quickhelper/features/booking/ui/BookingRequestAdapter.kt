@@ -10,10 +10,10 @@ import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.ItemBookingRequestBinding
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
 import com.example.hcmus_quickhelper.features.booking.model.BookingStatus
-import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestTab
 
 class BookingRequestAdapter (
     private var bookings: List<BookingRequest> = emptyList(),
+    var onViewDetailBooking: (BookingRequest) -> Unit
 ) : RecyclerView.Adapter<BookingRequestAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -78,6 +78,8 @@ class BookingRequestAdapter (
 
             binding.tvStatus.backgroundTintList = ColorStateList.valueOf(bgColor)
             binding.tvStatus.setTextColor(textColor)
+
+            binding.btnViewDetail.setOnClickListener { onViewDetailBooking(item) }
         }
     }
 }

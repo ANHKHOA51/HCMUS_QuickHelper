@@ -14,9 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentBookingRequestListBinding
-import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.datasource.MockBookingRequestDataSource
-import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRequestRepository
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestTab
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestViewModel
@@ -27,7 +25,17 @@ class BookingRequestListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: BookingRequestViewModel
-    private val bookingAdapter by lazy { BookingRequestAdapter() }
+    private val bookingAdapter by lazy {
+        BookingRequestAdapter() {booking ->
+            val bundle = Bundle().apply {
+                putInt("bookingId", booking.id)
+            }
+            findNavController().navigate(
+                R.id.action_booking_request_list_fragment_to_booking_request_detail_fragment2, // Nên dùng ID action trong NavGraph
+                bundle
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

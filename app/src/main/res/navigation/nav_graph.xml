@@ -172,7 +172,15 @@
         <action
             android:id="@+id/action_booking_request_list_fragment_to_booking_request_detail_fragment2"
             app:destination="@id/booking_request_detail_fragment" />
+        <action
+            android:id="@+id/action_booking_request_list_fragment_to_booking_process_helper_fragment"
+            app:destination="@id/booking_process_helper_fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/booking_process_helper_fragment"
+        android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
+        android:label="fragment_booking_process_helper"
+        tools:layout="@layout/fragment_booking_process_helper" />
 
 
 </navigation>
