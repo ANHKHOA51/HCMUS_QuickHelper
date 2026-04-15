@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/booking_request_detail_fragment">
+    app:startDestination="@id/booking_request_list_fragment">
 
     <fragment
         android:id="@+id/login_fragment"
@@ -165,6 +165,10 @@
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestDetailFragment"
         android:label="fragment_booking_request_helper"
         tools:layout="@layout/fragment_booking_request_detail" />
+    <fragment
+        android:id="@+id/booking_request_list_fragment"
+        android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestListFragment"
+        android:label="BookingRequestListFragment" />
 
 
 </navigation>
