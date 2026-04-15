@@ -15,7 +15,6 @@ import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestTa
 class BookingRequestAdapter (
     private var bookings: List<BookingRequest> = emptyList(),
 ) : RecyclerView.Adapter<BookingRequestAdapter.ViewHolder>() {
-    private var currentTab: BookingRequestTab = BookingRequestTab.NEWEST
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,9 +39,8 @@ class BookingRequestAdapter (
         return bookings.size
     }
 
-    fun updateData(newList: List<BookingRequest>, tab: BookingRequestTab) {
+    fun updateData(newList: List<BookingRequest>) {
         bookings = newList
-        currentTab = tab
         notifyDataSetChanged()
     }
 
@@ -63,15 +61,18 @@ class BookingRequestAdapter (
 
             val context = binding.tvStatus.context
 
-            val (bgColor, textColor) = when (currentTab) {
-                BookingRequestTab.NEWEST -> {
-                    ContextCompat.getColor(context, R.color.blue_light_300) to ContextCompat.getColor(context, R.color.blue)
+            val (bgColor, textColor) = when (item.status) {
+                BookingStatus.PENDING.toString() -> {
+                    ContextCompat.getColor(context, R.color.gray_light) to ContextCompat.getColor(context, R.color.gray_hint)
                 }
-                BookingRequestTab.UPCOMING -> {
+                BookingStatus.CONFIRMED.toString() -> {
                     ContextCompat.getColor(context, R.color.green_light) to ContextCompat.getColor(context, R.color.green)
                 }
-                BookingRequestTab.COMPLETED -> {
+                BookingStatus.COMPLETED.toString() -> {
                     ContextCompat.getColor(context, R.color.orange_light) to ContextCompat.getColor(context, R.color.orange_primary)
+                }
+                else -> {
+                    ContextCompat.getColor(context, R.color.blue_light_300) to ContextCompat.getColor(context, R.color.blue)
                 }
             }
 

@@ -79,7 +79,7 @@ class BookingRequestListFragment : Fragment() {
 
         viewModel.bookings.observe(viewLifecycleOwner) { list ->
             list?.let {
-                bookingAdapter.updateData(it, viewModel.currentTab.value ?: BookingRequestTab.NEWEST)
+                bookingAdapter.updateData(it)
             }
         }
     }
