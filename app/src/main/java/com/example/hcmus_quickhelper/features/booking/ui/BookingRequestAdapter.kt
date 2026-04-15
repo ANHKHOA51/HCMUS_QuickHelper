@@ -49,7 +49,7 @@ class BookingRequestAdapter (
         fun bind(item: BookingRequest) {
             binding.tvCustomerName.text = item.customerName
             binding.tvServiceName.text = item.serviceName
-            binding.tvDateBooking.text = item.schedule.toSmartTime()
+            binding.tvDateBooking.text = item.schedule
             binding.tvAddress.text = item.address
             
             // Handle possible enum mapping errors safely

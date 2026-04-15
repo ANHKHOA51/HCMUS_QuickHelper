@@ -168,7 +168,11 @@
     <fragment
         android:id="@+id/booking_request_list_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestListFragment"
-        android:label="BookingRequestListFragment" />
+        android:label="BookingRequestListFragment" >
+        <action
+            android:id="@+id/action_booking_request_list_fragment_to_booking_request_detail_fragment2"
+            app:destination="@id/booking_request_detail_fragment" />
+    </fragment>
 
 
 </navigation>

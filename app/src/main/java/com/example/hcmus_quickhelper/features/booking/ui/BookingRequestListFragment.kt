@@ -77,7 +77,7 @@ class BookingRequestListFragment : Fragment() {
             viewModel.loadBookings()
         }
 
-        viewModel.bookings.observe(viewLifecycleOwner) { list ->
+        viewModel.filterBooking.observe(viewLifecycleOwner) { list ->
             list?.let {
                 bookingAdapter.updateData(it)
             }
