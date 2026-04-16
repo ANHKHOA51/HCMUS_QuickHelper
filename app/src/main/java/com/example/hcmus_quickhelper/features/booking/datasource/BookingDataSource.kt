@@ -4,6 +4,8 @@ import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 
 class BookingDataSource {
     suspend fun getAll(): List<Booking> {
@@ -32,8 +34,12 @@ class BookingDataSource {
         """.trimIndent())
         ) {
             filter {
-                eq("helper_id", helperId)
+                or {
+                    eq("helper_id", helperId)
+                    filter("helper_id",FilterOperator.IS, "null")
+                }
             }
+            order("created_at", Order.DESCENDING)
         }.decodeList<Booking>()
     }
     suspend fun getById(id: Int): Booking {
