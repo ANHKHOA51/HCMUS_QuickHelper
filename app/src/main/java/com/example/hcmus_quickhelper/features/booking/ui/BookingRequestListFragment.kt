@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.databinding.FragmentBookingRequestListBinding
+import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.datasource.MockBookingRequestDataSource
-import com.example.hcmus_quickhelper.features.booking.model.BookingStatus
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRequestRepository
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestTab
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingRequestViewModel
@@ -33,17 +35,19 @@ class BookingRequestListFragment : Fragment() {
             }
             if(booking.status == BookingStatus.PENDING.toString()) {
                 findNavController().navigate(
-                    R.id.action_booking_request_list_fragment_to_booking_request_detail_fragment2, // Nên dùng ID action trong NavGraph
+                    R.id.action_booking_request_list_fragment_to_booking_request_detail_fragment2,
                     bundle
                 )
             } else {
                 findNavController().navigate(
-                    R.id.action_booking_request_list_fragment_to_booking_process_helper_fragment, // Nên dùng ID action trong NavGraph
+                    R.id.action_booking_request_list_fragment_to_booking_process_helper_fragment,
                     bundle
                 )
             }
         }
     }
+
+    private val helperId: Int = 4
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +71,7 @@ class BookingRequestListFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val repository = BookingRequestRepository(MockBookingRequestDataSource())
+        val repository = BookingRepository(BookingDataSource())
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
@@ -76,7 +80,7 @@ class BookingRequestListFragment : Fragment() {
         }
         viewModel = ViewModelProvider(this, factory)[BookingRequestViewModel::class.java]
 
-        viewModel.loadBookings()
+        viewModel.loadBookings(helperId)
     }
 
     private fun setupRecyclerView() {
@@ -90,7 +94,7 @@ class BookingRequestListFragment : Fragment() {
     private fun setupObserve() {
         viewModel.currentTab.observe(viewLifecycleOwner) { tab ->
             updateTabUI(tab)
-            viewModel.loadBookings()
+            viewModel.filterBooking()
         }
 
         viewModel.filterBooking.observe(viewLifecycleOwner) { list ->

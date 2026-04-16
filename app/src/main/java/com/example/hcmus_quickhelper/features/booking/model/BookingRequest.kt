@@ -3,12 +3,6 @@ package com.example.hcmus_quickhelper.features.booking.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-enum class BookingStatus(val value: String) {
-    COMPLETED("Hoàn thành"),
-    CONFIRMED("Đã xác nhận"),
-    IN_PROGRESS("Đang thực hiện"),
-    PENDING("Chờ xử lý");
-}
 
 @Serializable
 data class BookingRequest (
@@ -37,7 +31,7 @@ data class BookingRequest (
     val serviceName: String,
 
     @SerialName("status")
-    val status: String,
+    var status: String,
 
     @SerialName("total_price")
     val totalPrice: Double,

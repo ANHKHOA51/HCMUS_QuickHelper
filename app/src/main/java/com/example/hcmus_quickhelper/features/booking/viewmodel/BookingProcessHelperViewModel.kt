@@ -43,4 +43,14 @@ class BookingProcessHelperViewModel(
             _imageEvidence.value = currentList
         }
     }
+
+    fun updateBookingStatus(newStatus: String) {
+        val currentBooking = _booking.value
+        currentBooking?.let {
+            val updatedBooking = it.copy(status = newStatus)
+            _booking.value = updatedBooking
+            // Ở đây bạn có thể gọi repository để update database thật
+             bookingRequestRepository.updateStatus(it.id, newStatus)
+        }
+    }
 }

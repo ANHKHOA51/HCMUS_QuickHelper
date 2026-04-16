@@ -12,6 +12,22 @@ class BookingRepository (
     suspend fun getBookingById(id: Int): Booking {
         return dataSource.getById(id)
     }
+
+    suspend fun getBookingByIdFullData(id: Int): Booking {
+        return dataSource.getByIdFullData(id)
+    }
+
+    suspend fun getAllBooking(): List<Booking> {
+        return dataSource.getAll()
+    }
+
+    suspend fun getAllBookingFullData(): List<Booking> {
+        return dataSource.getAllFullData()
+    }
+
+    suspend fun getBookingsByHelperId(helperId: Int): List<Booking> {
+        return dataSource.getAllByHelperIdFullData(helperId)
+    }
 }
 class BookingRepositoryTmp(private val localDataSource: BookingLocalDataSource) {
     suspend fun getBookingHistories(): List<BookingHistory> {

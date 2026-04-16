@@ -1,6 +1,8 @@
 package com.example.hcmus_quickhelper.features.booking.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.hcmus_quickhelper.core.model.BookingStatus
+import com.example.hcmus_quickhelper.core.utils.toRemainingTime
 import com.example.hcmus_quickhelper.databinding.FragmentBookingProcessHelperBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.MockBookingRequestDataSource
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
@@ -35,6 +39,9 @@ class BookingProcessHelperFragment : Fragment() {
             viewModel.addEvidence(uris)
         }
     }
+
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var runnable: Runnable
 
     private var bookingId = -1
 
@@ -81,12 +88,49 @@ class BookingProcessHelperFragment : Fragment() {
 
     private fun setupObserve() {
         viewModel.booking.observe(viewLifecycleOwner) { booking ->
-            booking?.let { displayBooking(it) }
+            booking?.let { 
+                displayBooking(it)
+                updateUIBasedOnStatus(it.status)
+                updateCountdown(it.schedule)
+            }
         }
 
         viewModel.imageEvidence.observe(viewLifecycleOwner) { uris ->
             evidenceAdapter.updateImages(uris)
         }
+    }
+
+    private fun updateUIBasedOnStatus(status: String) {
+        when (status) {
+            BookingStatus.CONFIRMED.toString() -> {
+                binding.btnStartWork.visibility = View.VISIBLE
+                binding.btnCompleteWork.visibility = View.GONE
+                // Khi chưa bắt đầu thì chưa cho thêm ảnh
+                binding.cardEvidence.visibility = View.GONE
+            }
+            BookingStatus.IN_PROGRESS.toString() -> {
+                binding.btnStartWork.visibility = View.GONE
+                binding.btnCompleteWork.visibility = View.VISIBLE
+                binding.cardEvidence.visibility = View.VISIBLE
+            }
+            else -> {
+                binding.btnStartWork.visibility = View.GONE
+                binding.btnCompleteWork.visibility = View.GONE
+                binding.cardEvidence.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun updateCountdown(schedule: String) {
+        runnable = object : Runnable {
+            override fun run() {
+
+                binding.tvCountdownBanner.text = schedule.toRemainingTime()
+
+                handler.postDelayed(this, 60000)
+            }
+        }
+        handler.post(runnable)
     }
 
     private fun setupListeners() {
@@ -98,12 +142,18 @@ class BookingProcessHelperFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        binding.btnChat.setOnClickListener {
-            // Logic mở chat
+        binding.btnStartWork.setOnClickListener {
+            // Cập nhật trạng thái sang IN_PROGRESS trong ViewModel
+            viewModel.updateBookingStatus(BookingStatus.IN_PROGRESS.toString())
         }
 
         binding.btnCompleteWork.setOnClickListener {
             // Logic hoàn tất công việc
+            viewModel.updateBookingStatus(BookingStatus.COMPLETED.toString())
+        }
+
+        binding.btnChat.setOnClickListener {
+            // Logic mở chat
         }
     }
 

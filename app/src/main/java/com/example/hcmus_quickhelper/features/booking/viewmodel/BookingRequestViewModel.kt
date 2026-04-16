@@ -1,13 +1,14 @@
 package com.example.hcmus_quickhelper.features.booking.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
-import com.example.hcmus_quickhelper.features.booking.model.BookingStatus
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
-import com.example.hcmus_quickhelper.features.booking.repository.BookingRequestRepository
 import kotlinx.coroutines.launch
 
 enum class BookingRequestTab {
@@ -15,16 +16,16 @@ enum class BookingRequestTab {
 }
 
 class BookingRequestViewModel (
-    private val bookingRepository: BookingRequestRepository
+    private val bookingRepository: BookingRepository
 ) : ViewModel() {
     private val _currentTab = MutableLiveData<BookingRequestTab>(BookingRequestTab.NEWEST)
     val currentTab: LiveData<BookingRequestTab> = _currentTab
 
-    private val _bookings = MutableLiveData<List<BookingRequest>>()
-    val bookings: LiveData<List<BookingRequest>> = _bookings
+    private val _bookings = MutableLiveData<List<Booking>>()
+    val bookings: LiveData<List<Booking>> = _bookings
 
-    private val _filterBooking = MutableLiveData<List<BookingRequest>>()
-    val filterBooking: LiveData<List<BookingRequest>> = _filterBooking
+    private val _filterBooking = MutableLiveData<List<Booking>>()
+    val filterBooking: LiveData<List<Booking>> = _filterBooking
 
     fun selectTab(tab: BookingRequestTab) {
         _currentTab.value = tab
@@ -52,10 +53,10 @@ class BookingRequestViewModel (
         }
     }
 
-    fun loadBookings() {
+    fun loadBookings(helperId: Int) {
         viewModelScope.launch {
             try {
-                val data = bookingRepository.getAllBookingRequest()
+                val data = bookingRepository.getBookingsByHelperId(helperId)
                 _bookings.value = data
                 filterBooking()
             } catch (e: Exception) {

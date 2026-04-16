@@ -1,7 +1,7 @@
 package com.example.hcmus_quickhelper.features.booking.datasource
 
+import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
-import com.example.hcmus_quickhelper.features.booking.model.BookingStatus
 
 class MockBookingRequestDataSource {
     val bookingRequests = listOf(
@@ -81,7 +81,7 @@ class MockBookingRequestDataSource {
             serviceName = "Nấu ăn tại nhà",
             status = BookingStatus.CONFIRMED.toString(),
             totalPrice = 600000.0,
-            createdAt = "2024-05-21 15:45"
+            createdAt = "2026-04-12 10:37:53.544218"
         ),
         BookingRequest(
             id = 7,
@@ -114,7 +114,7 @@ class MockBookingRequestDataSource {
             schedule = "2024-05-24 11:00",
             address = "333 Võ Văn Ngân, Thủ Đức, TP.HCM",
             customerName = "Vũ Văn I",
-            customerPhone = "0989012345",
+            customerPhone = "2026-04-12 10:37:53.544218",
             customerAvatar = "https://i.pravatar.cc/150?u=9",
             customerRating = 5.0,
             serviceName = "Khử khuẩn nhà cửa",
@@ -139,5 +139,11 @@ class MockBookingRequestDataSource {
 
     fun getAll(): List<BookingRequest> {
         return bookingRequests
+    }
+
+    fun updateStatus(id: Int, newStatus: String) {
+        bookingRequests.find { it.id == id }?.let {
+            it.status = newStatus
+        }
     }
 }

@@ -9,4 +9,8 @@ class BookingRequestRepository (
     fun getAllBookingRequest() : List<BookingRequest>{
         return dataSource.getAll()
     }
+
+    fun updateStatus(id: Int, newStatus: String) {
+        dataSource.updateStatus(id, newStatus)
+    }
 }

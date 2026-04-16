@@ -5,8 +5,14 @@ import kotlinx.serialization.Serializable
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+enum class BookingStatus(val value: String) {
+    COMPLETED("Hoàn thành"),
+    CONFIRMED("Đã xác nhận"),
+    IN_PROGRESS("Đang thực hiện"),
+    PENDING("Chờ xử lý");
+}
+
 @Serializable
-@Parcelize
 data class Booking (
     @SerialName("id")
     val id: Int,
@@ -21,7 +27,7 @@ data class Booking (
     val customerId: Int,
 
     @SerialName("helper_id")
-    val helperId: Int,
+    val helperId: Int?,
 
     @SerialName("service_id")
     val serviceId: Int,
@@ -40,4 +46,13 @@ data class Booking (
 
     @SerialName("created_at")
     val createdAt: String,
-): Parcelable
+
+    @SerialName("customer")
+    val customer: User? = null,
+
+    @SerialName("helper")
+    val helper: User? = null,
+
+    @SerialName("services")
+    val service: Service? = null,
+)

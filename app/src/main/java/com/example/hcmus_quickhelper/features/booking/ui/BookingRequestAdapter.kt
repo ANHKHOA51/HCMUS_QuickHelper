@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
-import com.example.hcmus_quickhelper.core.utils.toSmartTime
+import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.core.model.BookingStatus
+import com.example.hcmus_quickhelper.core.utils.toMessageTime
 import com.example.hcmus_quickhelper.databinding.ItemBookingRequestBinding
-import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
-import com.example.hcmus_quickhelper.features.booking.model.BookingStatus
 
 class BookingRequestAdapter (
-    private var bookings: List<BookingRequest> = emptyList(),
-    var onViewDetailBooking: (BookingRequest) -> Unit
+    private var bookings: List<Booking> = emptyList(),
+    var onViewDetailBooking: (Booking) -> Unit
 ) : RecyclerView.Adapter<BookingRequestAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -39,20 +39,19 @@ class BookingRequestAdapter (
         return bookings.size
     }
 
-    fun updateData(newList: List<BookingRequest>) {
+    fun updateData(newList: List<Booking>) {
         bookings = newList
         notifyDataSetChanged()
     }
 
     inner class ViewHolder(private val binding: ItemBookingRequestBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: BookingRequest) {
-            binding.tvCustomerName.text = item.customerName
-            binding.tvServiceName.text = item.serviceName
-            binding.tvDateBooking.text = item.schedule
+        fun bind(item: Booking) {
+            binding.tvCustomerName.text = item.customer?.fullname
+            binding.tvServiceName.text = item.service?.name
+            binding.tvDateBooking.text = item.schedule.toMessageTime()
             binding.tvAddress.text = item.address
-            
-            // Handle possible enum mapping errors safely
+
             binding.tvStatus.text = try {
                 BookingStatus.valueOf(item.status).value
             } catch (e: Exception) {
