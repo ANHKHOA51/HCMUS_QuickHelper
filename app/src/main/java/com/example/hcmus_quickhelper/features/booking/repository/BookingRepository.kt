@@ -4,6 +4,7 @@ import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.model.BookingHistory
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingLocalDataSource
+import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
 
 class BookingRepository (
@@ -27,6 +28,10 @@ class BookingRepository (
 
     suspend fun getBookingsByHelperId(helperId: Int): List<Booking> {
         return dataSource.getAllByHelperIdFullData(helperId)
+    }
+
+    suspend fun updateBooking(id: Int, booking: BookingInsert) {
+        dataSource.update(id, booking)
     }
 }
 class BookingRepositoryTmp(private val localDataSource: BookingLocalDataSource) {

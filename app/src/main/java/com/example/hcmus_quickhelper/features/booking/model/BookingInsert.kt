@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.booking.model
 
+import com.example.hcmus_quickhelper.core.model.Booking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -29,3 +30,16 @@ data class BookingInsert (
     @SerialName("note")
     val note: String? = null
 )
+
+fun Booking.toBookingInsert(): BookingInsert {
+    return BookingInsert(
+        schedule = this.schedule,
+        address = this.address,
+        customerId = this.customerId,
+        serviceId = this.serviceId,
+        status = this.status,
+        quantity = this.quantity,
+        totalPrice = this.totalPrice,
+        note = this.note
+    )
+}

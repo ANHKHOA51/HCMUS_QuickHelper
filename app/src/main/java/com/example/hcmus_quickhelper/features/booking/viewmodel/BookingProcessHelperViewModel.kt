@@ -5,15 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
+import com.example.hcmus_quickhelper.features.booking.model.toBookingInsert
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRequestRepository
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
+import kotlin.String
 
 class BookingProcessHelperViewModel(
-    private val bookingRequestRepository: BookingRequestRepository
+    private val bookingRepository: BookingRepository
 ): ViewModel() {
-    private val _booking = MutableLiveData<BookingRequest?>()
-    val booking: LiveData<BookingRequest?> = _booking
+    private val _booking = MutableLiveData<Booking?>()
+    val booking: LiveData<Booking?> = _booking
 
     private val _imageEvidence = MutableLiveData<MutableList<Uri>>(mutableListOf())
     val imageEvidence: LiveData<MutableList<Uri>> = _imageEvidence
@@ -21,9 +27,8 @@ class BookingProcessHelperViewModel(
     fun loadBooking(bookingId: Int) {
         viewModelScope.launch {
             try {
-                val allBookings = bookingRequestRepository.getAllBookingRequest()
-                val foundBooking = allBookings.find { it.id == bookingId }
-                _booking.postValue(foundBooking)
+                val data = bookingRepository.getBookingByIdFullData(bookingId)
+                _booking.value = data
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -49,8 +54,13 @@ class BookingProcessHelperViewModel(
         currentBooking?.let {
             val updatedBooking = it.copy(status = newStatus)
             _booking.value = updatedBooking
-            // Ở đây bạn có thể gọi repository để update database thật
-             bookingRequestRepository.updateStatus(it.id, newStatus)
+            viewModelScope.launch {
+                try {
+                    bookingRepository.updateBooking(it.id, it.toBookingInsert())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
     }
 }

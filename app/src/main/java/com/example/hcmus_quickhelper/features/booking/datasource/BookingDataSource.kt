@@ -2,6 +2,7 @@ package com.example.hcmus_quickhelper.features.booking.datasource
 
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
@@ -65,5 +66,9 @@ class BookingDataSource {
                 eq("id", id)
             }
         }.decodeSingle<Booking>()
+    }
+
+    suspend fun update(id: Int, booking: BookingInsert) {
+        SupabaseClient.client.from("bookings").update(booking)
     }
 }

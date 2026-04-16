@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.core.utils.toRemainingTime
 import com.example.hcmus_quickhelper.databinding.FragmentBookingProcessHelperBinding
+import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.datasource.MockBookingRequestDataSource
 import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
+import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRequestRepository
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingProcessHelperViewModel
 
@@ -68,7 +71,7 @@ class BookingProcessHelperFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val repository = BookingRequestRepository(MockBookingRequestDataSource())
+        val repository = BookingRepository(BookingDataSource())
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
@@ -157,11 +160,11 @@ class BookingProcessHelperFragment : Fragment() {
         }
     }
 
-    private fun displayBooking(booking: BookingRequest) {
+    private fun displayBooking(booking: Booking) {
         binding.apply {
-            tvUserName.text = booking.customerName
-            tvPhone.text = booking.customerPhone
-            tvServiceName.text = booking.serviceName
+            tvUserName.text = booking.customer?.fullname
+            tvPhone.text = booking.customer?.phone
+            tvServiceName.text = booking.service?.name
             tvAddress.text = booking.address
         }
     }
