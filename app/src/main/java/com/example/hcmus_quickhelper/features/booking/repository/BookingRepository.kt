@@ -5,7 +5,6 @@ import com.example.hcmus_quickhelper.features.booking.model.BookingHistory
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingLocalDataSource
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
-import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
 
 class BookingRepository (
     private val dataSource: BookingDataSource

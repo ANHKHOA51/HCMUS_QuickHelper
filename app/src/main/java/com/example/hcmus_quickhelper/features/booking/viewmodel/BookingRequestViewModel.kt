@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
-import com.example.hcmus_quickhelper.features.booking.model.BookingRequest
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import kotlinx.coroutines.launch
 
