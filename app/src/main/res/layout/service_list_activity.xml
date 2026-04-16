@@ -64,20 +64,11 @@
             android:drawablePadding="8dp"
             android:hint="Bạn đang tìm dịch vụ gì?"
             android:paddingHorizontal="12dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:inputType="text"
+            android:maxLines="1"/>
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:id="@+id/btnAdvancedFilter"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="20dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="12dp"
-        android:src="@drawable/ic_filter"
-        app:layout_constraintBottom_toBottomOf="@id/cvSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cvSearch" />
 
     <HorizontalScrollView
         android:id="@+id/svFilters"
@@ -119,6 +110,17 @@
                 android:text="Đánh giá 4.5+" />
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
+    <ImageView
+        android:id="@+id/btnAdvancedFilter"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:src="@drawable/ic_filter"
+        app:layout_constraintBottom_toBottomOf="@id/svFilters"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/svFilters" />
 
     <TextView
         android:id="@+id/tvResultCount"

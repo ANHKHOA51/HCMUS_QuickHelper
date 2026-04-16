@@ -23,7 +23,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@drawable/default_avt" />
 
         <ImageView
             android:id="@+id/ivOnlineStatus"
@@ -45,16 +45,6 @@
             app:layout_constraintTop_toTopOf="@id/ivAvatar"
             tools:text="Nguyễn Thị Hoa" />
 
-        <ImageView
-            android:id="@+id/ivVerified"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="4dp"
-            android:src="@drawable/ic_verified"
-            app:layout_constraintBottom_toBottomOf="@id/tvExpertName"
-            app:layout_constraintStart_toEndOf="@id/tvExpertName"
-            app:layout_constraintTop_toTopOf="@id/tvExpertName" />
-
         <TextView
             android:id="@+id/tvRating"
             android:layout_width="wrap_content"
@@ -65,7 +55,8 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvExpertName"
+            app:layout_constraintBottom_toBottomOf="@id/tvExpertName"
             tools:text="4.9" />
 
         <TextView
@@ -76,37 +67,10 @@
             android:layout_marginEnd="16dp"
             android:textColor="#495057"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@id/tvRating"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvExpertName"
             app:layout_constraintTop_toBottomOf="@id/tvExpertName"
             tools:text="Dọn dẹp nhà • Nấu ăn" />
-
-        <TextView
-            android:id="@+id/tvDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:drawableStart="@drawable/ic_location"
-            android:drawablePadding="4dp"
-            android:textColor="#6C757D"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/tvExpertName"
-            app:layout_constraintTop_toBottomOf="@id/tvSkills"
-            tools:text="1.2 km" />
-
-        <TextView
-            android:id="@+id/tvReviewCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:drawableStart="@drawable/ic_filter_lines"
-            android:drawablePadding="4dp"
-            android:textColor="#6C757D"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/tvDistance"
-            app:layout_constraintStart_toEndOf="@id/tvDistance"
-            app:layout_constraintTop_toTopOf="@id/tvDistance"
-            tools:text="128 đánh giá" />
 
         <TextView
             android:id="@+id/tvPrice"
@@ -118,7 +82,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvExpertName"
-            app:layout_constraintTop_toBottomOf="@id/tvDistance"
+            app:layout_constraintTop_toBottomOf="@id/tvSkills"
             tools:text="80.000đ/giờ" />
 
         <com.google.android.material.button.MaterialButton

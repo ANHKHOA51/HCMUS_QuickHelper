@@ -31,7 +31,7 @@ class TopHelperAdapter(private var helpers: List<Helper> = emptyList()) : Recycl
 
         fun bind(helper: Helper) {
             tvHelperName.text = helper.name
-            tvHelperRating.text = "${helper.rating} (${helper.reviewCount})"
+            tvHelperRating.text = "${helper.rating}"
 
             // Xử lý sự kiện click
             btnViewProfile.setOnClickListener {

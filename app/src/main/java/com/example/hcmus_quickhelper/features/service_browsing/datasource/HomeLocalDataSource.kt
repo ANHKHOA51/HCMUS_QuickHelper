@@ -28,30 +28,6 @@ class HomeLocalDataSource {
     suspend fun getTopHelpers(): List<Helper> {
         delay(300)
         return listOf(
-            Helper(
-                id = "1",
-                name = "Nguyễn Thị Hoa",
-                avatarUrl = "", // Sẽ gắn link ảnh sau
-                isOnline = true,
-                isVerified = true,
-                rating = 4.9,
-                reviewCount = 128,
-                skills = "Dọn dẹp nhà • Nấu ăn",
-                distance = 1.2,
-                priceText = "80.000đ/giờ"
-            ),
-            Helper(
-                id = "2",
-                name = "Trần Văn Nam",
-                avatarUrl = "",
-                isOnline = false,
-                isVerified = true,
-                rating = 4.8,
-                reviewCount = 95,
-                skills = "Sửa điện • Ống nước",
-                distance = 2.5,
-                priceText = "100.000đ/giờ"
-            )
         )
     }
 }
