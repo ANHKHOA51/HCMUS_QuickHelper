@@ -28,7 +28,6 @@ class SelectVoucherViewModel (
 
             try {
                 val data = repository.getAllVoucherGlobal()
-                Log.d("TEST", "$data")
                 _vouchers.value = data
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -1,9 +1,8 @@
 package com.example.hcmus_quickhelper.features.payment.repository
 
-import com.example.hcmus_quickhelper.core.model.Booking
-import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentInsert
 
 class PaymentRepository (
     val paymentDataSource: PaymentDataSource
@@ -16,15 +15,19 @@ class PaymentRepository (
         return paymentDataSource.getByBookingId(id)
     }
 
+    suspend fun getPaymentByBookingIdFullData(bookingId: Int): Payment {
+        return paymentDataSource.getByBookingIdFullData(bookingId)
+    }
+
     suspend fun getAllPayments(): List<Payment> {
         return paymentDataSource.getAll()
     }
 
-    suspend fun insertPayment(payment: Payment): Payment {
+    suspend fun insertPayment(payment: PaymentInsert): Payment {
         return paymentDataSource.insert(payment)
     }
 
-    suspend fun updatePayment(payment: Payment): Payment {
-        return paymentDataSource.update(payment)
+    suspend fun updatePayment(paymentId: Int ,payment: PaymentInsert): Payment {
+        return paymentDataSource.update(paymentId, payment)
     }
 }

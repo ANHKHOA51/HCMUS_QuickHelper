@@ -6,19 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
-import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.FragmentPaymentBinding
-import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
-import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
-import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.model.PaymentMethod
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
@@ -36,15 +33,6 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val navBackStackEntry = findNavController().currentBackStackEntry
-        navBackStackEntry?.savedStateHandle?.getLiveData<Voucher>("selected_voucher")
-            ?.observe(viewLifecycleOwner) { voucher ->
-                voucher?.let {
-                    viewModel.setVoucher(it)
-                    navBackStackEntry.savedStateHandle.remove<Voucher>("selected_voucher")
-                }
-            }
-
         _binding = FragmentPaymentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -54,76 +42,84 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bookingId = arguments?.getInt("booking_id") ?: 1
+
         setupViewModel()
         setupObservers()
-        updateUI()
+        
+        // Load data chỉ khi chưa có dữ liệu payment hoặc khi khởi tạo lần đầu
+        if (viewModel.payment.value == null) {
+            viewModel.loadBooking(bookingId)
+        }
+        
+        setupVoucherResultListener()
 
         binding.layoutVoucherPicker.setOnClickListener { showVoucherPicker() }
         binding.btnBack.setOnClickListener { handleBack() }
-        binding.btnConfirmPayment.setOnClickListener{ submitPayment(viewModel.payment.value, viewModel.booking.value, viewModel.voucher.value) }
+        binding.btnConfirmPayment.setOnClickListener {
+            val selectedId = binding.radioGroupPaymentMethod.checkedRadioButtonId
+            if (selectedId != -1) {
+                val radioButton: RadioButton = binding.root.findViewById(selectedId)
+                val method = PaymentMethod.fromString(radioButton.text.toString()).toString()
+                submitPayment(method)
+            } else {
+                Toast.makeText(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupViewModel() {
         val paymentRepository = PaymentRepository(PaymentDataSource())
-        val bookingRepository = BookingRepository(BookingDataSource())
-
 
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return PaymentViewModel(paymentRepository, bookingRepository) as T
+                return PaymentViewModel(paymentRepository) as T
             }
         }
         viewModel = ViewModelProvider(this, factory)[PaymentViewModel::class.java]
     }
 
+    private fun setupVoucherResultListener() {
+        val navBackStackEntry = findNavController().currentBackStackEntry
+        navBackStackEntry?.savedStateHandle?.getLiveData<Voucher>("selected_voucher")
+            ?.observe(viewLifecycleOwner) { voucher ->
+                voucher?.let {
+                    Log.d("PaymentFragment", "Voucher selected: ${it.code}")
+                    viewModel.setVoucher(it)
+                    navBackStackEntry.savedStateHandle.remove<Voucher>("selected_voucher")
+                }
+            }
+    }
+
     private fun setupObservers() {
         viewModel.payment.observe(viewLifecycleOwner) { payment ->
             payment?.let {
-            }
-        }
-
-        viewModel.voucher.observe(viewLifecycleOwner) {voucher ->
-            if (voucher != null) {
-                viewModel.payment
-
-                binding.layoutVoucher.visibility = View.VISIBLE
-
-                binding.tvCodeVoucher.text = voucher.code
-                binding.tvVoucherItemDiscount.text = "giảm ${MoneyUtils.formatVietnameseCurrency(voucher.discount)}"
-
-
-                binding.tvVoucherDiscount.text = "-${MoneyUtils.formatVietnameseCurrency(voucher.discount)}"
-
-                binding.btnCancelVoucher.setOnClickListener {
-                    viewModel.setVoucher(null)
+                if (it.voucher != null) {
+                    binding.layoutVoucher.visibility = View.VISIBLE
+                    binding.tvCodeVoucher.text = it.voucher?.code
+                    binding.tvVoucherItemDiscount.text = "giảm ${MoneyUtils.formatVietnameseCurrency(it.voucher?.discount ?: 0.0)}"
+                    binding.tvVoucherDiscount.text = "-${MoneyUtils.formatVietnameseCurrency(it.voucher?.discount ?: 0.0)}"
+                    binding.btnCancelVoucher.setOnClickListener {
+                        viewModel.setVoucher(null)
+                    }
+                } else {
+                    binding.layoutVoucher.visibility = View.GONE
+                    binding.tvVoucherDiscount.text = "0đ"
                 }
-            } else {
-                binding.layoutVoucher.visibility = View.GONE
-                binding.tvVoucherDiscount.text = "${MoneyUtils.formatVietnameseCurrency(0.0)}"
-            }
 
-            binding.tvTotalPrice.text = MoneyUtils.formatVietnameseCurrency(viewModel.calcTotalPrice())
-        }
+                it.booking?.let { booking ->
+                    binding.tvAddress.text = booking.address
+                    binding.tvDateBooking.text = booking.schedule.toSmartTime()
+                    binding.tvServicePrice.text = MoneyUtils.formatVietnameseCurrency(booking.totalPrice)
+                }
 
-        viewModel.booking.observe(viewLifecycleOwner) {booking ->
-            booking?.let {
-                binding.tvAddress.text = it.address
-                binding.tvDateBooking.text = it.schedule.toSmartTime()
-
-                binding.tvServicePrice.text = MoneyUtils.formatVietnameseCurrency(it.totalPrice)
-
-                binding.tvTotalPrice.text = MoneyUtils.formatVietnameseCurrency(viewModel.calcTotalPrice())
+                binding.tvTotalPrice.text = MoneyUtils.formatVietnameseCurrency(it.amount)
             }
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isVisible ->
-            // loading
         }
-    }
-
-    private fun updateUI() {
-        viewModel.loadBooking(bookingId)
     }
 
     private fun showVoucherPicker() {
@@ -131,26 +127,18 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun handleBack() {
-        Log.d("DEBUG", "BACK")
+        findNavController().popBackStack()
     }
 
-    private fun submitPayment(payment: Payment?, booking: Booking?, voucher: Voucher?) {
-
-        val selectedId = binding.radioGroupPaymentMethod.checkedRadioButtonId
-        if (selectedId != -1) {
-            val radioButton: RadioButton = binding.root.findViewById(selectedId)
-            val method = PaymentMethod.fromString(radioButton.text.toString()).toString()
-
-            viewModel.savePayment(method)
-        }
-
-        val navController = findNavController()
-
+    private fun submitPayment(method: String) {
         val bundle = Bundle().apply {
-            putInt("payment_id", payment?.id ?: -1)
+            putInt("booking_id", bookingId)
         }
-
-        navController.navigate(R.id.action_payment_fragment_to_receipt_fragment, bundle)
+        findNavController().navigate(R.id.action_payment_fragment_to_receipt_fragment, bundle)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -1,13 +1,10 @@
-package com.example.hcmus_quickhelper.features.receipt.ui
+package com.example.hcmus_quickhelper.features.payment.ui
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,17 +12,13 @@ import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
-import com.example.hcmus_quickhelper.databinding.FragmentPaymentBinding
 import com.example.hcmus_quickhelper.databinding.FragmentReceiptBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
-import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
-import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
-import com.example.hcmus_quickhelper.features.receipt.viewmodel.ReceiptViewModel
+import com.example.hcmus_quickhelper.features.payment.viewmodel.ReceiptViewModel
 import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
-import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
 
 class ReceiptFragment : Fragment(R.layout.fragment_receipt) {

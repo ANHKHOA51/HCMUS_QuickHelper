@@ -1,6 +1,5 @@
-package com.example.hcmus_quickhelper.features.receipt.viewmodel
+package com.example.hcmus_quickhelper.features.payment.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
