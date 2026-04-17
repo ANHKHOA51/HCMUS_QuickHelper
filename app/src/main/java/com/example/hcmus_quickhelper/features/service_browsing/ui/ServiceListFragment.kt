@@ -38,6 +38,10 @@ class ServiceListFragment : Fragment() {
         setupRecyclerView()
         setupSearchAndFilters()
         observeViewModel()
+        val query = arguments?.getString("searchQuery")
+        if (!query.isNullOrEmpty()) {
+            binding.etSearch.setText(query)
+        }
 
         viewModel.loadHelpers()
     }
@@ -60,8 +64,10 @@ class ServiceListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ServiceListHelperAdapter(emptyList()) { helper ->
-            // Truyền ID hoặc thông tin qua Bundle để chuyển sang Booking
-            view?.findNavController()?.navigate(R.id.action_service_to_booking)
+            val bundle = Bundle().apply {
+                putInt("helperId", helper.id)
+            }
+            view?.findNavController()?.navigate(R.id.action_service_to_booking, bundle)
         }
 
         binding.rvExperts.apply {

@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import android.util.Log
 
 class BookingFragment : Fragment(R.layout.fragment_booking) {
 
@@ -19,6 +20,7 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
     private lateinit var tvLocationName: TextView
     private lateinit var tvLocationAddress: TextView
     private lateinit var confirmBtn: Button
+    private var currentHelperId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +53,10 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         confirmBtn.setOnClickListener {
             findNavController().navigate(R.id.payment_fragment)
         }
+
+        // test coi có id helper chưa
+        currentHelperId = arguments?.getInt("helperId") ?: -1
+        Log.d("BookingFragment", "Helper ID received: $currentHelperId")
     }
 
     inner class WebAppInterface {
