@@ -1,31 +1,28 @@
 package com.example.hcmus_quickhelper.features.voucher.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
-import com.example.hcmus_quickhelper.databinding.FragmentVoucherBinding
+import com.example.hcmus_quickhelper.databinding.FragmentSelectVoucherBinding
 import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
-import com.example.hcmus_quickhelper.features.voucher.viewmodel.VoucherViewModel
+import com.example.hcmus_quickhelper.features.voucher.viewmodel.SelectVoucherViewModel
 
-class VoucherFragment : Fragment(R.layout.fragment_voucher) {
+class SelectVoucherFragment : Fragment(R.layout.fragment_select_voucher) {
 
-    private lateinit var viewModel: VoucherViewModel
-    private lateinit var adapter: VoucherAdapter
+    private lateinit var viewModel: SelectVoucherViewModel
+    private lateinit var adapter: SelectVoucherAdapter
 
-    private var _binding: FragmentVoucherBinding? = null
+    private var _binding: FragmentSelectVoucherBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -33,7 +30,7 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentVoucherBinding.inflate(inflater, container, false)
+        _binding = FragmentSelectVoucherBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -55,20 +52,20 @@ class VoucherFragment : Fragment(R.layout.fragment_voucher) {
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return VoucherViewModel(repository) as T
+                return SelectVoucherViewModel(repository) as T
             }
         }
-        viewModel = ViewModelProvider(this, factory)[VoucherViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[SelectVoucherViewModel::class.java]
     }
 
     private fun setupUI() {
-        adapter = VoucherAdapter(vouchers = emptyList()) { voucher ->
+        adapter = SelectVoucherAdapter(vouchers = emptyList()) { voucher ->
             viewModel.setVoucher(voucher)
         }
 
         binding.rvVoucher.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            this.adapter = this@VoucherFragment.adapter
+            this.adapter = this@SelectVoucherFragment.adapter
             setHasFixedSize(true)
         }
     }

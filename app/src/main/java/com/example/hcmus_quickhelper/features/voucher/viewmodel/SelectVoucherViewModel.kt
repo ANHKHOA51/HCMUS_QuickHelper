@@ -9,7 +9,7 @@ import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
 import kotlinx.coroutines.launch
 
-class VoucherViewModel (
+class SelectVoucherViewModel (
     private val repository: VoucherRepository
 ) : ViewModel() {
     private val _vouchers = MutableLiveData<List<Voucher>>()
@@ -27,7 +27,7 @@ class VoucherViewModel (
             _isLoading.value = true
 
             try {
-                val data = repository.getAll()
+                val data = repository.getAllVoucherGlobal()
                 Log.d("TEST", "$data")
                 _vouchers.value = data
             } catch (e: Exception) {

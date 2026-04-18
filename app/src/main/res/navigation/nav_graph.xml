@@ -82,9 +82,9 @@
     </fragment>
     <fragment
         android:id="@+id/voucher_fragment"
-        android:name="com.example.hcmus_quickhelper.features.voucher.ui.VoucherFragment"
+        android:name="com.example.hcmus_quickhelper.features.voucher.ui.SelectVoucherFragment"
         android:label="fragment_voucher"
-        tools:layout="@layout/fragment_voucher" />
+        tools:layout="@layout/fragment_select_voucher" />
     <fragment
         android:id="@+id/rating_fragment"
         android:name="com.example.hcmus_quickhelper.features.rating.ui.RatingFragment"
@@ -123,6 +123,9 @@
         <action
             android:id="@+id/action_home_to_community"
             app:destination="@id/community_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_collect_voucher_fragment"
+            app:destination="@id/collect_voucher_fragment" />
     </fragment>
 
     <fragment
@@ -156,6 +159,32 @@
         tools:layout="@layout/fragment_booking_history" >
 
     </fragment>
+    <fragment
+        android:id="@+id/collect_voucher_fragment"
+        android:name="com.example.hcmus_quickhelper.features.voucher.ui.CollectVoucherFragment"
+        android:label="fragment_collect_voucher"
+        tools:layout="@layout/fragment_collect_voucher" />
+    <fragment
+        android:id="@+id/booking_request_detail_fragment"
+        android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestDetailFragment"
+        android:label="fragment_booking_request_helper"
+        tools:layout="@layout/fragment_booking_request_detail" />
+    <fragment
+        android:id="@+id/booking_request_list_fragment"
+        android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestListFragment"
+        android:label="BookingRequestListFragment" >
+        <action
+            android:id="@+id/action_booking_request_list_fragment_to_booking_request_detail_fragment2"
+            app:destination="@id/booking_request_detail_fragment" />
+        <action
+            android:id="@+id/action_booking_request_list_fragment_to_booking_process_helper_fragment"
+            app:destination="@id/booking_process_helper_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/booking_process_helper_fragment"
+        android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
+        android:label="fragment_booking_process_helper"
+        tools:layout="@layout/fragment_booking_process_helper" />
 
 
 </navigation>

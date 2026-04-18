@@ -84,3 +84,50 @@ fun String?.toRelativeTime(): String {
         this?.take(10) ?: ""
     }
 }
+
+fun String?.toRemainingTime(): String {
+    // 1. Kiểm tra chuỗi rỗng hoặc null
+    if (this.isNullOrBlank()) return ""
+
+    return try {
+        // 2. Chuẩn hóa định dạng ISO-8601 (Thêm 'T' và 'Z' nếu thiếu)
+        val cleanInput = this.replace(" ", "T").let {
+            if (!it.contains("Z") && !it.contains("+")) "${it}Z" else it
+        }
+
+        val futureInstant = Instant.parse(cleanInput)
+        val nowInstant = Instant.now()
+
+        // 3. Tính toán khoảng cách thời gian
+        val duration = Duration.between(nowInstant, futureInstant)
+        val seconds = duration.seconds
+
+        // 4. Phân loại các trường hợp hiển thị
+        when {
+            // Nếu thời gian đã trôi qua hoặc đang diễn ra rất gần
+            seconds <= 0 -> "Đã kết thúc"
+
+            // Còn lại dưới 1 giờ: Hiện phút
+            seconds < 3600 -> {
+                val minutes = seconds / 60
+                "Còn $minutes phút"
+            }
+
+            // Còn lại dưới 24 giờ: Hiện giờ và phút
+            seconds < 86400 -> {
+                val hours = seconds / 3600
+                val remainingMinutes = (seconds % 3600) / 60
+                "Còn $hours giờ $remainingMinutes phút"
+            }
+
+            // Còn lại trên 1 ngày: Hiện số ngày
+            else -> {
+                val days = seconds / 86400
+                "Còn $days ngày"
+            }
+        }
+    } catch (e: Exception) {
+        // Nếu có lỗi định dạng, trả về chuỗi gốc hoặc thông báo lỗi
+        "Định dạng sai"
+    }
+}

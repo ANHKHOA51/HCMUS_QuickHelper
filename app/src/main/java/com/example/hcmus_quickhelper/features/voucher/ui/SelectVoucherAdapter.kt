@@ -1,6 +1,5 @@
 package com.example.hcmus_quickhelper.features.voucher.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,10 @@ import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class VoucherAdapter(
+class SelectVoucherAdapter(
     private var vouchers: List<Voucher> = emptyList(),
     var onVoucherClick: (Voucher) -> Unit
-) : RecyclerView.Adapter<VoucherAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<SelectVoucherAdapter.ViewHolder>() {
 
     private var selectedVoucherId: Int? = null
 
