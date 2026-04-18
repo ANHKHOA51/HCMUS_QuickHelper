@@ -123,6 +123,9 @@
         <action
             android:id="@+id/action_home_to_community"
             app:destination="@id/community_fragment" />
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profile_fragment" />
     </fragment>
 
     <fragment
@@ -152,6 +155,12 @@
         tools:layout="@layout/fragment_booking_history" >
 
     </fragment>
+
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.example.hcmus_quickhelper.features.profile.ui.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 
 
 </navigation>
