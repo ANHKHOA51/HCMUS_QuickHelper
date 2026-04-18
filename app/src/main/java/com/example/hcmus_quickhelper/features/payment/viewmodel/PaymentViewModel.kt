@@ -94,7 +94,6 @@ class PaymentViewModel (
             status = PaymentStatus.SUCCESS.toString()
         )
 
-
         _payment.value = updatedPayment
 
         _payment.value?.let { payment ->

@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.core.model.BookingStatus
+import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.core.utils.toMessageTime
 import com.example.hcmus_quickhelper.databinding.FragmentBookingRequestDetailBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
@@ -22,6 +24,9 @@ class BookingRequestDetailFragment : Fragment() {
 
     private lateinit var viewModel: BookingRequestDetailViewModel
     private var bookingId: Int = -1
+
+    private var helperId: Int = 5
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,12 +73,12 @@ class BookingRequestDetailFragment : Fragment() {
         }
 
         binding.btnAccept.setOnClickListener {
-            viewModel.acceptBooking()
+            viewModel.acceptBooking(helperId)
             // findNavController().popBackStack()
         }
 
         binding.btnDecline.setOnClickListener {
-            viewModel.rejectBooking()
+            viewModel.rejectBooking(helperId)
             // findNavController().popBackStack()
         }
     }
@@ -83,10 +88,16 @@ class BookingRequestDetailFragment : Fragment() {
             tvUserName.text = booking.customer?.fullname
             tvPhone.text = booking.customer?.phone
             tvRating.text = booking.customer?.rating.toString()
-            
+            tvIncomeAmount.text = MoneyUtils.formatVietnameseCurrency(booking.totalPrice)
             tvServiceName.text = booking.service?.name
             tvAddress.text = booking.address
             tvDateTime.text = booking.schedule.toMessageTime()
+            tvCustomerNote.text = booking.note
+
+            if(booking.status == BookingStatus.REJECTED.toString()) {
+                btnAccept.visibility = View.GONE
+                btnDecline.visibility = View.GONE
+            }
         }
     }
 

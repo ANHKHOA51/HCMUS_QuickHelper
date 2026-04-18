@@ -40,6 +40,7 @@ class BookingRequestViewModel (
             when(tab) {
                 BookingRequestTab.NEWEST -> {
                     booking.status == BookingStatus.PENDING.toString()
+                            || booking.status == BookingStatus.REJECTED.toString()
                 }
                 BookingRequestTab.COMPLETED -> {
                     booking.status == BookingStatus.COMPLETED.toString()

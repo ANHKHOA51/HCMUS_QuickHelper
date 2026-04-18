@@ -70,6 +70,9 @@ class BookingRequestAdapter (
                 BookingStatus.COMPLETED.toString() -> {
                     ContextCompat.getColor(context, R.color.orange_light) to ContextCompat.getColor(context, R.color.orange_primary)
                 }
+                BookingStatus.REJECTED.toString() -> {
+                    ContextCompat.getColor(context, R.color.red_light) to ContextCompat.getColor(context, R.color.red)
+                }
                 else -> {
                     ContextCompat.getColor(context, R.color.blue_light_300) to ContextCompat.getColor(context, R.color.blue)
                 }

@@ -1,6 +1,7 @@
 package com.example.hcmus_quickhelper.features.booking.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,16 +49,24 @@ class BookingProcessHelperViewModel(
     }
 
     fun updateBookingStatus(newStatus: String) {
-        val currentBooking = _booking.value
-        currentBooking?.let {
-            val updatedBooking = it.copy(status = newStatus)
-            _booking.value = updatedBooking
-            viewModelScope.launch {
-                try {
-                    bookingRepository.updateBooking(it.id, it.toBookingInsert())
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+        Log.d("DEBUG", "Trạng thái mới: $newStatus")
+
+        val currentBooking = _booking.value ?: return
+        val updatedBooking = currentBooking.copy(status = newStatus)
+        _booking.value = updatedBooking
+
+        viewModelScope.launch {
+            try {
+                bookingRepository.updateBooking(
+                    updatedBooking.id,
+                    updatedBooking.toBookingInsert()
+                )
+                Log.d("DEBUG", "Cập nhật Server thành công")
+            } catch (e: Exception) {
+                Log.e("DEBUG", "Lỗi cập nhật Server: ${e.message}")
+                e.printStackTrace()
+                // Tùy chọn: Hoàn tác (rollback) UI nếu lưu thất bại
+                // _booking.value = currentBooking
             }
         }
     }
