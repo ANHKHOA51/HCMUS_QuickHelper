@@ -130,6 +130,10 @@
         android:name="com.example.hcmus_quickhelper.features.service_browsing.ui.ServiceListFragment"
         android:label="fragment_rating"
         tools:layout="@layout/service_list_activity" >
+        <argument
+            android:name="helperId"
+            app:argType="integer"
+            android:defaultValue="-1" />
         <action
             android:id="@+id/action_service_to_booking"
             app:destination="@id/booking_fragment" />

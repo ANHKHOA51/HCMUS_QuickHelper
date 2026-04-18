@@ -6,9 +6,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.hcmus_quickhelper.R
 
-class TopHelperAdapter(private var helpers: List<Helper> = emptyList()) : RecyclerView.Adapter<TopHelperAdapter.TopHelperViewHolder>() {
+class TopHelperAdapter(
+    private var helpers: List<Helper> = emptyList(),
+    private val onClick: (Helper) -> Unit // Bắt sự kiện click chuyển trang
+) : RecyclerView.Adapter<TopHelperAdapter.TopHelperViewHolder>() {
 
     fun updateData(newHelpers: List<Helper>) {
         helpers = newHelpers
@@ -31,12 +35,17 @@ class TopHelperAdapter(private var helpers: List<Helper> = emptyList()) : Recycl
 
         fun bind(helper: Helper) {
             tvHelperName.text = helper.name
-            tvHelperRating.text = "${helper.rating} (${helper.reviewCount})"
+            tvHelperRating.text = "⭐ ${helper.rating}"
 
-            // Xử lý sự kiện click
-            btnViewProfile.setOnClickListener {
-
+            ivAvatar.load(helper.avatarUrl) {
+                placeholder(R.drawable.default_avt)
+                error(R.drawable.default_avt)
             }
+
+            // Click vào nút ViewProfile hoặc cả Card
+            val clickAction = View.OnClickListener { onClick(helper) }
+            btnViewProfile.setOnClickListener(clickAction)
+            itemView.setOnClickListener(clickAction)
         }
     }
 }
