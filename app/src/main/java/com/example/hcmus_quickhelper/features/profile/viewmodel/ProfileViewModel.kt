@@ -1,37 +1,41 @@
 package com.example.hcmus_quickhelper.features.profile.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.profile.repository.ProfileRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+sealed class ProfileUiState {
+    object Idle : ProfileUiState()
+    object Loading : ProfileUiState()
+    data class Success(val user: User) : ProfileUiState()
+    data class Error(val message: String) : ProfileUiState()
+}
 
-    private val _updateStatus = MutableLiveData<Result<User>?>()
-    val updateStatus: LiveData<Result<User>?> = _updateStatus
+class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
+    private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
+    val uiState: StateFlow<ProfileUiState> = _uiState
 
     fun saveProfile(username: String, fullname: String) {
         val currentUser = SessionManager.currentUser.value ?: return
         
-        _isLoading.value = true
         viewModelScope.launch {
+            _uiState.value = ProfileUiState.Loading
             try {
                 val updatedUser = currentUser.copy(username = username, fullname = fullname)
                 val result = repository.updateUserInfo(updatedUser)
-                _updateStatus.postValue(Result.success(result))
+                _uiState.value = ProfileUiState.Success(result)
             } catch (e: Exception) {
-                _updateStatus.postValue(Result.failure(e))
-            } finally {
-                _isLoading.postValue(false) // Ensures the UI stops loading
+                _uiState.value = ProfileUiState.Error(e.localizedMessage ?: "Unknown Error")
             }
         }
     }
 
-    fun resetUpdateStatus() { _updateStatus.value = null }
+    fun resetToIdle() {
+        _uiState.value = ProfileUiState.Idle
+    }
 }

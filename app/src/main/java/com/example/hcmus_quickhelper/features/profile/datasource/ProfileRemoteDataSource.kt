@@ -13,7 +13,7 @@ class ProfileRemoteDataSource {
             }
         ) {
             filter { eq("id", user.id) }
-            // CRITICAL: Request the updated data back from the server
+            // Ensure we are explicitly asking for all columns to match the User model
             select()
         }.decodeSingle<User>()
     }

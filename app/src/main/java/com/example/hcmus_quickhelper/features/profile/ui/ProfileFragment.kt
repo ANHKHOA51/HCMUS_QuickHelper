@@ -8,12 +8,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentProfileBinding
 import com.example.hcmus_quickhelper.features.profile.datasource.ProfileRemoteDataSource
 import com.example.hcmus_quickhelper.features.profile.repository.ProfileRepository
 import com.example.hcmus_quickhelper.features.profile.viewmodel.ProfileViewModel
+import com.example.hcmus_quickhelper.features.profile.viewmodel.ProfileUiState
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
 
@@ -43,6 +46,7 @@ class ProfileFragment : Fragment() {
         val repository = ProfileRepository(dataSource)
         
         val factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return ProfileViewModel(repository) as T
             }
@@ -52,6 +56,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUI() {
+        // Initial setup from current session
         val user = SessionManager.currentUser.value
         user?.let {
             binding.etFullname.setText(it.fullname)
@@ -78,18 +83,31 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.btnSave.isEnabled = !isLoading
-        }
-
-        viewModel.updateStatus.observe(viewLifecycleOwner) { result ->
-            result?.onSuccess {
-                Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-            }?.onFailure { error ->
-                Toast.makeText(context, "Update failed: ${error.message}", Toast.LENGTH_LONG).show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is ProfileUiState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.btnSave.isEnabled = false
+                    }
+                    is ProfileUiState.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.btnSave.isEnabled = true
+                        Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                        viewModel.resetToIdle()
+                    }
+                    is ProfileUiState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.btnSave.isEnabled = true
+                        Toast.makeText(context, "Update failed: ${state.message}", Toast.LENGTH_LONG).show()
+                        viewModel.resetToIdle()
+                    }
+                    is ProfileUiState.Idle -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.btnSave.isEnabled = true
+                    }
+                }
             }
-            viewModel.resetUpdateStatus()
         }
     }
 
