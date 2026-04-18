@@ -61,17 +61,29 @@ class PaymentViewModel (
     }
 
     fun setVoucher(voucher: Voucher?) {
-        // validate voucher
         val currentPayment = _payment.value ?: return
-        
         val servicePrice = currentPayment.booking?.totalPrice ?: 0.0
 
-        val discount = voucher?.discount ?: 0.0
-        val newAmount = (servicePrice - discount).coerceAtLeast(0.0)
+        val newAmount: Double
+        val finalVoucher: Voucher?
+
+        if (voucher == null) {
+            newAmount = servicePrice
+            finalVoucher = null
+        } else {
+            if (servicePrice >= (voucher.minPrice)) {
+                val discount = voucher.discount
+                newAmount = (servicePrice - discount).coerceAtLeast(0.0)
+                finalVoucher = voucher
+            } else {
+                newAmount = servicePrice
+                finalVoucher = null
+            }
+        }
 
         _payment.value = currentPayment.copy(
-            voucherId = voucher?.id,
-            voucher = voucher,
+            voucherId = finalVoucher?.id,
+            voucher = finalVoucher,
             amount = newAmount
         )
     }
