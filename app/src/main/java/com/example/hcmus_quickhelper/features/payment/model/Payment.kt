@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import android.os.Parcelable
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.core.model.Service
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import kotlinx.parcelize.Parcelize
 

@@ -112,13 +112,15 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                     binding.tvAddress.text = booking.address
                     binding.tvDateBooking.text = booking.schedule.toSmartTime()
                     binding.tvServicePrice.text = MoneyUtils.formatVietnameseCurrency(booking.totalPrice)
+
+                    booking.service?.let { service ->
+                        binding.tvServiceName.text = service.name
+                    }
                 }
+
 
                 binding.tvTotalPrice.text = MoneyUtils.formatVietnameseCurrency(it.amount)
             }
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) { isVisible ->
         }
     }
 
@@ -132,7 +134,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
     private fun submitPayment() {
         val bundle = Bundle().apply {
-            putInt("booking_id", bookingId)
+            putInt("payment_id", viewModel.payment.value?.id!!)
         }
         findNavController().navigate(R.id.action_payment_fragment_to_receipt_fragment, bundle)
     }

@@ -39,12 +39,12 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/btnDownload"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Notification button"
-            android:src="@drawable/ic_share" />
+            android:src="@drawable/ic_download" />
     </LinearLayout>
 
     <ScrollView
@@ -160,26 +160,14 @@
                         app:layout_constraintStart_toEndOf="@+id/imageView2"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tvTypeService"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Gói phổ biến"
-                        android:textColor="@color/orange_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@+id/tvServiceName"
-                        app:layout_constraintTop_toBottomOf="@+id/tvServiceName" />
-
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="16dp"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/tvTypeService"
-                        app:layout_constraintTop_toBottomOf="@+id/tvTypeService">
+                        app:layout_constraintStart_toStartOf="@+id/tvServiceName"
+                        app:layout_constraintTop_toBottomOf="@+id/tvServiceName">
 
                         <ImageView
                             android:id="@+id/imageView3"

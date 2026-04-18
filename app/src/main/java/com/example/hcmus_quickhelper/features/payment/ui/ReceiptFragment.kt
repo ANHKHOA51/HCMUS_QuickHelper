@@ -36,9 +36,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentReceiptBinding.inflate(inflater, container, false)
-
         paymentId = arguments?.getInt("payment_id", -1) ?: -1
-
         return binding.root
     }
 
@@ -50,20 +48,19 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
         setupObservers()
         loadData()
 
-        binding.btnGoToRating.setOnClickListener { handleGoToRating(viewModel.booking.value) }
+        binding.btnGoToRating.setOnClickListener { handleGoToRating(viewModel.payment.value?.bookingId) }
         binding.btnBack.setOnClickListener { handleBack() }
         binding.btnBackToHome.setOnClickListener { findNavController().navigate(R.id.home_fragment) }
+        binding.btnDownload.setOnClickListener { handleDownload() }
     }
 
     private fun setupViewModel() {
         val paymentRepository = PaymentRepository(PaymentDataSource())
-        val bookingRepository = BookingRepository(BookingDataSource())
-        val voucherRepository = VoucherRepository(VoucherDataSource())
 
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return ReceiptViewModel(paymentRepository, bookingRepository, voucherRepository) as T
+                return ReceiptViewModel(paymentRepository) as T
             }
         }
         viewModel = ViewModelProvider(this, factory)[ReceiptViewModel::class.java]
@@ -73,35 +70,31 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
         viewModel.payment.observe(viewLifecycleOwner) { payment ->
             payment?.let {
                 binding.tvPaymentId.text = "Mã hóa đơn: #${it.id}"
-            }
-        }
+                binding.tvVoucherDiscount.text = "-${MoneyUtils.formatVietnameseCurrency(it.voucher?.discount!!)}"
 
-        viewModel.voucher.observe(viewLifecycleOwner) {voucher ->
-            voucher?.let{
-                binding.tvVoucherDiscount.text = "-${MoneyUtils.formatVietnameseCurrency(it.discount)}"
-            }
-        }
+                binding.tvDate.text = it.booking?.schedule?.toSmartTime()
+                binding.tvServicePrice.text = "${MoneyUtils.formatVietnameseCurrency(it.booking?.totalPrice!!)}"
 
-        viewModel.booking.observe(viewLifecycleOwner) {booking ->
-            booking?.let{
-                binding.tvDate.text = it.schedule.toSmartTime()
-                binding.tvServicePrice.text = "${MoneyUtils.formatVietnameseCurrency(it.totalPrice)}"
+                binding.tvTotalPrice.text = "${MoneyUtils.formatVietnameseCurrency(it.amount)}"
 
-                binding.tvTotalPrice.text = "${MoneyUtils.formatVietnameseCurrency(viewModel.calcTotalPrice())}"
+                binding.tvServiceName.text = it.booking.service?.name
             }
         }
     }
-
 
     private  fun loadData() {
         viewModel.loadData(paymentId)
     }
 
-    private fun handleGoToRating(booking: Booking?) {
+    private fun handleDownload() {
+
+    }
+
+    private fun handleGoToRating(bookingId: Int?) {
         val navController = findNavController()
 
         val bundle = Bundle().apply {
-            putInt("booking_id", booking?.id ?: -1)
+            putInt("booking_id", bookingId ?: -1)
         }
 
         navController.navigate(R.id.action_receipt_fragment_to_rating_fragment, bundle)
