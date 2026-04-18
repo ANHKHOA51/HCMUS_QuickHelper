@@ -46,8 +46,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         setupViewModel()
         setupObservers()
-        
-        // Load data chỉ khi chưa có dữ liệu payment hoặc khi khởi tạo lần đầu
+
         if (viewModel.payment.value == null) {
             viewModel.loadBooking(bookingId)
         }
@@ -60,8 +59,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             val selectedId = binding.radioGroupPaymentMethod.checkedRadioButtonId
             if (selectedId != -1) {
                 val radioButton: RadioButton = binding.root.findViewById(selectedId)
-                val method = PaymentMethod.fromString(radioButton.text.toString()).toString()
-                submitPayment(method)
+                val method = radioButton.text.toString()
+                viewModel.submitPayment(method)
+                submitPayment()
             } else {
                 Toast.makeText(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT).show()
             }
@@ -130,7 +130,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         findNavController().popBackStack()
     }
 
-    private fun submitPayment(method: String) {
+    private fun submitPayment() {
         val bundle = Bundle().apply {
             putInt("booking_id", bookingId)
         }

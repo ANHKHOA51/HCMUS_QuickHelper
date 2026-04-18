@@ -21,7 +21,7 @@ data class PaymentInsert (
     val voucherId: Int?,
 )
 
-fun Payment.toBookingInsert(): PaymentInsert {
+fun Payment.toPaymentInsert(): PaymentInsert {
     return PaymentInsert(
         amount = this.amount,
         method = this.method,

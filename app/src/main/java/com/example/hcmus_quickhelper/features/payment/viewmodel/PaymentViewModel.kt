@@ -9,6 +9,7 @@ import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.model.PaymentInsert
 import com.example.hcmus_quickhelper.features.payment.model.PaymentMethod
 import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
+import com.example.hcmus_quickhelper.features.payment.model.toPaymentInsert
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
 import kotlinx.coroutines.launch
@@ -27,15 +28,13 @@ class PaymentViewModel (
             _isLoading.value = true
             try {
                 val paymentData = paymentRepository.getPaymentByBookingIdFullData(bookingId)
-                
-                // GIỮ LẠI VOUCHER NẾU ĐÃ CHỌN Ở LOCAL TRƯỚC ĐÓ
+
                 val currentVoucher = _payment.value?.voucher
                 if (currentVoucher != null) {
                     paymentData.voucher = currentVoucher
                     paymentData.voucherId = currentVoucher.id
                 }
 
-                // Cập nhật giá tiền dựa trên dữ liệu mới load
                 val servicePrice = paymentData.booking?.totalPrice ?: 0.0
                 val discount = paymentData.voucher?.discount ?: 0.0
                 paymentData.amount = (servicePrice - discount).coerceAtLeast(0.0)
@@ -86,6 +85,23 @@ class PaymentViewModel (
             voucher = finalVoucher,
             amount = newAmount
         )
+    }
+
+    fun submitPayment(method: String) {
+        val currentPayment = _payment.value ?: return
+        val updatedPayment = currentPayment.copy(
+            method = PaymentMethod.fromDisplayName(method).toString(),
+            status = PaymentStatus.SUCCESS.toString()
+        )
+
+
+        _payment.value = updatedPayment
+
+        _payment.value?.let { payment ->
+            viewModelScope.launch {
+                paymentRepository.updatePayment(payment.id!!, payment.toPaymentInsert())
+            }
+        }
     }
 
     fun calcTotalPrice(): Double {

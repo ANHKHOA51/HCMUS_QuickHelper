@@ -54,5 +54,9 @@ enum class PaymentMethod(val displayName: String) {
         fun fromString(value: String): PaymentMethod {
             return entries.find { it.name.equals(value, ignoreCase = true) } ?: CASH
         }
+
+        fun fromDisplayName(name: String): PaymentMethod {
+            return entries.find { it.displayName == name } ?: CASH
+        }
     }
 }
