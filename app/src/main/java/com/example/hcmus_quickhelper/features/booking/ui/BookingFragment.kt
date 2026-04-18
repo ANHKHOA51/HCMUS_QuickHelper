@@ -1,5 +1,8 @@
 package com.example.hcmus_quickhelper.features.booking.ui
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.View
 import android.webkit.JavascriptInterface
@@ -12,57 +15,188 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import android.util.Log
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.Spinner
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.ViewModelProvider
+import coil.load
+import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingViewModel
+import com.google.android.material.imageview.ShapeableImageView
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class BookingFragment : Fragment(R.layout.fragment_booking) {
 
+    private lateinit var viewModel: BookingViewModel
+    private var currentHelperId: Int = -1
+    private val calendar = Calendar.getInstance()
+
+    // Views
+    private lateinit var ivHelperAvatar: ShapeableImageView
+    private lateinit var tvHelperName: TextView
+    private lateinit var tvHelperRating: TextView
+    private lateinit var spinnerServices: Spinner
+    private lateinit var btnDate: Button
+    private lateinit var btnTime: Button
+    private lateinit var edtQuantity: EditText
+    private lateinit var edtNote: EditText
+    private lateinit var tvTotalPrice: TextView
+    private lateinit var confirmBtn: Button
+    // Map views
     private lateinit var webView: WebView
     private lateinit var edtSearch: EditText
     private lateinit var tvLocationName: TextView
     private lateinit var tvLocationAddress: TextView
-    private lateinit var confirmBtn: Button
-    private var currentHelperId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(this)[BookingViewModel::class.java]
+        currentHelperId = arguments?.getInt("helperId") ?: -1
+
+        initViews(view)
+        setupMap()
+        setupListeners()
+        observeViewModel()
+
+        if (currentHelperId != -1) {
+            viewModel.loadHelperInfo(currentHelperId)
+        }
+    }
+
+    private fun initViews(view: View) {
+        ivHelperAvatar = view.findViewById(R.id.ivHelperAvatar)
+        tvHelperName = view.findViewById(R.id.tvHelperName)
+        tvHelperRating = view.findViewById(R.id.tvHelperRating)
+        spinnerServices = view.findViewById(R.id.spinnerServices)
+        btnDate = view.findViewById(R.id.btnDate)
+        btnTime = view.findViewById(R.id.btnTime)
+        edtQuantity = view.findViewById(R.id.edtQuantity)
+        edtNote = view.findViewById(R.id.edtNote)
+        tvTotalPrice = view.findViewById(R.id.tvTotalPrice)
+        confirmBtn = view.findViewById(R.id.confirmBtn)
         webView = view.findViewById(R.id.webViewMap)
         edtSearch = view.findViewById(R.id.edtSearch)
         tvLocationName = view.findViewById(R.id.tvLocationName)
         tvLocationAddress = view.findViewById(R.id.tvLocationAddress)
-        confirmBtn = view.findViewById(R.id.confirmBtn)
 
+        view.findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
 
+    private fun observeViewModel() {
+        viewModel.helperData.observe(viewLifecycleOwner) { helper ->
+            tvHelperName.text = helper.fullname
+            tvHelperRating.text = helper.rating.toString()
+            ivHelperAvatar.load(helper.avatarUrl) {
+                placeholder(R.drawable.default_avt)
+                error(R.drawable.default_avt)
+            }
+
+            // Setup Dropdown Services
+            val serviceNames = helper.services.map { it.name }
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, serviceNames)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerServices.adapter = adapter
+
+            spinnerServices.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    viewModel.selectedService = helper.services[position]
+                    viewModel.calculateTotal()
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }
+
+        viewModel.totalPrice.observe(viewLifecycleOwner) { total ->
+            tvTotalPrice.text = "${total.toLong()}đ"
+        }
+    }
+
+    private fun setupListeners() {
+        btnDate.setOnClickListener {
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, month)
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    btnDate.text = dateFormat.format(calendar.time)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+
+        btnTime.setOnClickListener {
+            TimePickerDialog(
+                requireContext(),
+                { _, hourOfDay, minute ->
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    calendar.set(Calendar.MINUTE, minute)
+                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    btnTime.text = timeFormat.format(calendar.time)
+                },
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true // Dùng 24h format
+            ).show()
+        }
+
+        edtQuantity.doAfterTextChanged { text ->
+            val qty = text.toString().toIntOrNull() ?: 1
+            viewModel.quantityHours = qty
+            viewModel.calculateTotal()
+        }
+
+        confirmBtn.setOnClickListener {
+            // Timestamp
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val scheduleString = format.format(calendar.time)
+
+            val addressString = tvLocationAddress.text.toString()
+            val noteString = edtNote.text.toString()
+
+            // Fix cứng
+            val currentCustomerId = 7
+
+            viewModel.createBooking(
+                customerId = currentCustomerId,
+                helperId = currentHelperId,
+                schedule = scheduleString,
+                address = addressString,
+                note = noteString,
+                onSuccess = {
+                    findNavController().navigate(R.id.payment_fragment)
+                }
+            )
+        }
+    }
+
+    private fun setupMap() {
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = WebViewClient()
-
         webView.addJavascriptInterface(WebAppInterface(), "AndroidInterface")
-
         webView.loadUrl("file:///android_asset/map.html")
 
-       // search
         edtSearch.setOnEditorActionListener { _, _, _ ->
             val query = edtSearch.text.toString()
-
             if (query.isNotEmpty()) {
-                // Gọi sang HTML/JS
                 webView.loadUrl("javascript:searchLocation('$query')")
             }
             true
         }
-
-        confirmBtn.setOnClickListener {
-            findNavController().navigate(R.id.payment_fragment)
-        }
-
-        // test coi có id helper chưa
-        currentHelperId = arguments?.getInt("helperId") ?: -1
-        Log.d("BookingFragment", "Helper ID received: $currentHelperId")
     }
 
     inner class WebAppInterface {
         @JavascriptInterface
         fun updateLocationInfo(name: String, displayName: String) {
-            // dùng runOnUiThread để cập nhật UI trên Main Thread do chạy dưới background Thread của WebView
             activity?.runOnUiThread {
                 tvLocationName.text = name
                 tvLocationAddress.text = displayName

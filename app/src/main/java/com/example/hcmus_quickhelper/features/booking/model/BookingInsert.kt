@@ -15,14 +15,17 @@ data class BookingInsert (
     @SerialName("customer_id")
     val customerId: Int,
 
+    @SerialName("helper_id")
+    val helperId:  Int? = null,
+
     @SerialName("service_id")
     val serviceId: Int,
 
     @SerialName("status")
-    val status: String = "pending",
+    val status: String,
 
     @SerialName("quantity")
-    val quantity: Int = 1,
+    val quantity: Int,
 
     @SerialName("total_price")
     val totalPrice: Double,
@@ -36,8 +39,9 @@ fun Booking.toBookingInsert(): BookingInsert {
         schedule = this.schedule,
         address = this.address,
         customerId = this.customerId,
+        helperId = this.helperId,
         serviceId = this.serviceId,
-        status = this.status,
+        status = "PENDING",
         quantity = this.quantity,
         totalPrice = this.totalPrice,
         note = this.note

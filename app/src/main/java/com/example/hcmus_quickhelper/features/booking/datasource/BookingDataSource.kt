@@ -3,6 +3,7 @@ package com.example.hcmus_quickhelper.features.booking.datasource
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
+import com.example.hcmus_quickhelper.features.service_browsing.model.HelperWithServicesDto
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
@@ -70,5 +71,17 @@ class BookingDataSource {
 
     suspend fun update(id: Int, booking: BookingInsert) {
         SupabaseClient.client.from("bookings").update(booking)
+    }
+
+    suspend fun insertBooking(booking: BookingInsert) {
+        SupabaseClient.client.from("bookings").insert(booking)
+    }
+
+    suspend fun getHelperWithServices(helperId: Int): HelperWithServicesDto {
+        val columns = Columns.raw("id, fullname, avatar_url, rating, services(id, name, base_price)")
+        return SupabaseClient.client.from("users")
+            .select(columns = columns) {
+                filter { eq("id", helperId) }
+            }.decodeSingle<HelperWithServicesDto>()
     }
 }
