@@ -10,53 +10,42 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.features.service_browsing.model.Helper
+import com.example.hcmus_quickhelper.databinding.ItemExpertFservicelistBinding
+import coil.load
+import androidx.recyclerview.widget.DiffUtil
 
-class ServiceListHelperAdapter (
-    private var helpers: List<Helper> = emptyList(),
+class ServiceListHelperAdapter(
+    private var helpers: List<Helper>,
     private val onBookClick: (Helper) -> Unit
-) : RecyclerView.Adapter<ServiceListHelperAdapter.HelperViewHolder>(){
+) : RecyclerView.Adapter<ServiceListHelperAdapter.HelperViewHolder>() {
 
-    fun updateData(newHelpers: List<Helper>){
-        helpers = newHelpers
-        notifyDataSetChanged()
-    }
+    class HelperViewHolder(val binding: ItemExpertFservicelistBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HelperViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_expert_fservicelist, parent, false)
-        return HelperViewHolder(view)
+        val binding = ItemExpertFservicelistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return HelperViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: HelperViewHolder, position: Int) {
-        holder.bind(helpers[position])
-    }
+        val helper = helpers[position]
 
-    override fun getItemCount(): Int {
-        return helpers.size
-    }
-
-    inner class HelperViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvExpertName: TextView = itemView.findViewById(R.id.tvExpertName)
-        private val tvRating: TextView = itemView.findViewById(R.id.tvRating)
-        private val tvSkills: TextView = itemView.findViewById(R.id.tvSkills)
-        private val tvDistance: TextView = itemView.findViewById(R.id.tvDistance)
-        private val tvReviewCount: TextView = itemView.findViewById(R.id.tvReviewCount)
-        private val tvPrice: TextView = itemView.findViewById(R.id.tvPrice)
-        private val ivOnlineStatus: ImageView = itemView.findViewById(R.id.ivOnlineStatus)
-        private val ivVerified: ImageView = itemView.findViewById(R.id.ivVerified)
-        private val btnBook: Button = itemView.findViewById(R.id.btnBook)
-
-        fun bind(helper: Helper) {
+        with(holder.binding) {
             tvExpertName.text = helper.name
             tvRating.text = helper.rating.toString()
             tvSkills.text = helper.skills
-            tvDistance.text = "${helper.distance} km"
-            tvReviewCount.text = "${helper.reviewCount} đánh giá"
-            tvPrice.text = helper.priceText
+            if (helper.price > 0.0) {
+                tvPrice.text = "Từ ${helper.price.toLong()}đ/giờ"
+            } else {
+                tvPrice.text = "Liên hệ"
+            }
 
-            // Xử lý hiển thị các icon trạng thái
+            // Load Avatar bằng Coil
+            ivAvatar.load(helper.avatarUrl) {
+                placeholder(R.drawable.default_avt)
+                error(R.drawable.default_avt)
+            }
+
             ivOnlineStatus.visibility = if (helper.isOnline) View.VISIBLE else View.GONE
-            ivVerified.visibility = if (helper.isVerified) View.VISIBLE else View.GONE
 
             btnBook.setOnClickListener {
                 onBookClick(helper)
@@ -64,4 +53,24 @@ class ServiceListHelperAdapter (
         }
     }
 
+    override fun getItemCount(): Int = helpers.size
+
+    fun updateData(newHelpers: List<Helper>) {
+        val diffCallback = object : DiffUtil.Callback() {
+            override fun getOldListSize() = helpers.size
+            override fun getNewListSize() = newHelpers.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return helpers[oldItemPosition].id == newHelpers[newItemPosition].id
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return helpers[oldItemPosition] == newHelpers[newItemPosition]
+            }
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        helpers = newHelpers
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
