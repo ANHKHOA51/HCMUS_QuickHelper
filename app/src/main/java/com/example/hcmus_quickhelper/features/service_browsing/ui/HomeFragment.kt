@@ -16,12 +16,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.features.service_browsing.datasource.HomeRemoteDataSource
 import com.example.hcmus_quickhelper.features.service_browsing.repository.HomeRepository
-import com.example.hcmus_quickhelper.features.service_browsing.viewmodel.HomeViewModel
-
 class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel

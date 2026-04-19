@@ -16,9 +16,11 @@ import com.example.hcmus_quickhelper.features.service_browsing.model.ServiceDto
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
-
+    private val currentUserId = 7
     // Expose the global user from SessionManager to the Fragment
     val userProfile: LiveData<User?> = SessionManager.currentUser.asLiveData()
+    private val _userProfile = MutableLiveData<User>()
+//    val userProfile: LiveData<User> get() = _userProfile
 
     private val _vouchers = MutableLiveData<List<Voucher>>()
     val vouchers: LiveData<List<Voucher>> get() = _vouchers
@@ -41,8 +43,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     fun loadHomeData() {
         viewModelScope.launch {
             try {
-                _vouchers.value = repository.getVouchers()
-                _topHelpers.value = repository.getTopHelpers()
+//                _vouchers.value = repository.getVouchers()
+//                _topHelpers.value = repository.getTopHelpers()
+                repository.getUserProfile(currentUserId).onSuccess { _userProfile.value = it }
+                repository.getVouchers(currentUserId).onSuccess { _vouchers.value = it }
+                repository.getPopularServices().onSuccess { _services.value = it }
+                repository.getTopHelpers().onSuccess { _topHelpers.value = it }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
