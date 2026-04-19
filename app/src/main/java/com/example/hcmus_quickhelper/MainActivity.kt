@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -12,7 +15,13 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Cho phép layout vẽ full màn hình
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContentView(R.layout.main_activity)
+
+        hideNavigationBar()
+
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
                 Log.d("FCM_TOKEN", token)
@@ -74,5 +83,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
         }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        // Giữ trạng thái ẩn khi quay lại app
+        if (hasFocus) {
+            hideNavigationBar()
+        }
+    }
+
+    private fun hideNavigationBar() {
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+
+        // ❗ CHỈ ẩn navigation bar
+        controller.hide(WindowInsetsCompat.Type.navigationBars())
+
+        // Cho phép vuốt để hiện lại tạm thời
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 }
