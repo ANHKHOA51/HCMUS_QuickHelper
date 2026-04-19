@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dashboard_helper_fragment">
+    app:startDestination="@id/login_fragment">
 
     <fragment
         android:id="@+id/login_fragment"
@@ -196,6 +196,9 @@
         <action
             android:id="@+id/action_dashboard_helper_fragment_to_booking_process_helper_fragment"
             app:destination="@id/booking_process_helper_fragment" />
+        <action
+            android:id="@+id/action_dashboard_helper_fragment_to_booking_request_list_fragment"
+            app:destination="@id/booking_request_list_fragment" />
     </fragment>
 
 

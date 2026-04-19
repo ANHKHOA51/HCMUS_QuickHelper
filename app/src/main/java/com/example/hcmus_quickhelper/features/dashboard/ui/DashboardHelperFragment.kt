@@ -104,11 +104,14 @@ class DashboardHelperFragment : Fragment() {
         binding.apply {
             tvRatingCount.text = data.rating.toString()
 
+            tvSeeAll.setOnClickListener {
+                findNavController().navigate(R.id.action_dashboard_helper_fragment_to_booking_request_list_fragment)
+            }
+
             spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val selectedItem = parent?.getItemAtPosition(position).toString()
                     viewModel.filter(selectedItem)
-                    Log.d("TEST", selectedItem)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
