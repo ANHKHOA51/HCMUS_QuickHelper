@@ -92,7 +92,7 @@
         tools:layout="@layout/fragment_rating" />
     <fragment
         android:id="@+id/receipt_fragment"
-        android:name="com.example.hcmus_quickhelper.features.receipt.ui.ReceiptFragment"
+        android:name="com.example.hcmus_quickhelper.features.payment.ui.ReceiptFragment"
         android:label="fragment_payment"
         tools:layout="@layout/fragment_payment" >
         <action
@@ -188,6 +188,21 @@
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
         android:label="fragment_booking_process_helper"
         tools:layout="@layout/fragment_booking_process_helper" />
+    <fragment
+        android:id="@+id/dashboard_helper_fragment"
+        android:name="com.example.hcmus_quickhelper.features.dashboard.ui.DashboardHelperFragment"
+        android:label="fragment_dashboard_helper"
+        tools:layout="@layout/fragment_dashboard_helper" >
+        <action
+            android:id="@+id/action_dashboard_helper_fragment_to_booking_request_detail_fragment"
+            app:destination="@id/booking_request_detail_fragment" />
+        <action
+            android:id="@+id/action_dashboard_helper_fragment_to_booking_process_helper_fragment"
+            app:destination="@id/booking_process_helper_fragment" />
+        <action
+            android:id="@+id/action_dashboard_helper_fragment_to_booking_request_list_fragment"
+            app:destination="@id/booking_request_list_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profile_fragment"

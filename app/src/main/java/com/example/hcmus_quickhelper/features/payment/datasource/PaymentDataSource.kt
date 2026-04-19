@@ -3,7 +3,9 @@ package com.example.hcmus_quickhelper.features.payment.datasource
 import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentInsert
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 
 class PaymentDataSource {
     suspend fun getById(id: Int): Payment? {
@@ -14,9 +16,44 @@ class PaymentDataSource {
             .decodeSingleOrNull<Payment>()
     }
 
+    suspend fun getByIdFullData(paymentId: Int): Payment {
+        return SupabaseClient.client
+            .from("payments")
+            .select(columns = Columns.raw("""
+                *,
+                booking:bookings (
+                    *,
+                    customer:users!bookings_customer_id_fkey (*),
+                    helper:users!bookings_helper_id_fkey (*),
+                    services:services (*)
+                ),
+                voucher:vouchers (*)
+            """.trimIndent())
+            ) {
+                filter {
+                    eq("id", paymentId)
+                }
+            }.decodeSingle<Payment>()
+    }
+
     suspend fun getAll(): List<Payment> {
-        Log.d("TEST", "TEST")
         return SupabaseClient.client.from("payments").select().decodeList<Payment>()
+    }
+
+    suspend fun getAllFullData(): List<Payment> {
+        return SupabaseClient.client
+            .from("payments")
+            .select(columns = Columns.raw("""
+                *,
+                booking:bookings (
+                    *,
+                    customer:users!bookings_customer_id_fkey (*),
+                    helper:users!bookings_helper_id_fkey (*),
+                    services:services (*)
+                ),
+                voucher:vouchers (*)
+            """.trimIndent()))
+            .decodeList<Payment>()
     }
 
     suspend fun getByBookingId(id: Int): Payment? {
@@ -27,17 +64,37 @@ class PaymentDataSource {
             .decodeSingleOrNull<Payment>()
     }
 
-    suspend fun insert(payment: Payment): Payment {
+    suspend fun getByBookingIdFullData(bookingId: Int): Payment {
+        return SupabaseClient.client
+            .from("payments")
+            .select(columns = Columns.raw("""
+                *,
+                booking:bookings (
+                    *,
+                    customer:users!bookings_customer_id_fkey (*),
+                    helper:users!bookings_helper_id_fkey (*),
+                    services:services (*)
+                ),
+                voucher:vouchers (*)
+            """.trimIndent())
+            ) {
+                filter {
+                    eq("booking_id", bookingId)
+                }
+            }.decodeSingle<Payment>()
+    }
+
+    suspend fun insert(payment: PaymentInsert): Payment {
         return SupabaseClient.client.from("payments").insert(payment) {
             select()
         }.decodeSingle<Payment>()
     }
 
-    suspend fun update(payment: Payment): Payment {
+    suspend fun update(id: Int, payment: PaymentInsert): Payment {
         return SupabaseClient.client.from("payments").update(payment){
             select()
             filter {
-                eq("id", payment.id!!)
+                eq("id", id)
             }
         }.decodeSingle<Payment>()
     }

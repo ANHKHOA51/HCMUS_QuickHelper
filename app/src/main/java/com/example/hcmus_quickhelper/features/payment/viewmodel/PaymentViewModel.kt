@@ -5,32 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hcmus_quickhelper.core.model.Booking
-import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
-import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentInsert
 import com.example.hcmus_quickhelper.features.payment.model.PaymentMethod
 import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
+import com.example.hcmus_quickhelper.features.payment.model.toPaymentInsert
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PaymentViewModel (
-    private val paymentRepository: PaymentRepository,
-    private val bookingRepository: BookingRepository
+    private val paymentRepository: PaymentRepository
 ) : ViewModel() {
     private val _payment = MutableLiveData<Payment?>(null)
     val payment: LiveData<Payment?> = _payment
-
-    private val _voucher = MutableLiveData<Voucher?>(null)
-    val voucher: LiveData<Voucher?> = _voucher
-
-    private  val _booking = MutableLiveData<Booking?>(null)
-    val booking: LiveData<Booking?> = _booking
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -38,28 +26,33 @@ class PaymentViewModel (
     fun loadBooking(bookingId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
-
             try {
-                val bookingData = bookingRepository.getBookingById(bookingId)
-                _booking.value = bookingData
+                val paymentData = paymentRepository.getPaymentByBookingIdFullData(bookingId)
 
-                var paymentData = paymentRepository.getPaymentByBookingId(bookingId)
-
-                if (paymentData == null) {
-                    paymentData = Payment(
-                        id = null,
-                        bookingId = bookingId,
-                        amount = bookingData.totalPrice,
-                        status = PaymentStatus.PENDING.toString(),
-                        method = PaymentMethod.CASH.toString(),
-                        voucherId = null,
-                        createdAt = null
-                    )
+                val currentVoucher = _payment.value?.voucher
+                if (currentVoucher != null) {
+                    paymentData.voucher = currentVoucher
+                    paymentData.voucherId = currentVoucher.id
                 }
+
+                val servicePrice = paymentData.booking?.totalPrice ?: 0.0
+                val discount = paymentData.voucher?.discount ?: 0.0
+                paymentData.amount = (servicePrice - discount).coerceAtLeast(0.0)
 
                 _payment.value = paymentData
             } catch (e: Exception) {
-                e.printStackTrace()
+                if(e is NoSuchElementException) {
+                    val paymentDataInsert = PaymentInsert(
+                        bookingId = bookingId,
+                        amount = 0.0,
+                        status = PaymentStatus.PENDING.toString(),
+                        method = PaymentMethod.CASH.toString(),
+                        voucherId = null
+                    )
+                    paymentRepository.insertPayment(paymentDataInsert)
+                } else {
+                    e.printStackTrace()
+                }
             } finally {
                 _isLoading.value = false
             }
@@ -67,32 +60,50 @@ class PaymentViewModel (
     }
 
     fun setVoucher(voucher: Voucher?) {
-        _voucher.value = voucher
-        _payment.value?.let{
-            it.voucherId = voucher?.id
-            _payment.value = it
+        val currentPayment = _payment.value ?: return
+        val servicePrice = currentPayment.booking?.totalPrice ?: 0.0
+
+        val newAmount: Double
+        val finalVoucher: Voucher?
+
+        if (voucher == null) {
+            newAmount = servicePrice
+            finalVoucher = null
+        } else {
+            if (servicePrice >= (voucher.minPrice)) {
+                val discount = voucher.discount
+                newAmount = (servicePrice - discount).coerceAtLeast(0.0)
+                finalVoucher = voucher
+            } else {
+                newAmount = servicePrice
+                finalVoucher = null
+            }
+        }
+
+        _payment.value = currentPayment.copy(
+            voucherId = finalVoucher?.id,
+            voucher = finalVoucher,
+            amount = newAmount
+        )
+    }
+
+    fun submitPayment(method: String) {
+        val currentPayment = _payment.value ?: return
+        val updatedPayment = currentPayment.copy(
+            method = PaymentMethod.fromDisplayName(method).toString(),
+            status = PaymentStatus.SUCCESS.toString()
+        )
+
+        _payment.value = updatedPayment
+
+        _payment.value?.let { payment ->
+            viewModelScope.launch {
+                paymentRepository.updatePayment(payment.id!!, payment.toPaymentInsert())
+            }
         }
     }
 
     fun calcTotalPrice(): Double {
-        val servicePrice = _booking.value?.totalPrice ?: 0.0
-
-        val discount = _voucher.value?.discount ?: 0.0
-
-        val total = servicePrice - discount
-
-        return total.coerceAtLeast(0.0)
-    }
-
-    fun savePayment(method: String) {
-        viewModelScope.launch {
-            _payment.value?.let{
-                it.method = method;
-                it.amount = calcTotalPrice()
-                it.voucherId = _voucher.value?.id
-                it.status = PaymentStatus.SUCCESS.toString()
-                paymentRepository.updatePayment(it)
-            }
-        }
+        return _payment.value?.amount ?: 0.0
     }
 }

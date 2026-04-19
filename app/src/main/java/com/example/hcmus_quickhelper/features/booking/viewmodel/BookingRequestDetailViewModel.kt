@@ -1,10 +1,13 @@
 package com.example.hcmus_quickhelper.features.booking.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.core.model.BookingStatus
+import com.example.hcmus_quickhelper.features.booking.model.toBookingInsert
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import kotlinx.coroutines.launch
 
@@ -21,11 +24,33 @@ class BookingRequestDetailViewModel (
         }
     }
 
-    fun acceptBooking() {
-        // Logic xử lý chấp nhận (gọi API qua repository)
+    fun acceptBooking(helperId: Int) {
+        val currentBooking = _booking.value ?: return
+        val updatedBooking = currentBooking.copy(
+            status = BookingStatus.CONFIRMED.toString(),
+            helperId = helperId
+        )
+        _booking.value = updatedBooking
+
+        _booking.value?.let { booking ->
+            viewModelScope.launch {
+                bookingRepository.updateBooking(booking.id, booking.toBookingInsert())
+            }
+        }
     }
 
-    fun rejectBooking() {
-        // Logic xử lý từ chối (gọi API qua repository)
+    fun rejectBooking(helperId: Int) {
+        val currentBooking = _booking.value ?: return
+        val updatedBooking = currentBooking.copy(
+            status = BookingStatus.REJECTED.toString(),
+            helperId = helperId
+        )
+        _booking.value = updatedBooking
+
+        _booking.value?.let { booking ->
+            viewModelScope.launch {
+                bookingRepository.updateBooking(booking.id, booking.toBookingInsert())
+            }
+        }
     }
 }

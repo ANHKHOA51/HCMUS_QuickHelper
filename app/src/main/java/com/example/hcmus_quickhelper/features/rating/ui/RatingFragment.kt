@@ -14,7 +14,6 @@ import com.example.hcmus_quickhelper.databinding.FragmentRatingBinding
 import com.example.hcmus_quickhelper.databinding.FragmentReceiptBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
-import com.example.hcmus_quickhelper.features.payment.datasource.MockPaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
 import com.example.hcmus_quickhelper.features.rating.datasource.MockRatingDataSource

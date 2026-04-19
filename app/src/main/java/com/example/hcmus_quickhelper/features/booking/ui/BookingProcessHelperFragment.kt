@@ -91,7 +91,7 @@ class BookingProcessHelperFragment : Fragment() {
             booking?.let { 
                 displayBooking(it)
                 updateUIBasedOnStatus(it.status)
-                updateCountdown(it.schedule)
+//                updateCountdown(it.schedule)
             }
         }
 
@@ -163,6 +163,7 @@ class BookingProcessHelperFragment : Fragment() {
             tvPhone.text = booking.customer?.phone
             tvServiceName.text = booking.service?.name
             tvAddress.text = booking.address
+            tvNote.text = booking.note
         }
     }
 

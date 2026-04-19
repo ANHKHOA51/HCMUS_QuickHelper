@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.booking_fragment,
                 R.id.booking_request_detail_fragment,
                 R.id.booking_process_helper_fragment,
+                R.id.dashboard_helper_fragment,
                 R.id.otp_fragment -> {
                     bottomNav.visibility = View.GONE
                 }

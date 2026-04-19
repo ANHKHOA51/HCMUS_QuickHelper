@@ -69,6 +69,10 @@ class BookingDataSource {
     }
 
     suspend fun update(id: Int, booking: BookingInsert) {
-        SupabaseClient.client.from("bookings").update(booking)
+        SupabaseClient.client.from("bookings").update(booking) {
+            filter {
+                eq("id", id)
+            }
+        }
     }
 }

@@ -31,7 +31,7 @@ class BookingRequestListFragment : Fragment() {
             val bundle = Bundle().apply {
                 putInt("bookingId", booking.id)
             }
-            if(booking.status == BookingStatus.PENDING.toString()) {
+            if(booking.status == BookingStatus.PENDING.toString() || booking.status == BookingStatus.REJECTED.toString()) {
                 findNavController().navigate(
                     R.id.action_booking_request_list_fragment_to_booking_request_detail_fragment2,
                     bundle
@@ -45,7 +45,7 @@ class BookingRequestListFragment : Fragment() {
         }
     }
 
-    private val helperId: Int = 4
+    private val helperId: Int = 5
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

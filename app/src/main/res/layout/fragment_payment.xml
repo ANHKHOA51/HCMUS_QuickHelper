@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.receipt.ui.ReceiptFragment">
+    tools:context=".features.payment.ui.ReceiptFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -387,6 +387,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
+                            android:buttonTint="@color/orange_primary"
                             android:text="Tiền mặt"
                             android:checked="true" />
                         <RadioButton
@@ -394,6 +395,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
+                            android:buttonTint="@color/orange_primary"
                             android:text="Ví MoMo" />
 
                         <RadioButton
@@ -401,6 +403,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
+                            android:buttonTint="@color/orange_primary"
                             android:text="Chuyển khoản ngân hàng" />
 
                         <RadioButton
@@ -408,6 +411,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
+                            android:buttonTint="@color/orange_primary"
                             android:text="Thẻ tín dụng" />
 
                     </RadioGroup>
