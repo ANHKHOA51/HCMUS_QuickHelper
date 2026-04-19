@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.auth.repository
 
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 
@@ -7,6 +8,7 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
     suspend fun login(email: String, pass: String): Result<User> {
         return try {
             val user = dataSource.loginWithEmail(email, pass)
+            SessionManager.login(user) // Save to global context
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)

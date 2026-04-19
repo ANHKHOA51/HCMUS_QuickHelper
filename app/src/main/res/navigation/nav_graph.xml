@@ -82,9 +82,9 @@
     </fragment>
     <fragment
         android:id="@+id/voucher_fragment"
-        android:name="com.example.hcmus_quickhelper.features.voucher.ui.SelectVoucherFragment"
+        android:name="com.example.hcmus_quickhelper.features.voucher.ui.VoucherFragment"
         android:label="fragment_voucher"
-        tools:layout="@layout/fragment_select_voucher" />
+        tools:layout="@layout/fragment_voucher" />
     <fragment
         android:id="@+id/rating_fragment"
         android:name="com.example.hcmus_quickhelper.features.rating.ui.RatingFragment"
@@ -126,6 +126,9 @@
         <action
             android:id="@+id/action_home_fragment_to_collect_voucher_fragment"
             app:destination="@id/collect_voucher_fragment" />
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profile_fragment" />
     </fragment>
 
     <fragment
@@ -185,6 +188,12 @@
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
         android:label="fragment_booking_process_helper"
         tools:layout="@layout/fragment_booking_process_helper" />
+
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.example.hcmus_quickhelper.features.profile.ui.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 
 
 </navigation>
