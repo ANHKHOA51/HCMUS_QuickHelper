@@ -2,7 +2,11 @@ package com.example.hcmus_quickhelper.features.booking.datasource
 
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.features.booking.model.BookingConversation
+import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
+import com.example.hcmus_quickhelper.features.booking.model.ConversationInsert
+import com.example.hcmus_quickhelper.features.service_browsing.model.HelperWithServicesDto
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
@@ -74,5 +78,49 @@ class BookingDataSource {
                 eq("id", id)
             }
         }
+    }
+
+    suspend fun insertBooking(booking: BookingInsert) {
+        SupabaseClient.client.from("bookings").insert(booking)
+    }
+
+    suspend fun insertBookingAndGet(booking: BookingInsert): Booking {
+        return SupabaseClient.client.from("bookings")
+            .insert(booking) { select() }
+            .decodeSingle<Booking>()
+    }
+
+    suspend fun createConversation(bookingId: Int) {
+        val conversationInsert = ConversationInsert(bookingId = bookingId)
+        SupabaseClient.client.from("booking_conversations").insert(conversationInsert)
+    }
+
+    suspend fun getHelperWithServices(helperId: Int): HelperWithServicesDto {
+        val columns = Columns.raw("id, fullname, avatar_url, rating, services(id, name, base_price)")
+        return SupabaseClient.client.from("users")
+            .select(columns = columns) {
+                filter { eq("id", helperId) }
+            }.decodeSingle<HelperWithServicesDto>()
+    }
+
+    suspend fun deleteConversationByBookingId(bookingId: Int) {
+        SupabaseClient.client.from("booking_conversations").delete {
+            filter {
+                eq("booking_id", bookingId)
+            }
+        }
+    }
+    suspend fun getEvidences(bookingId: Int): List<BookingEvidence> {
+        return SupabaseClient.client.from("booking_evidences")
+            .select { filter { eq("booking_id", bookingId) } }
+            .decodeList<BookingEvidence>()
+    }
+
+    suspend fun getConversationByBookingId(bookingId: Int): BookingConversation? {
+        return try {
+            SupabaseClient.client.from("booking_conversations")
+                .select { filter { eq("booking_id", bookingId) } }
+                .decodeSingleOrNull<BookingConversation>()
+        } catch (e: Exception) { null }
     }
 }
