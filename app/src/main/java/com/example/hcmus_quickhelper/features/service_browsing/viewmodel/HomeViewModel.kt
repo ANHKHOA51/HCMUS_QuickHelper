@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private val currentUserId = 7
     // Expose the global user from SessionManager to the Fragment
-    val userProfile: LiveData<User?> = SessionManager.currentUser.asLiveData()
     private val _userProfile = MutableLiveData<User>()
+    val userProfile: LiveData<User?> = SessionManager.currentUser.asLiveData()
 //    val userProfile: LiveData<User> get() = _userProfile
 
     private val _vouchers = MutableLiveData<List<Voucher>>()

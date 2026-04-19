@@ -4,21 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import com.example.hcmus_quickhelper.features.service_browsing.viewmodel.HomeViewModel
-import android.view.*
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.features.service_browsing.datasource.HomeRemoteDataSource
 import com.example.hcmus_quickhelper.features.service_browsing.repository.HomeRepository
+import com.example.hcmus_quickhelper.features.service_browsing.viewmodel.HomeViewModel
+
 class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel

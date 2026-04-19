@@ -1,6 +1,5 @@
 package com.example.hcmus_quickhelper.features.payment.datasource
 
-import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.payment.model.PaymentInsert

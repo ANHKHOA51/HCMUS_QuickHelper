@@ -2,8 +2,6 @@ package com.example.hcmus_quickhelper.core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
 enum class BookingStatus(val value: String) {
     COMPLETED("Hoàn thành"),

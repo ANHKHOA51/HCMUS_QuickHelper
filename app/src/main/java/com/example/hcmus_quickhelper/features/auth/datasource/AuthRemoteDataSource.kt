@@ -4,8 +4,6 @@ import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.User
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 
 class AuthRemoteDataSource {
     suspend fun loginWithEmail(email: String, pass: String): User {
