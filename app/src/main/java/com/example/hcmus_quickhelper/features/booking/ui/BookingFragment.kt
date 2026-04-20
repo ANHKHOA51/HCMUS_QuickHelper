@@ -97,7 +97,7 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                 error(R.drawable.default_avt)
             }
 
-            // Setup Dropdown Services
+            // Setup Dropdown
             val serviceNames = helper.services.map { it.name }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, serviceNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -172,8 +172,14 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                 schedule = scheduleString,
                 address = addressString,
                 note = noteString,
-                onSuccess = {
-                    findNavController().navigate(R.id.payment_fragment)
+                onSuccess = { createdBookingId ->
+                    val selectedServiceName = viewModel.selectedService?.name ?: "Dịch vụ"
+                    val bundle = Bundle().apply {
+                        putInt("bookingId", createdBookingId)
+                        putString("serviceName", selectedServiceName)
+                    }
+                    // ĐIỀU HƯỚNG SANG TRACKING HELPERS THAY VÌ PAYMENT
+                    findNavController().navigate(R.id.action_booking_to_tracking, bundle)
                 }
             )
         }

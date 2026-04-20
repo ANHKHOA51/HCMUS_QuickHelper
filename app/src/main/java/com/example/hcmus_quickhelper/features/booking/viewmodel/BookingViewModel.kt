@@ -42,7 +42,7 @@ class BookingViewModel(private val dataSource: BookingDataSource = BookingDataSo
     }
 
     fun createBooking(
-        customerId: Int, helperId: Int, schedule: String, address: String, note: String, onSuccess: () -> Unit
+        customerId: Int, helperId: Int, schedule: String, address: String, note: String, onSuccess: (Int) -> Unit
     ) {
         if (selectedService == null) return
 
@@ -59,8 +59,9 @@ class BookingViewModel(private val dataSource: BookingDataSource = BookingDataSo
                     totalPrice = _totalPrice.value ?: 0.0,
                     note = note
                 )
-                dataSource.insertBooking(newBooking)
-                onSuccess()
+                val insertedBooking = dataSource.insertBookingAndGet(newBooking)
+                dataSource.createConversation(insertedBooking.id)
+                onSuccess(insertedBooking.id)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

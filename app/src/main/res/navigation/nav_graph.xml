@@ -148,8 +148,27 @@
         android:label="fragment_rating"
         tools:layout="@layout/fragment_booking" >
         <action
-            android:id="@+id/action_booking_to_payment"
+            android:id="@+id/action_booking_to_tracking"
+            app:destination="@id/fragment_booking_trackinghelpers" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_booking_trackinghelpers"
+        android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingTrackingHelpersFragment"
+        android:label="fragment_booking_trackinghelpers"
+        tools:layout="@layout/fragment_booking_trackinghelpers" >
+
+        <action
+            android:id="@+id/action_tracking_to_payment"
             app:destination="@id/payment_fragment" />
+
+        <action
+            android:id="@+id/action_tracking_to_chat"
+            app:destination="@id/chat_fragment" />
+
+        <action
+            android:id="@+id/action_tracking_to_home"
+            app:destination="@id/home_fragment" />
     </fragment>
 
     <fragment
