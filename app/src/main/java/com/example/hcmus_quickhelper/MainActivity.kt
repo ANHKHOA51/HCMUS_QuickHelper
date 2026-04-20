@@ -1,5 +1,8 @@
 package com.example.hcmus_quickhelper
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,7 +18,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Cho phép layout vẽ full màn hình
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContentView(R.layout.main_activity)
