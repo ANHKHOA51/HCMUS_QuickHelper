@@ -13,6 +13,7 @@ class CommunityViewModel (
     val feedList = MutableLiveData<List<Feed>>()
 
     fun fetchFeeds(userId: Int) {
+        if (userId == -1) return;
         viewModelScope.launch {
             val result = repository.getFeeds(userId)
 

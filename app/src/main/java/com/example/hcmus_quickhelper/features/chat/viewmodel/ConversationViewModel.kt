@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.chat.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,8 @@ class ConversationViewModel(
     private var subscribeJob: Job? = null
 
     fun fetchConversations(userId: Int) {
+        Log.d("fetchConversations", "userId: $userId")
+        if (userId == -1) return;
         viewModelScope.launch {
             val result = repository.getConservations(userId)
 

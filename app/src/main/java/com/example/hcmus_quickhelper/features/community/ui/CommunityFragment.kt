@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentFeedBinding
 import com.example.hcmus_quickhelper.features.community.datasource.CommunityRemoteDataSource
 import com.example.hcmus_quickhelper.features.community.repository.CommunityRepository
@@ -17,6 +19,7 @@ class CommunityFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var chipType = "All"
+    val currentUserId: Int = SessionManager.currentUser.asLiveData().value?.id ?: -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +37,7 @@ class CommunityFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
 
-        viewModel.fetchFeeds(3)
+        viewModel.fetchFeeds(currentUserId)
     }
 
     private lateinit var viewModel: CommunityViewModel
@@ -58,8 +61,6 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val currentUserId = 3
-
         feedAdapter = FeedAdapter(emptyList(), currentUserId)
 
         binding.rvFeed.apply {

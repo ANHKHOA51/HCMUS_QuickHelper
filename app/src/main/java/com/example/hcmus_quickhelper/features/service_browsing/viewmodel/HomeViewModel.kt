@@ -45,8 +45,8 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             try {
 //                _vouchers.value = repository.getVouchers()
 //                _topHelpers.value = repository.getTopHelpers()
-                repository.getUserProfile(currentUserId).onSuccess { _userProfile.value = it }
-                repository.getVouchers(currentUserId).onSuccess { _vouchers.value = it }
+                repository.getUserProfile(userProfile.value?.id ?: -1 ).onSuccess { _userProfile.value = it }
+                repository.getVouchers(userProfile.value?.id ?: -1).onSuccess { _vouchers.value = it }
                 repository.getPopularServices().onSuccess { _services.value = it }
                 repository.getTopHelpers().onSuccess { _topHelpers.value = it }
             } catch (e: Exception) {

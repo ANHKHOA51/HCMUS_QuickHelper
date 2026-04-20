@@ -20,7 +20,7 @@ class FirebaseService : FirebaseMessagingService() {
         val title = remoteMessage.notification?.title ?: "No title"
         val body = remoteMessage.notification?.body ?: "No body"
 
-        NotificationHelper.sendNotification(
+        NotificationHelper.showNotification(
             this,
             title,
             body
@@ -31,14 +31,14 @@ class FirebaseService : FirebaseMessagingService() {
         super.onNewToken(token)
     }
 
-    fun showNotification(title: String?, body: String?) {
-        val builder = NotificationCompat.Builder(this, "high_channel")
-            .setSmallIcon(R.drawable.ic_launcher_foreground) // đổi icon của bạn
-            .setContentTitle(title)
-            .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(1, builder.build())
-    }
+//    fun showNotification(title: String?, body: String?) {
+//        val builder = NotificationCompat.Builder(this, "high_channel")
+//            .setSmallIcon(R.drawable.ic_launcher_foreground) // đổi icon của bạn
+//            .setContentTitle(title)
+//            .setContentText(body)
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//
+//        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//        manager.notify(1, builder.build())
+//    }
 }

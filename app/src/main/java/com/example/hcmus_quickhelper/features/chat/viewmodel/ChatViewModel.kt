@@ -43,6 +43,7 @@ class ChatViewModel(
     }
 
     fun sendMessage(conversationId: Int, senderId: Int, content: String) {
+        if (senderId == -1) return;
         viewModelScope.launch {
 
             val result = repository.sendMessage(conversationId, senderId, content)

@@ -17,7 +17,7 @@ object NotificationHelper {
     private const val CHANNEL_NAME = "High Notification"
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun sendNotification(
+    fun showNotification(
         context: Context,
         title: String,
         message: String,

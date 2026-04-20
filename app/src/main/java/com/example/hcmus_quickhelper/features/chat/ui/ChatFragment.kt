@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import coil.load
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentChatBinding
 import com.example.hcmus_quickhelper.features.chat.datasource.ChatRemoteDataSource
 import com.example.hcmus_quickhelper.features.chat.repository.ChatRepository
@@ -19,7 +21,7 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-    val currentUserId = 5
+    val currentUserId: Int = SessionManager.currentUser.asLiveData().value?.id ?: -1
 
     var conversationId: Int? = null
 
