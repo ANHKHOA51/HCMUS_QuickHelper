@@ -16,9 +16,10 @@ class FirebaseService : FirebaseMessagingService() {
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d("FCM_DEBUG", "DATA: ${remoteMessage.data}")
 
-        val title = remoteMessage.notification?.title ?: "No title"
-        val body = remoteMessage.notification?.body ?: "No body"
+        val title = remoteMessage.data["title"] ?: "No title"
+        val body = remoteMessage.data["body"] ?: "No body"
 
         NotificationHelper.showNotification(
             this,

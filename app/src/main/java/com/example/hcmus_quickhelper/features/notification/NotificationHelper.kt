@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -25,17 +26,17 @@ object NotificationHelper {
         notificationId: Int = System.currentTimeMillis().toInt()
     ) {
 
-        // 🔥 1. Tạo channel (nếu chưa có)
+        // 1. Tạo channel (nếu chưa có)
         val channel = NotificationChannel(
             CHANNEL_ID,
             CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_HIGH // 🔥 popup
+            NotificationManager.IMPORTANCE_HIGH // popup
         )
 
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
 
-        // 🔥 2. PendingIntent (click mở màn)
+        // 2. PendingIntent (click mở màn)
         val pendingIntent = intent?.let {
             PendingIntent.getActivity(
                 context,
@@ -45,9 +46,15 @@ object NotificationHelper {
             )
         }
 
-        // 🔥 3. Build notification
+        val largeIcon = BitmapFactory.decodeResource(
+            context.resources,
+            R.drawable.logo_main
+        )
+
+        // 3. Build notification
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground) // 👉 đổi icon bạn
+            .setLargeIcon(largeIcon)
+            .setSmallIcon(R.drawable.logo_main) // đổi icon bạn
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
