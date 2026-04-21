@@ -11,6 +11,7 @@ if (localPropertiesFile.exists()) {
 
 val supabaseUrl = localProperties.getProperty("SUPABASE_URL") ?: ""
 val supabaseKey = localProperties.getProperty("SUPABASE_KEY") ?: ""
+val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
 
 plugins {
     alias(libs.plugins.android.application)
@@ -51,6 +52,12 @@ android {
             "SUPABASE_KEY",
             "\"$supabaseKey\""
         )
+
+        buildConfigField(
+            "String",
+            "GOOGLE_CLIENT_ID",
+            "\"$googleClientId\""
+        )
     }
 
     buildTypes {
@@ -88,30 +95,37 @@ dependencies {
     implementation(platform(libs.bom))
     implementation(libs.kotlinx.serialization.json)
 
-    implementation("io.ktor:ktor-client-okhttp:3.4.2")
-    implementation("io.ktor:ktor-client-core:3.4.2")
-    implementation("io.ktor:ktor-client-content-negotiation:3.4.2")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.2")
-    implementation("io.ktor:ktor-client-plugins:3.1.1")
     implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.core)
 
-    implementation(libs.postgrest.kt)
-    implementation(libs.auth.kt)
-    implementation(libs.storage.kt)
-    implementation(libs.postgrest.kt.v200)
-    implementation(libs.realtime.kt)
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
+    implementation(libs.supabase.realtime)
+    implementation(libs.supabase.storage)
+
+    //implementation(libs.postgrest.kt)
+    //implementation(libs.auth.kt)
+    //implementation(libs.storage.kt)
+    //implementation(libs.postgrest.kt.v200)
+    //implementation(libs.realtime.kt)
 
     // MVVM
     implementation(libs.androidx.lifecycle.extensions)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx")
+    implementation("androidx.fragment:fragment-ktx")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
 
     implementation("io.coil-kt:coil:2.7.0")
 
     implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
     implementation("com.google.firebase:firebase-messaging:25.0.1")
+
+    // Google Sign-In with Credential Manager
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 }

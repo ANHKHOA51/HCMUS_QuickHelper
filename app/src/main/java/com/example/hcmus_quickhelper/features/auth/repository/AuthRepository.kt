@@ -15,6 +15,16 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
         }
     }
 
+    suspend fun loginWithGoogle(idToken: String): Result<User> {
+        return try {
+            val user = dataSource.loginWithGoogle(idToken)
+            SessionManager.login(user)
+            Result.success(user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun register(email: String, pass: String, fullname: String, phone: String): Result<Unit> {
         return try {
             dataSource.registerWithEmail(email, pass, fullname, phone)

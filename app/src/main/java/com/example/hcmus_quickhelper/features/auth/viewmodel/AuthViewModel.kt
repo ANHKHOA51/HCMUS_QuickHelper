@@ -28,6 +28,14 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
+    fun signInWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            isLoading.value = true
+            loginResult.value = repository.loginWithGoogle(idToken)
+            isLoading.value = false
+        }
+    }
+
     fun register(email: String, pass: String, fullname: String, phone: String) {
         viewModelScope.launch {
             isLoading.value = true
