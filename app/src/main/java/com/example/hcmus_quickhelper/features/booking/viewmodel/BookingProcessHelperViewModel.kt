@@ -46,10 +46,10 @@ class BookingProcessHelperViewModel(
                 _booking.value = data
                 val evidencesData = bookingRepository.getEvidences(bookingId)
                 _evidences.value = evidencesData.toMutableList()
+                val paymentData = bookingRepository.getPayment(bookingId)
+                _payment.value = paymentData
 
-                MQService.postTask {
-                    subscribeToPayment(bookingId)
-                }
+                subscribeToPayment(bookingId)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -98,6 +98,14 @@ class BookingProcessHelperViewModel(
                 }
             }
         }
+
+        MQService.postTask {
+            try {
+                bookingRepository.createEvidences(_evidences.value?.toList()!!)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun removeEvidence(position: Int) {
@@ -112,6 +120,7 @@ class BookingProcessHelperViewModel(
             if (evidenceToDelete.evidenceUrl.isNotEmpty()) {
                 MQService.postTask {
                     try {
+                        bookingRepository.deleteEvidence(evidenceToDelete)
                         val fileName = evidenceToDelete.evidenceUrl.substringAfterLast("/")
                         StorageService.deleteImage(fileName)
                     } catch (e: Exception) {
@@ -136,9 +145,6 @@ class BookingProcessHelperViewModel(
                     updatedBooking.toBookingInsert()
                 )
 
-                if(newStatus == BookingStatus.COMPLETED.toString()) {
-                    bookingRepository.createEvidences(_evidences.value?.toList()!!)
-                }
                 Log.d("DEBUG", "Cập nhật Server thành công")
             } catch (e: Exception) {
                 Log.e("DEBUG", "Lỗi cập nhật Server: ${e.message}")

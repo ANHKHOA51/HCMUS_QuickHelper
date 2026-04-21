@@ -3,16 +3,19 @@ package com.example.hcmus_quickhelper.features.booking.ui
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.core.utils.toRemainingTime
@@ -97,6 +100,27 @@ class BookingProcessHelperFragment : Fragment() {
 
         viewModel.evidences.observe(viewLifecycleOwner) { evidences ->
             evidenceAdapter.updateEvidences(evidences)
+        }
+
+        viewModel.payment.observe(viewLifecycleOwner) { payment ->
+            if(payment != null) {
+                Log.d("TEST", payment.toString())
+                binding.btnViewReceipt.isEnabled = true
+                binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.orange_primary)
+                binding.btnViewReceipt.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                binding.btnViewReceipt.setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putInt("payment_id", payment.id!!)
+                    }
+//                    findNavController().navigate(R.id.action_booking_process_helper_fragment_to_receipt_fragment, bundle)
+                }
+            } else {
+                Log.d("TEST", "payment null")
+                binding.btnViewReceipt.isEnabled = false
+                binding.btnViewReceipt.text = "Đang chờ thanh toán"
+                binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.gray_light)
+                binding.btnViewReceipt.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_hint))
+            }
         }
     }
 

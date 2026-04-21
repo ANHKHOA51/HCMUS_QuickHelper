@@ -131,9 +131,18 @@ class BookingDataSource {
         SupabaseClient.client.from("booking_evidences").insert(evidences)
     }
 
-    suspend fun getPayment(bookingId: Int): Payment {
+    suspend fun deleteEvidence(evidence: BookingEvidence) {
+        SupabaseClient.client.from("booking_evidences").delete {
+            filter {
+                eq("booking_id", evidence.bookingId)
+                eq("evidence_url", evidence.evidenceUrl)
+            }
+        }
+    }
+
+    suspend fun getPayment(bookingId: Int): Payment? {
         return SupabaseClient.client.from("payments")
             .select { filter { eq("booking_id", bookingId) } }
-            .decodeSingle<Payment>()
+            .decodeSingleOrNull<Payment>()
     }
 }

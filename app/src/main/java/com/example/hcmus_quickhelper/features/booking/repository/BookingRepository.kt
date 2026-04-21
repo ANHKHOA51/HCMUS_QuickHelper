@@ -43,7 +43,12 @@ class BookingRepository (
         dataSource.createEvidences(evidences)
     }
 
-    suspend fun getPayment(bookingId: Int): Payment {
+    suspend fun deleteEvidence(evidence: BookingEvidence) {
+        dataSource.deleteEvidence(evidence)
+    }
+
+
+    suspend fun getPayment(bookingId: Int): Payment? {
         return dataSource.getPayment(bookingId)
     }
 }
