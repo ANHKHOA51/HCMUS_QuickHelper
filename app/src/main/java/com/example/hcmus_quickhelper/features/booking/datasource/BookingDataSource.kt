@@ -1,11 +1,13 @@
 package com.example.hcmus_quickhelper.features.booking.datasource
 
+import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.model.BookingConversation
 import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
 import com.example.hcmus_quickhelper.features.booking.model.ConversationInsert
+import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.service_browsing.model.HelperWithServicesDto
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -73,6 +75,7 @@ class BookingDataSource {
     }
 
     suspend fun update(id: Int, booking: BookingInsert) {
+        Log.d("TEST", "update: $booking")
         SupabaseClient.client.from("bookings").update(booking) {
             filter {
                 eq("id", id)
@@ -122,5 +125,15 @@ class BookingDataSource {
                 .select { filter { eq("booking_id", bookingId) } }
                 .decodeSingleOrNull<BookingConversation>()
         } catch (e: Exception) { null }
+    }
+
+    suspend fun createEvidences(evidences: List<BookingEvidence>) {
+        SupabaseClient.client.from("booking_evidences").insert(evidences)
+    }
+
+    suspend fun getPayment(bookingId: Int): Payment {
+        return SupabaseClient.client.from("payments")
+            .select { filter { eq("booking_id", bookingId) } }
+            .decodeSingle<Payment>()
     }
 }

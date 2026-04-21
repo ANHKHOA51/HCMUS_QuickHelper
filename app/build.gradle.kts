@@ -98,7 +98,7 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.auth.kt)
     implementation(libs.storage.kt)
-    implementation(libs.postgrest.kt.v200)
+//    implementation(libs.postgrest.kt.v200)
     implementation(libs.realtime.kt)
 
     // MVVM

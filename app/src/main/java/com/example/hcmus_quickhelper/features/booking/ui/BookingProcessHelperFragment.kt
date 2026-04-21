@@ -36,7 +36,7 @@ class BookingProcessHelperFragment : Fragment() {
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
         if (uris.isNotEmpty()) {
-            viewModel.addEvidence(uris)
+            viewModel.addEvidence(requireContext(), uris)
         }
     }
 
@@ -95,8 +95,8 @@ class BookingProcessHelperFragment : Fragment() {
             }
         }
 
-        viewModel.imageEvidence.observe(viewLifecycleOwner) { uris ->
-            evidenceAdapter.updateImages(uris)
+        viewModel.evidences.observe(viewLifecycleOwner) { evidences ->
+            evidenceAdapter.updateEvidences(evidences)
         }
     }
 
@@ -107,15 +107,31 @@ class BookingProcessHelperFragment : Fragment() {
                 binding.btnCompleteWork.visibility = View.GONE
                 // Khi chưa bắt đầu thì chưa cho thêm ảnh
                 binding.cardEvidence.visibility = View.GONE
+                binding.cardTime.visibility = View.VISIBLE
+                binding.btnViewReceipt.visibility = View.GONE
             }
             BookingStatus.IN_PROGRESS.toString() -> {
                 binding.btnStartWork.visibility = View.GONE
                 binding.btnCompleteWork.visibility = View.VISIBLE
                 binding.cardEvidence.visibility = View.VISIBLE
+                binding.cardTime.visibility = View.GONE
+                binding.btnViewReceipt.visibility = View.GONE
+
+                evidenceAdapter.setStatus(BookingStatus.IN_PROGRESS.toString())
+            }
+            BookingStatus.COMPLETED.toString() -> {
+                evidenceAdapter.setStatus(BookingStatus.COMPLETED.toString())
+                binding.btnStartWork.visibility = View.GONE
+                binding.btnCompleteWork.visibility = View.GONE
+                binding.btnAddImage.visibility = View.GONE
+                binding.cardEvidence.visibility = View.VISIBLE
+                binding.cardTime.visibility = View.GONE
+                binding.btnViewReceipt.visibility = View.VISIBLE
             }
             else -> {
                 binding.btnStartWork.visibility = View.GONE
                 binding.btnCompleteWork.visibility = View.GONE
+                binding.btnAddImage.visibility = View.GONE
                 binding.cardEvidence.visibility = View.VISIBLE
             }
         }
@@ -143,12 +159,10 @@ class BookingProcessHelperFragment : Fragment() {
         }
 
         binding.btnStartWork.setOnClickListener {
-            // Cập nhật trạng thái sang IN_PROGRESS trong ViewModel
             viewModel.updateBookingStatus(BookingStatus.IN_PROGRESS.toString())
         }
 
         binding.btnCompleteWork.setOnClickListener {
-            // Logic hoàn tất công việc
             viewModel.updateBookingStatus(BookingStatus.COMPLETED.toString())
         }
 

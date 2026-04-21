@@ -1,7 +1,6 @@
 [versions]
 agp = "8.13.2"
 bom = "3.4.1"
-extensions = "1.1.0"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -20,11 +19,11 @@ navigationUiKtx = "2.9.7"
 postgrestKt = "3.5.0"
 postgrestKtVersion = "3.5.0"
 realtimeKt = "3.5.0"
+supabase = "3.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensions" }
-auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
 bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -33,10 +32,15 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
-postgrest-kt-v200 = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "postgrestKtVersion" }
-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "realtimeKt" }
-storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt" }
+#postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
+#postgrest-kt-v200 = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "postgrestKtVersion" }
+#auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
+#realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "realtimeKt" }
+#storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt" }
+auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "supabase" }
+postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
+storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabase" }
+realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supabase" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }

@@ -34,7 +34,11 @@ class BookingRequestDetailViewModel (
 
         _booking.value?.let { booking ->
             viewModelScope.launch {
-                bookingRepository.updateBooking(booking.id, booking.toBookingInsert())
+                try {
+                    bookingRepository.updateBooking(booking.id, booking.toBookingInsert())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
