@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
@@ -23,9 +22,8 @@ import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
 import com.example.hcmus_quickhelper.features.auth.viewmodel.AuthViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
-import java.security.SecureRandom
-import java.util.Base64
 
 class LoginFragment : Fragment() {
 
@@ -66,13 +64,26 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
     }
 
+    private fun getFcmToken(onComplete: (String?) -> Unit) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+                onComplete(null)
+                return@addOnCompleteListener
+            }
+            onComplete(task.result)
+        }
+    }
+
     private fun setupUI() {
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
             
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.login(email, password)
+                getFcmToken { token ->
+                    viewModel.login(email, password, token)
+                }
             } else {
                 Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
@@ -88,13 +99,15 @@ class LoginFragment : Fragment() {
     }
 
     private fun triggerGoogleSignIn() {
+        // 1. Configure the Google-specific option
         val googleIdOption = GetGoogleIdOption.Builder()
-            // Start with false to ensure the selector always pops up for new users
-            .setFilterByAuthorizedAccounts(false)
+            .setFilterByAuthorizedAccounts(false) // Set to true if you only want to show accounts already linked
             .setServerClientId(SupabaseConfig.GOOGLE_WEB_CLIENT_ID)
-            .setAutoSelectEnabled(true) // Smooth experience for returning users
+            .setAutoSelectEnabled(true)
             .build()
 
+        // 2. Build the request EXCLUSIVELY with the Google option
+        // This removes any "Touch ID" / Passkey / Saved Password prompts
         val request = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
@@ -107,35 +120,10 @@ class LoginFragment : Fragment() {
                 )
                 handleSignIn(result)
             } catch (e: GetCredentialException) {
-                // This happens if the user cancels or no account is found
-                Log.e("GOOGLE_AUTH", "GetCredentialException: ${e.message}")
-                Toast.makeText(context, "Please sign into a Google account on this device", Toast.LENGTH_SHORT).show()
+                Log.e("GOOGLE_AUTH", "User cancelled or no Google account found")
             } catch (e: Exception) {
                 Log.e("GOOGLE_AUTH", "Error: ${e.message}")
             }
-        }
-    }
-
-    private suspend fun retryGoogleSignInWithoutFilter() {
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(SupabaseConfig.GOOGLE_WEB_CLIENT_ID)
-            //.setNonce(generateSecureRandomNonce())
-            .build()
-
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-        try {
-            val result = credentialManager.getCredential(
-                request = request,
-                context = requireContext()
-            )
-            handleSignIn(result)
-        } catch (e: Exception) {
-            Log.e("GOOGLE_AUTH", "Retry failed: ${e.message}", e)
-            Toast.makeText(context, "Google Sign-In Failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -145,19 +133,16 @@ class LoginFragment : Fragment() {
             try {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val idToken = googleIdTokenCredential.idToken
-                viewModel.signInWithGoogle(idToken)
+                
+                getFcmToken { token ->
+                    viewModel.signInWithGoogle(idToken, token)
+                }
             } catch (e: Exception) {
                 Log.e("GOOGLE_AUTH", "Failed to parse Google ID Token", e)
             }
         } else {
             Log.e("GOOGLE_AUTH", "Unexpected credential type: ${credential.type}")
         }
-    }
-
-    private fun generateSecureRandomNonce(): String {
-        val rawNonce = ByteArray(32)
-        SecureRandom().nextBytes(rawNonce)
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(rawNonce)
     }
 
     private fun observeViewModel() {

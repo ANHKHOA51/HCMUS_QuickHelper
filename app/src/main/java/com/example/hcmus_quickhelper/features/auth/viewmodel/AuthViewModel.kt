@@ -20,18 +20,18 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     
     val isLoading = MutableLiveData<Boolean>(false)
 
-    fun login(email: String, pass: String) {
+    fun login(email: String, pass: String, fcmToken: String?) {
         viewModelScope.launch {
             isLoading.value = true
-            loginResult.value = repository.login(email, pass)
+            loginResult.value = repository.login(email, pass, fcmToken)
             isLoading.value = false
         }
     }
 
-    fun signInWithGoogle(idToken: String) {
+    fun signInWithGoogle(idToken: String, fcmToken: String?) {
         viewModelScope.launch {
             isLoading.value = true
-            loginResult.value = repository.loginWithGoogle(idToken)
+            loginResult.value = repository.loginWithGoogle(idToken, fcmToken)
             isLoading.value = false
         }
     }

@@ -5,9 +5,10 @@ import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 
 class AuthRepository(private val dataSource: AuthRemoteDataSource) {
-    suspend fun login(email: String, pass: String): Result<User> {
+    suspend fun login(email: String, pass: String, fcmToken: String?): Result<User> {
         return try {
             val user = dataSource.loginWithEmail(email, pass)
+            fcmToken?.let { dataSource.saveFcmToken(user.id, it) } // Save token
             SessionManager.login(user) // Save to global context
             Result.success(user)
         } catch (e: Exception) {
@@ -15,9 +16,10 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
         }
     }
 
-    suspend fun loginWithGoogle(idToken: String): Result<User> {
+    suspend fun loginWithGoogle(idToken: String, fcmToken: String?): Result<User> {
         return try {
             val user = dataSource.loginWithGoogle(idToken)
+            fcmToken?.let { dataSource.saveFcmToken(user.id, it) } // Save token
             SessionManager.login(user)
             Result.success(user)
         } catch (e: Exception) {

@@ -1,6 +1,7 @@
 package com.example.hcmus_quickhelper.features.auth.datasource
 
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
+import com.example.hcmus_quickhelper.core.model.FcmToken
 import com.example.hcmus_quickhelper.core.model.User
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
@@ -89,6 +90,12 @@ class AuthRemoteDataSource {
 
         // 3. Insert into public.users
         SupabaseClient.client.postgrest["users"].insert(publicUser)
+    }
+
+    suspend fun saveFcmToken(userId: Int, token: String) {
+        val fcmToken = FcmToken(userId, token)
+        // Upsert ensures we don't get primary key collisions
+        SupabaseClient.client.postgrest["fcm_tokens"].upsert(fcmToken)
     }
 
     suspend fun sendOtp(email: String) {
