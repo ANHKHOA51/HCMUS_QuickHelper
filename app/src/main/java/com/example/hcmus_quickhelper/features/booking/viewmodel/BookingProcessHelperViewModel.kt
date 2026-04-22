@@ -39,6 +39,9 @@ class BookingProcessHelperViewModel(
     private val _evidences = MutableLiveData<MutableList<BookingEvidence>>(mutableListOf())
     val evidences: LiveData<MutableList<BookingEvidence>> = _evidences
 
+    private val _conversationId = MutableLiveData<Int?>()
+    val conversationId: LiveData<Int?> get() = _conversationId
+
     fun loadBooking(bookingId: Int) {
         viewModelScope.launch {
             try {
@@ -53,6 +56,9 @@ class BookingProcessHelperViewModel(
                     Log.d("TEST", "TEST status")
 //                    subscribeToPayment(bookingId)
                 }
+
+                val conv = bookingRepository.getConversationByBookingId(bookingId)
+                _conversationId.value = conv?.id
             } catch (e: Exception) {
                 e.printStackTrace()
             }

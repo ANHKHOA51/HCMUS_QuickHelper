@@ -4,6 +4,7 @@ import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.model.BookingHistory
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingLocalDataSource
+import com.example.hcmus_quickhelper.features.booking.model.BookingConversation
 import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
 import com.example.hcmus_quickhelper.features.payment.model.Payment
@@ -50,6 +51,10 @@ class BookingRepository (
 
     suspend fun getPayment(bookingId: Int): Payment? {
         return dataSource.getPayment(bookingId)
+    }
+
+    suspend fun getConversationByBookingId(bookingId: Int): BookingConversation? {
+        return dataSource.getConversationByBookingId(bookingId)
     }
 }
 class BookingRepositoryTmp(private val localDataSource: BookingLocalDataSource) {

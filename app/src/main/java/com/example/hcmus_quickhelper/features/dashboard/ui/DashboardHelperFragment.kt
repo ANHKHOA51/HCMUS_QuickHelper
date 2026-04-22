@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.databinding.FragmentDashboardHelperBinding
@@ -33,7 +34,7 @@ class DashboardHelperFragment : Fragment() {
             }
             if(booking.status == BookingStatus.PENDING.toString() || booking.status == BookingStatus.REJECTED.toString()) {
                 findNavController().navigate(
-                    R.id.action_dashboard_helper_fragment_to_booking_process_helper_fragment,
+                    R.id.action_dashboard_helper_fragment_to_booking_request_detail_fragment,
                     bundle
                 )
             } else {
@@ -45,7 +46,7 @@ class DashboardHelperFragment : Fragment() {
         }
     }
 
-    private val helperId = 5 // MOCK
+//    private val helperId = 5 // MOCK
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +62,7 @@ class DashboardHelperFragment : Fragment() {
         setupRecyclerView()
         setupObserver()
 
-        viewModel.loadData(helperId)
+        viewModel.loadData(SessionManager.currentUser.value?.id!!)
     }
 
     private fun setupViewModel() {

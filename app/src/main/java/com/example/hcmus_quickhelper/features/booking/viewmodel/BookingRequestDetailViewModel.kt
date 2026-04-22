@@ -17,10 +17,16 @@ class BookingRequestDetailViewModel (
     private val _booking = MutableLiveData<Booking?>()
     val booking: LiveData<Booking?> = _booking
 
+    private val _conversationId = MutableLiveData<Int?>()
+    val conversationId: LiveData<Int?> get() = _conversationId
+
     fun loadBooking(bookingId: Int) {
         viewModelScope.launch {
             val data = bookingRepository.getBookingByIdFullData(bookingId)
             _booking.postValue(data)
+
+            val conv = bookingRepository.getConversationByBookingId(bookingId)
+            _conversationId.value = conv?.id
         }
     }
 

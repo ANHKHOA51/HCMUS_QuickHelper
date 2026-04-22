@@ -189,7 +189,16 @@ class BookingProcessHelperFragment : Fragment() {
         }
 
         binding.btnChat.setOnClickListener {
-            // Logic mở chat
+            val convId = viewModel.conversationId.value
+            if (convId != null) {
+                val customer = viewModel.booking.value?.customer
+                val bundle = Bundle().apply {
+                    putInt("conversationId", convId)
+                    putString("senderName", customer?.fullname)
+                    putString("senderAvtUrl", customer?.avatarUrl)
+                }
+                findNavController().navigate(R.id.action_booking_process_helper_fragment_to_chat_fragment, bundle)
+            }
         }
     }
 
