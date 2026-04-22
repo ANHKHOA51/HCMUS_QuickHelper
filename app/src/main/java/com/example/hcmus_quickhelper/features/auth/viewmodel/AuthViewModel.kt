@@ -20,6 +20,14 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     
     val isLoading = MutableLiveData<Boolean>(false)
 
+    // State to hold the correct OTP for local verification if needed
+    private val _correctOtp = MutableLiveData<String>()
+    val correctOtp: LiveData<String> = _correctOtp
+
+    fun setGeneratedOtp(otp: String) {
+        _correctOtp.value = otp
+    }
+
     fun login(email: String, pass: String, fcmToken: String?) {
         viewModelScope.launch {
             isLoading.value = true
@@ -36,10 +44,10 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
-    fun register(email: String, pass: String, fullname: String, phone: String) {
+    fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null) {
         viewModelScope.launch {
             isLoading.value = true
-            registerResult.value = repository.register(email, pass, fullname, phone)
+            registerResult.value = repository.register(email, pass, fullname, phone, username)
             isLoading.value = false
         }
     }

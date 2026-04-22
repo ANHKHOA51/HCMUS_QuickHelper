@@ -27,9 +27,9 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
         }
     }
 
-    suspend fun register(email: String, pass: String, fullname: String, phone: String): Result<Unit> {
+    suspend fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null): Result<Unit> {
         return try {
-            dataSource.registerWithEmail(email, pass, fullname, phone)
+            dataSource.registerWithEmail(email, pass, fullname, phone, username)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

@@ -82,14 +82,35 @@
 
         <!-- Input Fields -->
         <TextView
-            android:id="@+id/tvLabelFullname"
+            android:id="@+id/tvLabelUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/label_fullname"
+            android:text="Username"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutTabs" />
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_field"
+            android:hint="Username (Optional)"
+            android:inputType="text"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tvLabelUsername" />
+
+        <TextView
+            android:id="@+id/tvLabelFullname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/label_fullname"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etUsername" />
 
         <EditText
             android:id="@+id/etFullname"
@@ -206,52 +227,6 @@
             app:layout_constraintStart_toStartOf="@id/btnRegister"
             app:layout_constraintTop_toTopOf="@id/btnRegister" />
 
-        <!-- Social Login -->
-        <TextView
-            android:id="@+id/tvOrContinue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/or_continue_with"
-            android:textColor="@color/gray_hint"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnRegister" />
-
-        <LinearLayout
-            android:id="@+id/layoutSocial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/tvOrContinue">
-
-            <Button
-                android:id="@+id/btnGoogle"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="@string/google"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:icon="@android:drawable/ic_menu_search" />
-
-            <Button
-                android:id="@+id/btnTouchId"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:text="@string/touch_id"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:icon="@android:drawable/ic_dialog_info" />
-        </LinearLayout>
-
         <!-- Terms -->
         <TextView
             android:id="@+id/tvTerms"
@@ -262,7 +237,7 @@
             android:text="@string/terms_note"
             android:textColor="@color/gray_hint"
             android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/layoutSocial" />
+            app:layout_constraintTop_toBottomOf="@id/btnRegister" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

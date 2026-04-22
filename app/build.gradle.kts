@@ -12,6 +12,8 @@ if (localPropertiesFile.exists()) {
 val supabaseUrl = localProperties.getProperty("SUPABASE_URL") ?: ""
 val supabaseKey = localProperties.getProperty("SUPABASE_KEY") ?: ""
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val businessEmail = localProperties.getProperty("BUSINESS_EMAIL") ?: ""
+val businessAppPass = localProperties.getProperty("BUSINESS_APP_PASS") ?: ""
 
 plugins {
     alias(libs.plugins.android.application)
@@ -58,6 +60,18 @@ android {
             "GOOGLE_CLIENT_ID",
             "\"$googleClientId\""
         )
+
+        buildConfigField(
+            "String",
+            "BUSINESS_EMAIL",
+            "\"$businessEmail\""
+        )
+
+        buildConfigField(
+            "String",
+            "BUSINESS_APP_PASS",
+            "\"$businessAppPass\""
+        )
     }
 
     buildTypes {
@@ -76,6 +90,12 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/NOTICE.md"
+            excludes += "/META-INF/LICENSE.md"
         }
     }
 }
@@ -128,4 +148,8 @@ dependencies {
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    // Android Mail for SMTP
+    implementation("com.sun.mail:android-mail:1.6.7")
+    implementation("com.sun.mail:android-activation:1.6.7")
 }

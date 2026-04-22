@@ -25,14 +25,12 @@ class AuthRemoteDataSource {
 
     suspend fun loginWithGoogle(idToken: String): User {
         // This now correctly resolves because dependencies are no longer conflicting
-        SupabaseClient.client.auth.signInWith(IDToken) { // <--- Capitalize as 'IDToken'
+        SupabaseClient.client.auth.signInWith(IDToken) { 
             this.idToken = idToken
             this.provider = Google
         }
 
         // 2. After successful auth, fetch or create the user in our public.users table
-        // For simplicity, we assume the user exists or will be handled by a Supabase trigger.
-        // If not, we can manually upsert here.
         val session = SupabaseClient.client.auth.currentSessionOrNull()
             ?: throw Exception("Failed to retrieve Supabase session after Google sign-in")
 
@@ -68,7 +66,7 @@ class AuthRemoteDataSource {
         return user
     }
 
-    suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String) {
+    suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String, username: String? = null) {
         // 1. Fetch the highest ID currently in the table
         val highestUser = SupabaseClient.client.postgrest["users"]
             .select {
@@ -82,6 +80,7 @@ class AuthRemoteDataSource {
         val publicUser = User(
             id = nextId,
             fullname = fullname,
+            username = username,
             email = email,
             phone = phone,
             password = pass,
@@ -94,15 +93,14 @@ class AuthRemoteDataSource {
 
     suspend fun saveFcmToken(userId: Int, token: String) {
         val fcmToken = FcmToken(userId, token)
-        // Upsert ensures we don't get primary key collisions
         SupabaseClient.client.postgrest["fcm_tokens"].upsert(fcmToken)
     }
 
     suspend fun sendOtp(email: String) {
-        // OTP is no longer used in custom database auth
+        // No-op: Handled by Android Intent in UI layer
     }
 
     suspend fun verifyOtp(email: String, token: String) {
-        // OTP is no longer used in custom database auth
+        // No-op: Handled locally in UI layer
     }
 }
