@@ -1,15 +1,9 @@
 package com.example.hcmus_quickhelper
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,11 +12,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-
         setContentView(R.layout.main_activity)
 
-//        hideNavigationBar()
 
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
@@ -87,15 +78,4 @@ class MainActivity : AppCompatActivity() {
         }
         }
     }
-
-//    override fun onWindowFocusChanged(hasFocus: Boolean) {
-//        super.onWindowFocusChanged(hasFocus)
-//
-//        // Giữ trạng thái ẩn khi quay lại app
-//        if (hasFocus) {
-//            hideNavigationBar()
-//        }
-//    }
-
-// q
 }
