@@ -83,12 +83,6 @@ class BookingTrackingHelpersFragment : Fragment(R.layout.fragment_booking_tracki
             findNavController().navigate(R.id.action_tracking_to_home)
         }
 
-        binding.btnPayment.setOnClickListener {
-            // Chuyển qua trang thanh toán, truyền bookingId qua
-            val bundle = Bundle().apply { putInt("bookingId", currentBookingId) }
-            findNavController().navigate(R.id.action_tracking_to_payment, bundle)
-        }
-
         binding.btnChat.setOnClickListener {
             val convId = viewModel.conversationId.value
             if (convId != null) {
@@ -179,5 +173,23 @@ class BookingTrackingHelpersFragment : Fragment(R.layout.fragment_booking_tracki
                 evidenceAdapter.updateData(evidencesList)
             }
         }
+
+        viewModel.isPaid.observe(viewLifecycleOwner) { isPaid ->
+            if (isPaid) {
+                binding.btnPayment.text = "Đã thanh toán"
+                binding.btnPayment.setBackgroundColor(Color.parseColor("#4CAF50"))
+                binding.btnPayment.setOnClickListener {
+                    findNavController().navigate(R.id.action_tracking_to_home)
+                }
+            } else {
+                binding.btnPayment.text = "Chuyển đến Thanh toán"
+                binding.btnPayment.setBackgroundColor(Color.parseColor("#E56B3D"))
+                binding.btnPayment.setOnClickListener {
+                    val bundle = Bundle().apply { putInt("bookingId", currentBookingId) }
+                    findNavController().navigate(R.id.action_tracking_to_payment, bundle)
+                }
+            }
+        }
+
     }
 }
