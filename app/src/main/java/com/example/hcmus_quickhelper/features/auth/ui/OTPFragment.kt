@@ -9,23 +9,26 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentOtpBinding
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
 import com.example.hcmus_quickhelper.features.auth.viewmodel.AuthViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Properties
+import javax.mail.*
+import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeMessage
 
 class OTPFragment : Fragment() {
     private var _binding: FragmentOtpBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: AuthViewModel
-    private var userEmail: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        userEmail = arguments?.getString("email")
-    }
+    private var generatedOtp: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentOtpBinding.inflate(inflater, container, false)
@@ -38,19 +41,11 @@ class OTPFragment : Fragment() {
         setupUI()
         observeViewModel()
 
-        // Reset states so old results don't trigger UI effects
-        viewModel.resetVerifyResult()
-        viewModel.resetSendOtpResult()
-
-        // REMOVE any automatic viewModel.sendOtp(it) calls here.
-        // The email was already sent by RegisterFragment's signUpWith call.
-
-        binding.tvResendOtp.setOnClickListener {
-            userEmail?.let {
-                viewModel.sendOtp(it)
-                Toast.makeText(context, "Resending code...", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // 1. Generate local OTP
+        generatedOtp = (100000..999999).random().toString()
+        
+        // 2. Automatically send the email via SMTP
+        sendOtpEmail(generatedOtp)
     }
 
     private fun setupViewModel() {
@@ -64,16 +59,77 @@ class OTPFragment : Fragment() {
 
     private fun setupUI() {
         binding.btnVerify.setOnClickListener {
-            val otp = binding.etOtp.text.toString().trim()
-            if (otp.length == 6 && userEmail != null) {
-                viewModel.verifyOtp(userEmail!!, otp)
+            val enteredOtp = binding.etOtp.text.toString().trim()
+            if (enteredOtp == generatedOtp) {
+                // OTP Matches! Now actually register the user in Supabase
+                val email = arguments?.getString("email") ?: ""
+                val pass = arguments?.getString("password") ?: ""
+                val name = arguments?.getString("fullname") ?: ""
+                val phone = arguments?.getString("phone") ?: ""
+                val username = arguments?.getString("username")
+                viewModel.register(email, pass, name, phone, username)
             } else {
-                Toast.makeText(context, "Please enter a valid 6-digit code", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Invalid OTP", Toast.LENGTH_SHORT).show()
             }
         }
         
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.tvResendOtp.setOnClickListener {
+            generatedOtp = (100000..999999).random().toString()
+            sendOtpEmail(generatedOtp)
+            Toast.makeText(context, "Resending code...", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun sendOtpEmail(otp: String) {
+        val recipientEmail = arguments?.getString("email") ?: return
+        
+        // Configuration for Gmail (Example)
+        // IMPORTANT: Use an "App Password", not your actual Gmail password.
+        val senderEmail = com.example.hcmus_quickhelper.BuildConfig.BUSINESS_EMAIL
+        val senderPassword = com.example.hcmus_quickhelper.BuildConfig.BUSINESS_APP_PASS
+
+        val props = Properties().apply {
+            put("mail.smtp.host", "smtp.gmail.com")
+            put("mail.smtp.socketFactory.port", "465")
+            put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
+            put("mail.smtp.auth", "true")
+            put("mail.smtp.port", "465")
+        }
+
+        val session = Session.getInstance(props, object : Authenticator() {
+            override fun getPasswordAuthentication(): PasswordAuthentication {
+                return PasswordAuthentication(senderEmail, senderPassword)
+            }
+        })
+
+        // Run in background thread
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val message = MimeMessage(session).apply {
+                    setFrom(InternetAddress(senderEmail))
+                    addRecipient(Message.RecipientType.TO, InternetAddress(recipientEmail))
+                    subject = "Your Verification Code"
+                    setText("Your OTP code is: $otp. Please enter this in the HCMUS QuickHelper app.")
+                }
+                Transport.send(message)
+                
+                withContext(Dispatchers.Main) {
+                    if (isAdded) {
+                        Toast.makeText(context, "OTP sent to $recipientEmail", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("SMTP_ERROR", "Failed to send email", e)
+                withContext(Dispatchers.Main) {
+                    if (isAdded) {
+                        Toast.makeText(context, "Failed to send email automatically.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
@@ -83,22 +139,13 @@ class OTPFragment : Fragment() {
             binding.btnVerify.isEnabled = !isLoading
         }
 
-        viewModel.sendOtpResult.observe(viewLifecycleOwner) { result ->
+        viewModel.registerResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess {
-                Toast.makeText(context, "OTP sent to your email", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_otp_to_login)
             }?.onFailure { error ->
-                Log.e("AUTH_ERROR", "Failed to send OTP", error)
-                Toast.makeText(context, "Failed to send OTP: ${error.message}", Toast.LENGTH_LONG).show()
-            }
-        }
-
-        viewModel.verifyResult.observe(viewLifecycleOwner) { result ->
-            result?.onSuccess {
-                Toast.makeText(context, "Verified! Please login.", Toast.LENGTH_SHORT).show()
-                findNavController().popBackStack(R.id.login_fragment, false)
-            }?.onFailure { error ->
-                Log.e("AUTH_ERROR", "Verification failed", error)
-                Toast.makeText(context, "Verification failed: ${error.message}", Toast.LENGTH_LONG).show()
+                Log.e("AUTH_ERROR", "Registration failed", error)
+                Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

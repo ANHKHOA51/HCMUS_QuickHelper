@@ -115,48 +115,16 @@
             app:layout_constraintTop_toBottomOf="@id/tvLabelEmail" />
 
         <TextView
-            android:id="@+id/tvLabelPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Phone"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEmail" />
-
-        <TextView
             android:id="@+id/tvPhone"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_input_field"
-            android:gravity="center_vertical"
-            android:padding="12dp"
-            android:textColor="@color/gray_hint"
-            app:layout_constraintTop_toBottomOf="@id/tvLabelPhone" />
-
-        <TextView
-            android:id="@+id/tvLabelRole"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Role"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPhone" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvRole"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_input_field"
-            android:gravity="center_vertical"
-            android:padding="12dp"
-            android:textColor="@color/gray_hint"
-            app:layout_constraintTop_toBottomOf="@id/tvLabelRole" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <!-- Save Button -->
         <Button
@@ -168,7 +136,19 @@
             android:text="Save Changes"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/tvRole" />
+            app:layout_constraintTop_toBottomOf="@id/tvEmail" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/white"
+            android:text="Logout"
+            android:textColor="@color/orange_primary"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:layout_constraintTop_toBottomOf="@id/btnSave" />
 
         <ProgressBar
             android:id="@+id/progressBar"

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentRegisterBinding
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
@@ -55,17 +56,30 @@ class RegisterFragment : Fragment() {
 
     private fun setupUI() {
         binding.btnRegister.setOnClickListener {
+            // Step 1: Extract username
+            val username = binding.etUsername.text.toString().trim()
             val fullname = binding.etFullname.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val phone = binding.etPhone.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
             
+            // Check required fields (username is optional)
             if (fullname.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.register(email, password, fullname, phone)
+                val bundle = Bundle().apply {
+                    putString("username", username) // Step 2: Add to bundle
+                    putString("fullname", fullname)
+                    putString("email", email)
+                    putString("phone", phone)
+                    putString("password", password)
+                }
+                // Navigate to OTP Fragment
+                findNavController().navigate(R.id.action_register_to_otp, bundle)
             } else {
-                Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please fill in all required fields", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Step 3: Social/Biometric logic removed (no click listeners for btnGoogle or btnTouchId)
 
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
