@@ -34,6 +34,11 @@
         <argument
             android:name="email"
             app:argType="string" />
+        <action
+            android:id="@+id/action_otp_to_login"
+            app:destination="@id/login_fragment"
+            app:popUpTo="@id/register_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
