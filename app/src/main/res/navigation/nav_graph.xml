@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/payment_fragment">
+    app:startDestination="@id/login_fragment">
 
     <fragment
         android:id="@+id/login_fragment"
@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_login_success"
             app:destination="@id/home_fragment" />
+        <action
+            android:id="@+id/action_login_fragment_to_dashboard_helper_fragment"
+            app:destination="@id/dashboard_helper_fragment" />
     </fragment>
 
     <fragment
@@ -107,6 +110,9 @@
         <action
             android:id="@+id/action_receipt_fragment_to_home"
             app:destination="@id/home_fragment" />
+        <action
+            android:id="@+id/action_receipt_fragment_to_dashboard_helper_fragment"
+            app:destination="@id/dashboard_helper_fragment" />
     </fragment>
 
     <fragment
@@ -211,7 +217,11 @@
         android:id="@+id/booking_process_helper_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
         android:label="fragment_booking_process_helper"
-        tools:layout="@layout/fragment_booking_process_helper" />
+        tools:layout="@layout/fragment_booking_process_helper" >
+        <action
+            android:id="@+id/action_booking_process_helper_fragment_to_receipt_fragment"
+            app:destination="@id/receipt_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/dashboard_helper_fragment"
         android:name="com.example.hcmus_quickhelper.features.dashboard.ui.DashboardHelperFragment"

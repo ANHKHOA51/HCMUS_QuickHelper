@@ -11,6 +11,10 @@ class PaymentRepository (
         return paymentDataSource.getById(id)
     }
 
+    suspend fun getPaymentByIdFullData(id: Int): Payment {
+        return paymentDataSource.getByIdFullData(id)
+    }
+
     suspend fun getPaymentByBookingId(id: Int): Payment? {
         return paymentDataSource.getByBookingId(id)
     }

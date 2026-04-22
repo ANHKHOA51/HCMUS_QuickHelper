@@ -37,7 +37,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         return binding.root
     }
 
-    private var bookingId: Int = 3
+    private var bookingId: Int = 2
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

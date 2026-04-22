@@ -21,3 +21,9 @@ data class User(
     @SerialName("created_at")
     val createdAt: String? = null
 )
+
+enum class UserRole {
+    HELPER,
+    CUSTOMER,
+    ADMIN
+}

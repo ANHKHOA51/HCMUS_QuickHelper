@@ -104,7 +104,6 @@ class BookingProcessHelperFragment : Fragment() {
 
         viewModel.payment.observe(viewLifecycleOwner) { payment ->
             if(payment != null) {
-                Log.d("TEST", payment.toString())
                 binding.btnViewReceipt.isEnabled = true
                 binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.orange_primary)
                 binding.btnViewReceipt.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
@@ -112,10 +111,9 @@ class BookingProcessHelperFragment : Fragment() {
                     val bundle = Bundle().apply {
                         putInt("payment_id", payment.id!!)
                     }
-//                    findNavController().navigate(R.id.action_booking_process_helper_fragment_to_receipt_fragment, bundle)
+                    findNavController().navigate(R.id.action_booking_process_helper_fragment_to_receipt_fragment, bundle)
                 }
             } else {
-                Log.d("TEST", "payment null")
                 binding.btnViewReceipt.isEnabled = false
                 binding.btnViewReceipt.text = "Đang chờ thanh toán"
                 binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.gray_light)
