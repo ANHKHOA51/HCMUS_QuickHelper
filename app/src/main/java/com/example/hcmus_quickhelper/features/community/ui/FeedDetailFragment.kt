@@ -1,16 +1,18 @@
 package com.example.hcmus_quickhelper.features.community.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import coil.load
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
+import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.core.utils.toRelativeTime
 import com.example.hcmus_quickhelper.databinding.FragmentFeedDetailBinding
 import com.example.hcmus_quickhelper.features.community.datasource.CommunityRemoteDataSource
@@ -21,6 +23,9 @@ import kotlin.text.lowercase
 class FeedDetailFragment : Fragment() {
     private var _binding: FragmentFeedDetailBinding? = null
     private val binding get() = _binding!!
+
+    var feedId: Int? = null
+    val currentUser: User? = SessionManager.currentUser.asLiveData().value
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,13 +39,15 @@ class FeedDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val currentUserId = currentUser?.id ?: -1
+
         setupViewModel()
-        setupRecyclerView()
+        setupRecyclerView(currentUserId)
         observeViewModel()
 
-        val feedId = arguments?.getInt("feedId")!!
+        feedId = arguments?.getInt("feedId")!!
 
-        viewModel.fetchFeedDetail(feedId, 3)
+        viewModel.fetchFeedDetail(feedId, currentUserId)
     }
 
     private lateinit var viewModel: FeedDetailViewModel
@@ -54,7 +61,7 @@ class FeedDetailFragment : Fragment() {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(FeedDetailViewModel::class.java)) {
                     @Suppress("UNCHECKED_CAST")
-                    return FeedDetailViewModel(repository) as T
+                    return FeedDetailViewModel(repository, currentUser) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
@@ -63,7 +70,7 @@ class FeedDetailFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory)[FeedDetailViewModel::class.java]
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerView(currentUserId: Int) {
         commentAdapter = CommentAdapter(emptyList())
 
         binding.btnBack.setOnClickListener {
@@ -75,8 +82,23 @@ class FeedDetailFragment : Fragment() {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-    }
 
+        binding.btnSend.setOnClickListener {
+            if (feedId == null) return@setOnClickListener
+
+            val content = binding.etComment.text.toString().trim()
+
+            if (content.isEmpty()) return@setOnClickListener
+
+            viewModel.postComment(
+                feedId!!,
+                currentUserId,
+                content
+            )
+
+            binding.etComment.text?.clear()
+        }
+    }
 
     private fun observeViewModel() {
         viewModel.feedContent.observe(viewLifecycleOwner) { item ->
