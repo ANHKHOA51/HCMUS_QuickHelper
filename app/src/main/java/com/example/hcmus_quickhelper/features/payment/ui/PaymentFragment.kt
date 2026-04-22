@@ -37,12 +37,12 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         return binding.root
     }
 
-    private var bookingId: Int = 1
+    private var bookingId: Int = 3
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bookingId = arguments?.getInt("booking_id") ?: 1
+        bookingId = arguments?.getInt("booking_id") ?: bookingId
 
         setupViewModel()
         setupObservers()
@@ -115,6 +115,11 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
                     booking.service?.let { service ->
                         binding.tvServiceName.text = service.name
+                    }
+
+                    booking.helper?.let { helper ->
+                        binding.tvHelperName.text = helper.fullname
+                        binding.tvHelperRating.text = helper.rating.toString()
                     }
                 }
 

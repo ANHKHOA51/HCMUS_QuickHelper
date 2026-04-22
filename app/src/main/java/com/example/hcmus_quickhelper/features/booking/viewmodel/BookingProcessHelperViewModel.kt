@@ -49,7 +49,10 @@ class BookingProcessHelperViewModel(
                 val paymentData = bookingRepository.getPayment(bookingId)
                 _payment.value = paymentData
 
-                subscribeToPayment(bookingId)
+                if(_booking.value?.status == BookingStatus.COMPLETED.toString()) {
+                    Log.d("TEST", "TEST status")
+//                    subscribeToPayment(bookingId)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
