@@ -115,14 +115,14 @@ class FeedDetailFragment : Fragment() {
                     transformations(coil.transform.CircleCropTransformation())
                 }
 
-                if (it.isLiked) {
-                    binding.ivHeart.setImageResource(R.drawable.ic_heart_filled)
-                } else {
-                    binding.ivHeart.setImageResource(R.drawable.ic_heart)
-                }
+                binding.cbHeart.setOnCheckedChangeListener(null)
+                binding.cbHeart.isChecked = item.isLiked
+                binding.tvHeart.text = item.likeCount.toString()
+                binding.tvCmt.text = item.commentCount.toString()
 
-                binding.tvHeart.text = it.likeCount.toString()
-                binding.tvCmt.text = it.commentCount.toString()
+                binding.cbHeart.setOnClickListener {
+                    viewModel.toggleLike(viewModel.feedContent.value, currentUser?.id ?: -1)
+                }
             }
         }
 

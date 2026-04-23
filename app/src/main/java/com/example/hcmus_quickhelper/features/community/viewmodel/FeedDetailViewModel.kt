@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.community.model.CommentUI
+import com.example.hcmus_quickhelper.features.community.model.Feed
 import com.example.hcmus_quickhelper.features.community.model.FeedDetail
 import com.example.hcmus_quickhelper.features.community.repository.CommunityRepository
 import kotlinx.coroutines.launch
@@ -58,6 +59,32 @@ class FeedDetailViewModel (
                 )
 
                 commentList.value?.add(0, newComment)
+            }
+        }
+    }
+
+    fun updateFeed(updated: FeedDetail) {
+        feedContent.value = updated
+    }
+
+    fun toggleLike(feed: FeedDetail?, userId: Int) {
+        if (userId == -1) return
+        if(feed == null) return
+
+        val isCurrentlyLiked = feed.isLiked
+        val newLikeCount = if (isCurrentlyLiked) feed.likeCount - 1 else feed.likeCount + 1
+        val updatedFeed = feed.copy(isLiked = !isCurrentlyLiked, likeCount = newLikeCount)
+
+        updateFeed(updatedFeed)
+
+        viewModelScope.launch {
+            try {
+                val (serverLiked, serverCount) = repository.toggleLike(feed.feedId, userId)
+                if (serverLiked != updatedFeed.isLiked || serverCount != updatedFeed.likeCount) {
+                    updateFeed(updatedFeed.copy(isLiked = serverLiked, likeCount = serverCount))
+                }
+            } catch (e: Exception) {
+                updateFeed(feed)
             }
         }
     }
