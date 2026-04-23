@@ -5,6 +5,7 @@ import com.example.hcmus_quickhelper.features.chat.model.Message
 import com.example.hcmus_quickhelper.features.community.model.Comment
 import com.example.hcmus_quickhelper.features.community.model.Feed
 import com.example.hcmus_quickhelper.features.community.model.FeedDetail
+import com.example.hcmus_quickhelper.features.community.model.ToggleLikeResponse
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
 import kotlinx.serialization.json.buildJsonObject
@@ -38,5 +39,17 @@ class CommunityRemoteDataSource {
                 select()
             }
                 .decodeSingle()
+    }
+
+    suspend fun toggleLike(feedId: Int, userId: Int): Pair<Boolean, Int> {
+        val result = SupabaseClient.client.postgrest.rpc(
+            "toggle_like",
+            mapOf(
+                "p_feed_id" to feedId,
+                "p_user_id" to userId
+            )
+        ).decodeSingle<ToggleLikeResponse>()
+
+        return Pair(result.liked, result.like_count)
     }
 }

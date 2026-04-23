@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Khi đã check (Like) -->
+    <item android:drawable="@drawable/ic_heart_filled" android:state_checked="true" />
+    <!-- Khi chưa check (Default) -->
+    <item android:drawable="@drawable/ic_heart" />
+</selector>

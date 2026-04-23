@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.hcmus_quickhelper.R
@@ -16,7 +17,8 @@ import com.example.hcmus_quickhelper.features.community.model.Feed
 
 class FeedAdapter (
     private var items: List<Feed>,
-    private val currentUserId: Int
+    private val currentUserId: Int,
+    val onLikeClick: (Feed) -> Unit
 ) : RecyclerView.Adapter<FeedAdapter.CommunityViewHolder>() {
 
     class CommunityViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root)
@@ -45,14 +47,14 @@ class FeedAdapter (
             error(R.drawable.default_avt)
         }
 
-        if (item.isLiked) {
-            holder.binding.ivHeart.setImageResource(R.drawable.ic_heart_filled)
-        } else {
-            holder.binding.ivHeart.setImageResource(R.drawable.ic_heart)
-        }
-
+        holder.binding.cbHeart.setOnCheckedChangeListener(null)
+        holder.binding.cbHeart.isChecked = item.isLiked
         holder.binding.tvHeart.text = item.likeCount.toString()
         holder.binding.tvCmt.text = item.commentCount.toString()
+
+        holder.binding.cbHeart.setOnClickListener {
+            onLikeClick(item)
+        }
 
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
@@ -68,7 +70,18 @@ class FeedAdapter (
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<Feed>) {
-        this.items = newItems
-        notifyDataSetChanged()
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = items.size
+            override fun getNewListSize() = newItems.size
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition].id == newItems[newItemPosition].id
+            }
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition] == newItems[newItemPosition]
+            }
+        })
+
+        this.items = newItems.toList()
+        diffResult.dispatchUpdatesTo(this)
     }
 }

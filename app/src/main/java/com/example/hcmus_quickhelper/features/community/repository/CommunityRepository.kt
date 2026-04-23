@@ -45,4 +45,8 @@ class CommunityRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun toggleLike(feedId: Int, userId: Int): Pair<Boolean, Int> {
+        return dataSource.toggleLike(feedId, userId)
+    }
 }

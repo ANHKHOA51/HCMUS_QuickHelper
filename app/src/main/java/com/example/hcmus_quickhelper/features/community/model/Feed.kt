@@ -27,11 +27,11 @@ data class Feed(
     val createdAt: String,
 
     @SerialName("like_count")
-    val likeCount: Int,
+    var likeCount: Int,
 
     @SerialName("comment_count")
     val commentCount: Int,
 
     @SerialName("is_like")
-    val isLiked: Boolean
+    var isLiked: Boolean
 )
