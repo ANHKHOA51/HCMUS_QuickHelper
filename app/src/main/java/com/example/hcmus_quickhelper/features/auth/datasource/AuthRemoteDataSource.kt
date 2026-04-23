@@ -55,7 +55,7 @@ class AuthRemoteDataSource {
                 email = email,
                 phone = "",
                 password = "", 
-                role = "user"
+                role = "CUSTOMER"
             )
             SupabaseClient.client.postgrest["users"].insert(user)
         }
@@ -63,7 +63,7 @@ class AuthRemoteDataSource {
         return user
     }
 
-    suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String, username: String? = null) {
+    suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String, username: String? = null, role: String = "CUSTOMER") {
         val highestUser = SupabaseClient.client.postgrest["users"]
             .select {
                 order("id", order = Order.DESCENDING)
@@ -79,7 +79,7 @@ class AuthRemoteDataSource {
             email = email,
             phone = phone,
             password = pass,
-            role = "user"
+            role = role
         )
 
         SupabaseClient.client.postgrest["users"].insert(publicUser)

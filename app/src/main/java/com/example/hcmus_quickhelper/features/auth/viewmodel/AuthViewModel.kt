@@ -44,10 +44,10 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
-    fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null) {
+    fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null, role: String = "CUSTOMER") {
         viewModelScope.launch {
             isLoading.value = true
-            registerResult.value = repository.register(email, pass, fullname, phone, username)
+            registerResult.value = repository.register(email, pass, fullname, phone, username, role)
             isLoading.value = false
         }
     }

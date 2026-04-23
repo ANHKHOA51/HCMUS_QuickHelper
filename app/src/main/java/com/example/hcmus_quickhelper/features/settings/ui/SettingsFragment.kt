@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentSettingsBinding
 import com.example.hcmus_quickhelper.features.settings.repository.SettingsRepository
@@ -65,9 +68,27 @@ class SettingsFragment : Fragment() {
             findNavController().navigate(R.id.action_settings_to_change_password)
         }
 
+        binding.cvLanguage.setOnClickListener {
+            showLanguageDialog()
+        }
+
         binding.btnLogout.setOnClickListener {
             logout()
         }
+    }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf("English", "Vietnamese")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Language")
+            .setItems(languages) { _, which ->
+                val selected = languages[which]
+                // Update UI placeholder
+                binding.tvCurrentLanguage.text = selected
+                Toast.makeText(context, "Language changed to $selected (Feature coming soon)", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun logout() {
@@ -78,8 +99,20 @@ class SettingsFragment : Fragment() {
             } catch (e: Exception) {
                 // Ignore errors
             }
-            findNavController().navigate(R.id.login_fragment) {
-                popUpTo(R.id.home_fragment) { inclusive = true }
+            
+            // Fix: Use the explicit navOptions builder to avoid the route vs ID ambiguity
+            val navOptions = navOptions {
+                popUpTo(findNavController().graph.id) {
+                    inclusive = true
+                }
+            }
+            
+            try {
+                findNavController().navigate(R.id.login_fragment, null, navOptions)
+            } catch (e: Exception) {
+                // Fallback: If your graph uses a different ID for the start destination, 
+                // ensure R.id.login_fragment is the exact ID defined in your nav_graph.xml
+                findNavController().navigate(R.id.login_fragment)
             }
         }
     }
