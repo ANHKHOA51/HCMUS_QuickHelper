@@ -260,7 +260,16 @@
         android:id="@+id/payment_admin_fragment"
         android:name="com.example.hcmus_quickhelper.features.payment.ui.PaymentAdminFragment"
         android:label="fragment_payment_admin"
-        tools:layout="@layout/fragment_payment_admin" />
+        tools:layout="@layout/fragment_payment_admin" >
+        <action
+            android:id="@+id/action_payment_admin_fragment_to_payment_admin_detail_fragment"
+            app:destination="@id/payment_admin_detail_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/payment_admin_detail_fragment"
+        android:name="com.example.hcmus_quickhelper.features.payment.ui.PaymentAdminDetailFragment"
+        android:label="fragment_payment_admin_detail"
+        tools:layout="@layout/fragment_payment_admin_detail" />
 
 
 </navigation>

@@ -26,10 +26,10 @@ class PaymentAdminFragment : Fragment() {
             val bundle = Bundle().apply {
                 putInt("paymentId", payment.id!!)
             }
-//            findNavController().navigate(
-//                R.id.action_payment_admin_fragment_to_payment_detail_admin_fragment,
-//                bundle
-//            )
+            findNavController().navigate(
+                R.id.action_payment_admin_fragment_to_payment_admin_detail_fragment,
+                bundle
+            )
         }
     }
 
