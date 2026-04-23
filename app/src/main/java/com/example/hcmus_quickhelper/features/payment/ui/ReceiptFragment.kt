@@ -117,6 +117,12 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
         // 3. Hiện lại các nút bấm ngay lập tức
         buttonsToHide.forEach { it.visibility = View.VISIBLE }
 
+        if(SessionManager.currentUser.value?.role == UserRole.CUSTOMER.toString()) {
+            binding.btnGoToRating.visibility = View.VISIBLE
+        } else {
+            binding.btnGoToRating.visibility = View.GONE
+        }
+
         // 4. Lưu Bitmap vào thư viện ảnh của thiết bị
         saveBitmapToGallery(bitmap)
     }
