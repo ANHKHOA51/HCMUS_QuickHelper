@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -31,12 +32,19 @@ class BookingHistoryFragment : Fragment(R.layout.fragment_booking_history) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBookingHistoryBinding.bind(view)
 
+        setupListeners()
         setupDependencies()
         setupRecyclerView()
         setupTabListeners()
         observeViewModel()
 
         viewModel.loadHistories()
+    }
+
+    private fun setupListeners() {
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun setupDependencies() {
