@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.hcmus_quickhelper.R
@@ -17,8 +18,8 @@ import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSour
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
 import com.example.hcmus_quickhelper.features.settings.viewmodel.ChangePasswordUiState
 import com.example.hcmus_quickhelper.features.settings.viewmodel.ChangePasswordViewModel
-import com.example.hcmus_quickhelper.features.settings.ui.ChangePasswordFragmentArgs
-import com.example.hcmus_quickhelper.features.settings.ui.ChangePasswordFragmentDirections
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 class ChangePasswordFragment : Fragment() {
 
@@ -68,17 +69,24 @@ class ChangePasswordFragment : Fragment() {
             val oldPass = binding.etOldPassword.text.toString()
             if (oldPass.isNotEmpty()) {
                 viewModel.verifyOldPassword(oldPass)
+            } else {
+                Toast.makeText(context, "Please enter your current password", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.tvForgotPassword.setOnClickListener {
-            val email = SessionManager.currentUser.value?.email
-            if (email != null) {
-                val action = ChangePasswordFragmentDirections.actionChangePasswordToOtp(
-                    email = email,
-                    flow = "password_reset"
-                )
-                findNavController().navigate(action)
+            lifecycleScope.launch {
+                val email = SessionManager.currentUser.value?.email 
+                    ?: SessionManager.currentUser.firstOrNull()?.email
+                if (email != null) {
+                    val action = ChangePasswordFragmentDirections.actionChangePasswordToOtp(
+                        email = email,
+                        flow = "password_reset"
+                    )
+                    findNavController().navigate(action)
+                } else {
+                    Toast.makeText(context, "Unable to identify user session", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

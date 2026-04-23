@@ -16,6 +16,15 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
         }
     }
 
+    suspend fun verifyOldPassword(oldPass: String): Result<Unit> {
+        return try {
+            dataSource.verifyPassword(oldPass)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun loginWithGoogle(idToken: String, fcmToken: String?): Result<User> {
         return try {
             val user = dataSource.loginWithGoogle(idToken)

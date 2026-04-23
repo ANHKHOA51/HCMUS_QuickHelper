@@ -18,6 +18,7 @@ import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentSettingsBinding
 import com.example.hcmus_quickhelper.features.settings.repository.SettingsRepository
 import com.example.hcmus_quickhelper.features.settings.viewmodel.SettingsViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
@@ -42,6 +43,7 @@ class SettingsFragment : Fragment() {
         credentialManager = CredentialManager.create(requireContext())
         setupViewModel()
         setupUI()
+        observeViewModel()
     }
 
     private fun setupViewModel() {
@@ -49,7 +51,7 @@ class SettingsFragment : Fragment() {
         val factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SettingsViewModel(repository) as T
+                return SettingsViewModel(repository, requireContext().applicationContext) as T
             }
         }
         viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
@@ -77,15 +79,22 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.language.collectLatest { language ->
+                binding.tvCurrentLanguage.text = language
+            }
+        }
+    }
+
     private fun showLanguageDialog() {
         val languages = arrayOf("English", "Vietnamese")
         AlertDialog.Builder(requireContext())
             .setTitle("Select Language")
             .setItems(languages) { _, which ->
                 val selected = languages[which]
-                // Update UI placeholder
-                binding.tvCurrentLanguage.text = selected
-                Toast.makeText(context, "Language changed to $selected (Feature coming soon)", Toast.LENGTH_SHORT).show()
+                viewModel.updateLanguage(selected)
+                Toast.makeText(context, "Language changed to $selected", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
@@ -100,7 +109,6 @@ class SettingsFragment : Fragment() {
                 // Ignore errors
             }
             
-            // Fix: Use the explicit navOptions builder to avoid the route vs ID ambiguity
             val navOptions = navOptions {
                 popUpTo(findNavController().graph.id) {
                     inclusive = true
@@ -110,8 +118,6 @@ class SettingsFragment : Fragment() {
             try {
                 findNavController().navigate(R.id.login_fragment, null, navOptions)
             } catch (e: Exception) {
-                // Fallback: If your graph uses a different ID for the start destination, 
-                // ensure R.id.login_fragment is the exact ID defined in your nav_graph.xml
                 findNavController().navigate(R.id.login_fragment)
             }
         }

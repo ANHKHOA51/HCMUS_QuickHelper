@@ -125,12 +125,6 @@ dependencies {
     implementation(libs.supabase.realtime)
     implementation(libs.supabase.storage)
 
-    //implementation(libs.postgrest.kt)
-    //implementation(libs.auth.kt)
-    //implementation(libs.storage.kt)
-    //implementation(libs.postgrest.kt.v200)
-    //implementation(libs.realtime.kt)
-
     // MVVM
     implementation(libs.androidx.lifecycle.extensions)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx")
@@ -153,4 +147,7 @@ dependencies {
     // Android Mail for SMTP
     implementation("com.sun.mail:android-mail:1.6.7")
     implementation("com.sun.mail:android-activation:1.6.7")
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 }
