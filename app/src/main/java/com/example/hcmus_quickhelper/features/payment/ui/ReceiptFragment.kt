@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,9 +86,9 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
                 binding.tvServiceName.text = it.booking?.service?.name ?: "Dịch vụ"
 
                 if(SessionManager.currentUser.value?.role == UserRole.CUSTOMER.toString()) {
-                    binding.btnGoToRating.visibility = View.GONE
-                } else {
                     binding.btnGoToRating.visibility = View.VISIBLE
+                } else {
+                    binding.btnGoToRating.visibility = View.GONE
                 }
             }
         }
