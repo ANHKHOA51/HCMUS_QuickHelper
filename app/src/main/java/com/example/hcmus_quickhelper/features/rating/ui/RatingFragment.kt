@@ -18,7 +18,6 @@ import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSour
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
-import com.example.hcmus_quickhelper.features.rating.datasource.MockRatingDataSource
 import com.example.hcmus_quickhelper.features.rating.datasource.RatingDataSource
 import com.example.hcmus_quickhelper.features.rating.repository.RatingRepository
 import com.example.hcmus_quickhelper.features.rating.viewmodel.RatingViewModel
