@@ -24,21 +24,29 @@
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_register_to_otp"
-            app:destination="@id/otp_fragment" />
+            app:destination="@id/OTPFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/otp_fragment"
+        android:id="@+id/OTPFragment"
         android:name="com.example.hcmus_quickhelper.features.auth.ui.OTPFragment"
         tools:layout="@layout/fragment_otp">
         <argument
             android:name="email"
             app:argType="string" />
+        <argument
+            android:name="flow"
+            app:argType="string"
+            android:defaultValue="registration" />
         <action
             android:id="@+id/action_otp_to_login"
             app:destination="@id/login_fragment"
             app:popUpTo="@id/register_fragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_otp_to_change_password"
+            app:destination="@id/ChangePasswordFragment"
+            app:popUpTo="@id/settings_fragment" />
     </fragment>
 
     <fragment
@@ -112,7 +120,7 @@
     <fragment
         android:id="@+id/home_fragment"
         android:name="com.example.hcmus_quickhelper.features.service_browsing.ui.HomeFragment"
-        android:label="fragment_rating"
+        android:label="Home"
         tools:layout="@layout/home_activity" >
         <action
             android:id="@+id/action_home_to_services"
@@ -132,14 +140,14 @@
             android:id="@+id/action_home_fragment_to_collect_voucher_fragment"
             app:destination="@id/collect_voucher_fragment" />
         <action
-            android:id="@+id/action_home_to_profile"
-            app:destination="@id/profile_fragment" />
+            android:id="@+id/action_home_to_settings"
+            app:destination="@id/settings_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/service_list_fragment"
         android:name="com.example.hcmus_quickhelper.features.service_browsing.ui.ServiceListFragment"
-        android:label="fragment_rating"
+        android:label="Services"
         tools:layout="@layout/service_list_activity" >
         <argument
             android:name="helperId"
@@ -153,7 +161,7 @@
     <fragment
         android:id="@+id/booking_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingFragment"
-        android:label="fragment_rating"
+        android:label="Booking"
         tools:layout="@layout/fragment_booking" >
         <action
             android:id="@+id/action_booking_to_tracking"
@@ -163,7 +171,7 @@
     <fragment
         android:id="@+id/fragment_booking_trackinghelpers"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingTrackingHelpersFragment"
-        android:label="fragment_booking_trackinghelpers"
+        android:label="Tracking"
         tools:layout="@layout/fragment_booking_trackinghelpers" >
 
         <action
@@ -182,24 +190,24 @@
     <fragment
         android:id="@+id/booking_history_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingHistoryFragment"
-        android:label="fragment_rating"
+        android:label="Booking History"
         tools:layout="@layout/fragment_booking_history" >
 
     </fragment>
     <fragment
         android:id="@+id/collect_voucher_fragment"
         android:name="com.example.hcmus_quickhelper.features.voucher.ui.CollectVoucherFragment"
-        android:label="fragment_collect_voucher"
+        android:label="Vouchers"
         tools:layout="@layout/fragment_collect_voucher" />
     <fragment
         android:id="@+id/booking_request_detail_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestDetailFragment"
-        android:label="fragment_booking_request_helper"
+        android:label="Booking Request"
         tools:layout="@layout/fragment_booking_request_detail" />
     <fragment
         android:id="@+id/booking_request_list_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestListFragment"
-        android:label="BookingRequestListFragment" >
+        android:label="Booking Requests" >
         <action
             android:id="@+id/action_booking_request_list_fragment_to_booking_request_detail_fragment2"
             app:destination="@id/booking_request_detail_fragment" />
@@ -210,12 +218,12 @@
     <fragment
         android:id="@+id/booking_process_helper_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
-        android:label="fragment_booking_process_helper"
+        android:label="Processing"
         tools:layout="@layout/fragment_booking_process_helper" />
     <fragment
         android:id="@+id/dashboard_helper_fragment"
         android:name="com.example.hcmus_quickhelper.features.dashboard.ui.DashboardHelperFragment"
-        android:label="fragment_dashboard_helper"
+        android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard_helper" >
         <action
             android:id="@+id/action_dashboard_helper_fragment_to_booking_request_detail_fragment"
@@ -229,10 +237,42 @@
     </fragment>
 
     <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.example.hcmus_quickhelper.features.settings.ui.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settings_to_profile"
+            app:destination="@id/profile_fragment" />
+        <action
+            android:id="@+id/action_settings_to_change_password"
+            app:destination="@id/ChangePasswordFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/profile_fragment"
         android:name="com.example.hcmus_quickhelper.features.profile.ui.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/ChangePasswordFragment"
+        android:name="com.example.hcmus_quickhelper.features.settings.ui.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password">
+        <argument
+            android:name="isFromOtp"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_change_password_to_otp"
+            app:destination="@id/OTPFragment" />
+    </fragment>
 
 
 </navigation>

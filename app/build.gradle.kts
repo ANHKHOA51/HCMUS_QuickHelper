@@ -18,6 +18,7 @@ val businessAppPass = localProperties.getProperty("BUSINESS_APP_PASS") ?: ""
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.androidx.navigation.safeargs)
     id ("org.jetbrains.kotlin.plugin.serialization")
     id ("kotlin-parcelize")
     id("com.google.gms.google-services")
