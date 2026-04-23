@@ -8,6 +8,7 @@ import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
+import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.channel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class BookingTrackingViewModel : ViewModel() {
     private val dataSource = BookingDataSource()
+    private val paymentDataSource = PaymentDataSource()
 
     private val _booking = MutableLiveData<Booking>()
     val booking: LiveData<Booking> get() = _booking
@@ -27,10 +29,16 @@ class BookingTrackingViewModel : ViewModel() {
 
     private val _conversationId = MutableLiveData<Int?>()
     val conversationId: LiveData<Int?> get() = _conversationId
+    private val _isPaid = MutableLiveData<Boolean>()
+    val isPaid: LiveData<Boolean> get() = _isPaid
 
     fun loadData(bookingId: Int) {
         viewModelScope.launch {
             try {
+
+                val payment = paymentDataSource.getByBookingId(bookingId)
+                _isPaid.value = (payment != null)
+
                 // Lấy thông tin booking (full data có helper/service)
                 val currentBooking = dataSource.getByIdFullData(bookingId)
                 _booking.value = currentBooking
