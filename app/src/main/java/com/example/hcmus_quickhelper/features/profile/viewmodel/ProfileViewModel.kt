@@ -20,13 +20,17 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
     val uiState: StateFlow<ProfileUiState> = _uiState
 
-    fun saveProfile(username: String, fullname: String) {
+    fun saveProfile(username: String, fullname: String, phone: String) {
         val currentUser = SessionManager.currentUser.value ?: return
         
         viewModelScope.launch {
             _uiState.value = ProfileUiState.Loading
             try {
-                val updatedUser = currentUser.copy(username = username, fullname = fullname)
+                val updatedUser = currentUser.copy(
+                    username = username, 
+                    fullname = fullname,
+                    phone = phone
+                )
                 val result = repository.updateUserInfo(updatedUser)
                 _uiState.value = ProfileUiState.Success(result)
             } catch (e: Exception) {

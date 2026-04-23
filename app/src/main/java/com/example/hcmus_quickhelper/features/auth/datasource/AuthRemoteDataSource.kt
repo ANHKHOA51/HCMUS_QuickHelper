@@ -24,13 +24,11 @@ class AuthRemoteDataSource {
     }
 
     suspend fun loginWithGoogle(idToken: String): User {
-        // This now correctly resolves because dependencies are no longer conflicting
         SupabaseClient.client.auth.signInWith(IDToken) { 
             this.idToken = idToken
             this.provider = Google
         }
 
-        // 2. After successful auth, fetch or create the user in our public.users table
         val session = SupabaseClient.client.auth.currentSessionOrNull()
             ?: throw Exception("Failed to retrieve Supabase session after Google sign-in")
 
@@ -44,7 +42,6 @@ class AuthRemoteDataSource {
             }.decodeSingleOrNull<User>()
 
         if (user == null) {
-            // Auto-register the Google user in our custom table if they don't exist
             val highestUser = SupabaseClient.client.postgrest["users"]
                 .select {
                     order("id", order = Order.DESCENDING)
@@ -57,7 +54,7 @@ class AuthRemoteDataSource {
                 fullname = session.user?.userMetadata?.get("full_name")?.toString() ?: "Google User",
                 email = email,
                 phone = "",
-                password = "", // No password for Google users
+                password = "", 
                 role = "user"
             )
             SupabaseClient.client.postgrest["users"].insert(user)
@@ -67,7 +64,6 @@ class AuthRemoteDataSource {
     }
 
     suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String, username: String? = null) {
-        // 1. Fetch the highest ID currently in the table
         val highestUser = SupabaseClient.client.postgrest["users"]
             .select {
                 order("id", order = Order.DESCENDING)
@@ -76,7 +72,6 @@ class AuthRemoteDataSource {
 
         val nextId = (highestUser?.id ?: 0) + 1
 
-        // 2. Create the User object with the new ID
         val publicUser = User(
             id = nextId,
             fullname = fullname,
@@ -87,8 +82,27 @@ class AuthRemoteDataSource {
             role = "user"
         )
 
-        // 3. Insert into public.users
         SupabaseClient.client.postgrest["users"].insert(publicUser)
+    }
+
+    suspend fun updatePassword(userId: Int, newPass: String) {
+        SupabaseClient.client.postgrest["users"].update(
+            {
+                set("password", newPass)
+            }
+        ) {
+            filter { eq("id", userId) }
+        }
+    }
+
+    suspend fun updatePasswordByEmail(email: String, newPass: String) {
+        SupabaseClient.client.postgrest["users"].update(
+            {
+                set("password", newPass)
+            }
+        ) {
+            filter { eq("email", email) }
+        }
     }
 
     suspend fun saveFcmToken(userId: Int, token: String) {
@@ -97,10 +111,10 @@ class AuthRemoteDataSource {
     }
 
     suspend fun sendOtp(email: String) {
-        // No-op: Handled by Android Intent in UI layer
+        // No-op
     }
 
     suspend fun verifyOtp(email: String, token: String) {
-        // No-op: Handled locally in UI layer
+        // No-op
     }
 }
