@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/payment_admin_fragment">
+    app:startDestination="@id/add_voucher_fragment">
 
     <fragment
         android:id="@+id/login_fragment"
@@ -270,6 +270,20 @@
         android:name="com.example.hcmus_quickhelper.features.payment.ui.PaymentAdminDetailFragment"
         android:label="fragment_payment_admin_detail"
         tools:layout="@layout/fragment_payment_admin_detail" />
+    <fragment
+        android:id="@+id/voucher_management_fragment"
+        android:name="com.example.hcmus_quickhelper.features.voucher.ui.VoucherManagementFragment"
+        android:label="fragment_voucher_management"
+        tools:layout="@layout/fragment_voucher_management" >
+        <action
+            android:id="@+id/action_voucher_management_fragment_to_add_voucher_fragment"
+            app:destination="@id/add_voucher_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/add_voucher_fragment"
+        android:name="com.example.hcmus_quickhelper.features.voucher.ui.AddVoucherFragment"
+        android:label="fragment_add_voucher"
+        tools:layout="@layout/fragment_add_voucher" />
 
 
 </navigation>
