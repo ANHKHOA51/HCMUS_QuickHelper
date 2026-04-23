@@ -97,7 +97,11 @@
         android:id="@+id/rating_fragment"
         android:name="com.example.hcmus_quickhelper.features.rating.ui.RatingFragment"
         android:label="fragment_rating"
-        tools:layout="@layout/fragment_rating" />
+        tools:layout="@layout/fragment_rating" >
+        <action
+            android:id="@+id/action_rating_fragment_to_home_fragment"
+            app:destination="@id/home_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/receipt_fragment"
         android:name="com.example.hcmus_quickhelper.features.payment.ui.ReceiptFragment"
