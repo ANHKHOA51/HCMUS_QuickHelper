@@ -1,6 +1,5 @@
 package com.example.hcmus_quickhelper.features.booking.datasource
 
-import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.model.BookingConversation
@@ -75,7 +74,6 @@ class BookingDataSource {
     }
 
     suspend fun update(id: Int, booking: BookingInsert) {
-        Log.d("TEST", "update: $booking")
         SupabaseClient.client.from("bookings").update(booking) {
             filter {
                 eq("id", id)
@@ -125,6 +123,23 @@ class BookingDataSource {
                 .select { filter { eq("booking_id", bookingId) } }
                 .decodeSingleOrNull<BookingConversation>()
         } catch (e: Exception) { null }
+    }
+
+    // search booking history by id
+    suspend fun getBookingsByCustomerIdFullData(customerId: Int): List<Booking> {
+        return SupabaseClient.client.from("bookings").select(
+            columns = Columns.raw("""
+            *,
+            customer:customer_id(*),
+            helper:helper_id(*),
+            services(*)
+        """.trimIndent())
+        ) {
+            filter {
+                eq("customer_id", customerId)
+            }
+            order("created_at", Order.DESCENDING)
+        }.decodeList<Booking>()
     }
 
     suspend fun createEvidences(evidences: List<BookingEvidence>) {

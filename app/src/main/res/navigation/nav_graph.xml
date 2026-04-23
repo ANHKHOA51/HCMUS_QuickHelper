@@ -194,7 +194,9 @@
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingHistoryFragment"
         android:label="fragment_rating"
         tools:layout="@layout/fragment_booking_history" >
-
+    <action
+        android:id="@+id/action_history_to_tracking"
+        app:destination="@id/fragment_booking_trackinghelpers" />
     </fragment>
     <fragment
         android:id="@+id/collect_voucher_fragment"

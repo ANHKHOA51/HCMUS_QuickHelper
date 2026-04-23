@@ -1,9 +1,7 @@
 package com.example.hcmus_quickhelper.features.booking.repository
 
 import com.example.hcmus_quickhelper.core.model.Booking
-import com.example.hcmus_quickhelper.features.booking.model.BookingHistory
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
-import com.example.hcmus_quickhelper.features.booking.datasource.BookingLocalDataSource
 import com.example.hcmus_quickhelper.features.booking.model.BookingConversation
 import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
@@ -56,9 +54,8 @@ class BookingRepository (
     suspend fun getConversationByBookingId(bookingId: Int): BookingConversation? {
         return dataSource.getConversationByBookingId(bookingId)
     }
-}
-class BookingRepositoryTmp(private val localDataSource: BookingLocalDataSource) {
-    suspend fun getBookingHistories(): List<BookingHistory> {
-        return localDataSource.getBookingHistories()
+
+    suspend fun getBookingsByCustomerId(customerId: Int): List<Booking> {
+        return dataSource.getBookingsByCustomerIdFullData(customerId)
     }
 }
