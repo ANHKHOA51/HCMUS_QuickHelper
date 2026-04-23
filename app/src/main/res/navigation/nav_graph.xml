@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_login_success"
             app:destination="@id/home_fragment" />
+        <action
+            android:id="@+id/action_login_fragment_to_dashboard_helper_fragment"
+            app:destination="@id/dashboard_helper_fragment" />
     </fragment>
 
     <fragment
@@ -95,14 +98,18 @@
     </fragment>
     <fragment
         android:id="@+id/voucher_fragment"
-        android:name="com.example.hcmus_quickhelper.features.voucher.ui.VoucherFragment"
+        android:name="com.example.hcmus_quickhelper.features.voucher.ui.SelectVoucherFragment"
         android:label="fragment_voucher"
-        tools:layout="@layout/fragment_voucher" />
+        tools:layout="@layout/fragment_select_voucher" />
     <fragment
         android:id="@+id/rating_fragment"
         android:name="com.example.hcmus_quickhelper.features.rating.ui.RatingFragment"
         android:label="fragment_rating"
-        tools:layout="@layout/fragment_rating" />
+        tools:layout="@layout/fragment_rating" >
+        <action
+            android:id="@+id/action_rating_fragment_to_home_fragment"
+            app:destination="@id/home_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/receipt_fragment"
         android:name="com.example.hcmus_quickhelper.features.payment.ui.ReceiptFragment"
@@ -115,6 +122,9 @@
         <action
             android:id="@+id/action_receipt_fragment_to_home"
             app:destination="@id/home_fragment" />
+        <action
+            android:id="@+id/action_receipt_fragment_to_dashboard_helper_fragment"
+            app:destination="@id/dashboard_helper_fragment" />
     </fragment>
 
     <fragment
@@ -204,8 +214,12 @@
     <fragment
         android:id="@+id/booking_request_detail_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestDetailFragment"
-        android:label="Booking Request"
-        tools:layout="@layout/fragment_booking_request_detail" />
+        android:label="fragment_booking_request_helper"
+        tools:layout="@layout/fragment_booking_request_detail" >
+        <action
+            android:id="@+id/action_booking_request_detail_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/booking_request_list_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingRequestListFragment"
@@ -220,8 +234,15 @@
     <fragment
         android:id="@+id/booking_process_helper_fragment"
         android:name="com.example.hcmus_quickhelper.features.booking.ui.BookingProcessHelperFragment"
-        android:label="Processing"
-        tools:layout="@layout/fragment_booking_process_helper" />
+        android:label="fragment_booking_process_helper"
+        tools:layout="@layout/fragment_booking_process_helper" >
+        <action
+            android:id="@+id/action_booking_process_helper_fragment_to_receipt_fragment"
+            app:destination="@id/receipt_fragment" />
+        <action
+            android:id="@+id/action_booking_process_helper_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/dashboard_helper_fragment"
         android:name="com.example.hcmus_quickhelper.features.dashboard.ui.DashboardHelperFragment"

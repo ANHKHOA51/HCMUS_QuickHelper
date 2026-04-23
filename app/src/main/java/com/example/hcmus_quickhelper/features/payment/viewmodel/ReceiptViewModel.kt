@@ -25,7 +25,7 @@ class ReceiptViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val paymentData = paymentRepository.getPaymentByBookingIdFullData(paymentId)
+                val paymentData = paymentRepository.getPaymentByIdFullData(paymentId)
                 _payment.value = paymentData
             } catch (e: Exception) {
                 e.printStackTrace()
