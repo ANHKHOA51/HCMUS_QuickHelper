@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentAddVoucherBinding
 import com.example.hcmus_quickhelper.databinding.FragmentCollectVoucherBinding
@@ -41,39 +42,6 @@ class AddVoucherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupViewModel()
-
-        binding.btnSave.setOnClickListener {
-            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-            val code = binding.etCode.text.toString().trim()
-            val quantityString = binding.etQuantity.text.toString().trim()
-            val discountString = binding.etDiscount.text.toString().trim()
-            val minPriceString = binding.etMinPrice.text.toString().trim()
-            val expiredAt = format.format(calendar.time)
-
-            if (code.isEmpty()) {
-                binding.etCode.error = "Mã voucher không được để trống"
-                return@setOnClickListener
-            }
-
-            if (discountString.isEmpty()) {
-                binding.etDiscount.error = "Vui lòng nhập giá trị giảm"
-                return@setOnClickListener
-            }
-
-            val quantity = quantityString.toIntOrNull() ?: 0
-
-            val discount = discountString.toDoubleOrNull() ?: 0.0
-            val minPrice = minPriceString.toDoubleOrNull() ?: 0.0
-
-            viewModel.addVoucher(VoucherInsert(
-                code = code,
-                quantity = quantity,
-                discount = discount,
-                minPrice = minPrice,
-                expiredAt = expiredAt
-            ))
-        }
-
         setupListeners()
     }
 
@@ -119,6 +87,44 @@ class AddVoucherFragment : Fragment() {
                 calendar.get(Calendar.MINUTE),
                 true // Dùng 24h format
             ).show()
+        }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.btnSave.setOnClickListener {
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val code = binding.etCode.text.toString().trim()
+            val quantityString = binding.etQuantity.text.toString().trim()
+            val discountString = binding.etDiscount.text.toString().trim()
+            val minPriceString = binding.etMinPrice.text.toString().trim()
+            val expiredAt = format.format(calendar.time)
+
+            if (code.isEmpty()) {
+                binding.etCode.error = "Mã voucher không được để trống"
+                return@setOnClickListener
+            }
+
+            if (discountString.isEmpty()) {
+                binding.etDiscount.error = "Vui lòng nhập giá trị giảm"
+                return@setOnClickListener
+            }
+
+            val quantity = quantityString.toIntOrNull() ?: 0
+
+            val discount = discountString.toDoubleOrNull() ?: 0.0
+            val minPrice = minPriceString.toDoubleOrNull() ?: 0.0
+
+            viewModel.addVoucher(VoucherInsert(
+                code = code,
+                quantity = quantity,
+                discount = discount,
+                minPrice = minPrice,
+                expiredAt = expiredAt
+            ))
+
+            findNavController().popBackStack()
         }
     }
 

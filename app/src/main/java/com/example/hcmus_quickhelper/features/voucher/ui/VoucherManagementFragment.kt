@@ -78,7 +78,7 @@ class VoucherManagementFragment : Fragment() {
     }
 
     private fun goToAddVoucher() {
-//        findNavController().navigate(R.id.action_voucher_management_to_add_edit_voucher)
+        findNavController().navigate(R.id.action_voucher_management_fragment_to_add_voucher_fragment)
     }
 
     private fun goToEditVoucher(voucher: Voucher) {

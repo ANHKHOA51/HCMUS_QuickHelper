@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.features.service_browsing.model.Voucher
 import com.example.hcmus_quickhelper.features.voucher.model.VoucherInsert
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddVoucherViewModel(
     private val voucherRepository: VoucherRepository
@@ -14,7 +16,13 @@ class AddVoucherViewModel(
 
     fun addVoucher(voucher: VoucherInsert) {
         viewModelScope.launch {
-            voucherRepository.insertVoucher(voucher)
+            try {
+                withContext(NonCancellable) {
+                    voucherRepository.insertVoucher(voucher)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
