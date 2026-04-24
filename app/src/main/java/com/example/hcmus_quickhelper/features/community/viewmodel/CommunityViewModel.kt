@@ -13,12 +13,13 @@ class CommunityViewModel (
     val feedList = MutableLiveData<List<Feed>>()
 
     fun fetchFeeds(userId: Int) {
-        if (userId == -1) return;
+        if (userId == -1) return
+
         viewModelScope.launch {
             val result = repository.getFeeds(userId)
 
-            result.onSuccess { list ->
-                feedList.value = list
+            result.onSuccess { newList ->
+                feedList.value = newList
             }
         }
     }
@@ -32,4 +33,31 @@ class CommunityViewModel (
             }
         }
     }
+
+    fun updateFeed(updated: Feed) {
+        feedList.value = feedList.value?.map {
+            if (it.id == updated.id) updated else it
+        }
+    }
+    fun toggleLike(feed: Feed, userId: Int) {
+        if (userId == -1) return
+
+        val isCurrentlyLiked = feed.isLiked
+        val newLikeCount = if (isCurrentlyLiked) feed.likeCount - 1 else feed.likeCount + 1
+        val updatedFeed = feed.copy(isLiked = !isCurrentlyLiked, likeCount = newLikeCount)
+
+        updateFeed(updatedFeed)
+
+        viewModelScope.launch {
+            try {
+                val (serverLiked, serverCount) = repository.toggleLike(feed.id, userId)
+                if (serverLiked != updatedFeed.isLiked || serverCount != updatedFeed.likeCount) {
+                    updateFeed(updatedFeed.copy(isLiked = serverLiked, likeCount = serverCount))
+                }
+            } catch (e: Exception) {
+                updateFeed(feed)
+            }
+        }
+    }
+
 }

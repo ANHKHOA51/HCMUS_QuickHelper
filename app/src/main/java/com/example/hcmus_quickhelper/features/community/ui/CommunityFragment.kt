@@ -7,19 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentFeedBinding
 import com.example.hcmus_quickhelper.features.community.datasource.CommunityRemoteDataSource
 import com.example.hcmus_quickhelper.features.community.repository.CommunityRepository
 import com.example.hcmus_quickhelper.features.community.viewmodel.CommunityViewModel
+import kotlinx.coroutines.launch
 
 class CommunityFragment : Fragment() {
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
 
     private var chipType = "All"
-    val currentUserId: Int = SessionManager.currentUser.asLiveData().value?.id ?: -1
+    private var currentUserId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +38,16 @@ class CommunityFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
 
-        viewModel.fetchFeeds(currentUserId)
+        lifecycleScope.launch {
+            SessionManager.currentUser
+                // 🔥 thêm dòng này
+                .collect { user ->
+                    val newUserId = user?.id ?: -1
+
+                    currentUserId = newUserId
+                    viewModel.fetchFeeds(currentUserId)
+                }
+        }
     }
 
     private lateinit var viewModel: CommunityViewModel
@@ -61,16 +71,19 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        feedAdapter = FeedAdapter(emptyList(), currentUserId)
+        feedAdapter = FeedAdapter(emptyList(), currentUserId)  { feed ->
+            viewModel.toggleLike(feed, currentUserId)
+        }
 
         binding.rvFeed.apply {
             adapter = feedAdapter
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
             setHasFixedSize(true)
+
+            (itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
         }
 
-        binding.chipGroupFilter.setOnCheckedStateChangeListener { group, checkedIds ->
-            // checkedIds là một danh sách các ID được chọn (vì singleSelection nên lấy cái đầu tiên)
+        binding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
             val checkedId = checkedIds.firstOrNull()
 
             when (checkedId) {
