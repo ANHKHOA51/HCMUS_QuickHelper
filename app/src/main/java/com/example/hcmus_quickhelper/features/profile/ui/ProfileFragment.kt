@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.credentials.ClearCredentialStateRequest
-import androidx.credentials.CredentialManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +24,6 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var credentialManager: CredentialManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +37,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        credentialManager = CredentialManager.create(requireContext())
         setupViewModel()
         setupUI()
         observeViewModel()
@@ -66,45 +62,24 @@ class ProfileFragment : Fragment() {
         user?.let {
             binding.etFullname.setText(it.fullname)
             binding.etUsername.setText(it.username ?: "")
+            binding.etPhone.setText(it.phone ?: "")
             binding.tvEmail.text = it.email
         }
 
         binding.btnSave.setOnClickListener {
             val fullname = binding.etFullname.text.toString().trim()
             val username = binding.etUsername.text.toString().trim()
+            val phone = binding.etPhone.text.toString().trim()
 
             if (fullname.isNotEmpty()) {
-                viewModel.saveProfile(username, fullname)
+                viewModel.saveProfile(username, fullname, phone)
             } else {
                 Toast.makeText(context, "Full name cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding.btnLogout.setOnClickListener {
-            logout()
-        }
-
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
-        }
-    }
-
-    private fun logout() {
-        lifecycleScope.launch {
-            // 1. Clear Supabase Session
-            SessionManager.logout()
-
-            // 2. Clear Credential Manager state (Google Sign-In selection)
-            try {
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            } catch (e: Exception) {
-                // Ignore errors on clearing state
-            }
-
-            // 3. Navigate back to login
-            findNavController().navigate(R.id.login_fragment) {
-                popUpTo(R.id.home_fragment) { inclusive = true }
-            }
         }
     }
 

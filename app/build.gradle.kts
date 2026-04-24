@@ -18,6 +18,7 @@ val businessAppPass = localProperties.getProperty("BUSINESS_APP_PASS") ?: ""
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.androidx.navigation.safeargs)
     id ("org.jetbrains.kotlin.plugin.serialization")
     id ("kotlin-parcelize")
     id("com.google.gms.google-services")
@@ -115,7 +116,7 @@ dependencies {
     implementation(platform(libs.bom))
     implementation(libs.kotlinx.serialization.json)
 
-    implementation(libs.ktor.client.android)
+    implementation("io.ktor:ktor-client-cio:3.1.1")
     implementation(libs.ktor.client.core)
 
     implementation(platform(libs.supabase.bom))
@@ -152,4 +153,7 @@ dependencies {
     // Android Mail for SMTP
     implementation("com.sun.mail:android-mail:1.6.7")
     implementation("com.sun.mail:android-activation:1.6.7")
+
+    // chart
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
