@@ -26,15 +26,6 @@
                 android:background="@android:color/white"
                 android:elevation="2dp">
 
-                <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_arrow_back" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -43,6 +34,18 @@
                     android:textColor="#212529"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btnLogout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Logout"
+                    android:src="@drawable/ic_logout"
+                    android:padding="12dp"
+                    app:tint="@color/black" />
+
             </androidx.appcompat.widget.Toolbar>
 
             <!-- Navigation Buttons -->

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentAdminStatisticBinding
 import com.example.hcmus_quickhelper.features.admin_statistic.viewmodel.StatisticViewModel
 import java.text.NumberFormat
@@ -58,7 +59,7 @@ class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
     }
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+//        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
 
         // Chuyển Tabs
         binding.cvTabOverview.setOnClickListener { selectTab(0) }
@@ -68,6 +69,10 @@ class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
         binding.btnManagePayment.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_payment_admin_fragment) }
         binding.btnManageVoucher.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_voucher_management_fragment) }
 
+        binding.btnLogout.setOnClickListener {
+            SessionManager.logout()
+            findNavController().navigate(R.id.action_fragment_admin_statistic_to_login_fragment)
+        }
     }
 
     private fun observeViewModel() {

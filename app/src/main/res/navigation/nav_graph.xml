@@ -352,5 +352,8 @@
         <action
             android:id="@+id/action_fragment_admin_statistic_to_payment_admin_fragment"
             app:destination="@id/payment_admin_fragment" />
+        <action
+            android:id="@+id/action_fragment_admin_statistic_to_login_fragment"
+            app:destination="@id/login_fragment" />
     </fragment>
 </navigation>
