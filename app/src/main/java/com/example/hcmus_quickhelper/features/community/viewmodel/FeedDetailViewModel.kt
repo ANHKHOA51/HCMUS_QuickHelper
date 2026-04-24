@@ -58,7 +58,11 @@ class FeedDetailViewModel (
                     commentTime = LocalDateTime.now().toString()
                 )
 
-                commentList.value?.add(0, newComment)
+                val currentList = commentList.value ?: mutableListOf()
+
+                currentList.add(0, newComment)
+
+                commentList.value = currentList
             }
         }
     }
