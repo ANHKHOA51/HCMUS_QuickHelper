@@ -9,7 +9,10 @@ import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.features.booking.model.toBookingInsert
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 
 class BookingRequestDetailViewModel (
     private val bookingRepository: BookingRepository
@@ -30,37 +33,33 @@ class BookingRequestDetailViewModel (
         }
     }
 
-    fun acceptBooking(helperId: Int) {
-        val currentBooking = _booking.value ?: return
-        val updatedBooking = currentBooking.copy(
-            status = BookingStatus.CONFIRMED.toString(),
+    fun updateBookingStatus(helperId: Int, newStatus: BookingStatus) {
+        val oldBooking = _booking.value ?: return
+
+        val updatedBooking = oldBooking.copy(
+            status = newStatus.toString(),
             helperId = helperId
         )
         _booking.value = updatedBooking
 
-        _booking.value?.let { booking ->
-            viewModelScope.launch {
-                try {
-                    bookingRepository.updateBooking(booking.id, booking.toBookingInsert())
-                } catch (e: Exception) {
-                    e.printStackTrace()
+        viewModelScope.launch {
+            try {
+                withContext(NonCancellable) {
+                    bookingRepository.updateBooking(updatedBooking.id, updatedBooking.toBookingInsert())
+                }
+            } catch (e: Exception) {
+                if (e !is CancellationException) {
+                    _booking.value = oldBooking
                 }
             }
         }
     }
 
-    fun rejectBooking(helperId: Int) {
-        val currentBooking = _booking.value ?: return
-        val updatedBooking = currentBooking.copy(
-            status = BookingStatus.REJECTED.toString(),
-            helperId = helperId
-        )
-        _booking.value = updatedBooking
+    fun acceptBooking(helperId: Int) {
+        updateBookingStatus(helperId, BookingStatus.CONFIRMED)
+    }
 
-        _booking.value?.let { booking ->
-            viewModelScope.launch {
-                bookingRepository.updateBooking(booking.id, booking.toBookingInsert())
-            }
-        }
+    fun rejectBooking(helperId: Int) {
+        updateBookingStatus(helperId, BookingStatus.REJECTED)
     }
 }

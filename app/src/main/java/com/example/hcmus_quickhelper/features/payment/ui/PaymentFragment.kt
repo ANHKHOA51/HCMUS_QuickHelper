@@ -42,7 +42,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bookingId = arguments?.getInt("booking_id") ?: bookingId
+        bookingId = arguments?.getInt("bookingId") ?: bookingId
+
+        Log.d("Payment", bookingId.toString())
 
         setupViewModel()
         setupObservers()
