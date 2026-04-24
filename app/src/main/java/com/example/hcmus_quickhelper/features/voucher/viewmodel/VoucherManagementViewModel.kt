@@ -28,6 +28,7 @@ class VoucherManagementViewModel (
     fun deleteVoucher(voucherId: Int) {
         viewModelScope.launch {
             try {
+                _vouchers.value = _vouchers.value?.filter { it.id != voucherId }
                 voucherRepository.softDeleteVoucher(voucherId)
             } catch (e: Exception) {
                 e.printStackTrace()

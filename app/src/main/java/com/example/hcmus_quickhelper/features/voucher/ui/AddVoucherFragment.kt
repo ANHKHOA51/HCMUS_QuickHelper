@@ -47,8 +47,6 @@ class AddVoucherFragment : Fragment() {
 
         voucherId = arguments?.getInt("voucherId") ?: -1
 
-        Log.d("Voucher", voucherId.toString())
-
         setupViewModel()
         setupObserver()
         setupListeners()

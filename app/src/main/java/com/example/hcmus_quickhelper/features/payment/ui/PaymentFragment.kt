@@ -44,8 +44,6 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         bookingId = arguments?.getInt("bookingId") ?: bookingId
 
-        Log.d("Payment", bookingId.toString())
-
         setupViewModel()
         setupObservers()
 
@@ -136,6 +134,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun handleBack() {
+        viewModel.savePayment()
         findNavController().popBackStack()
     }
 
