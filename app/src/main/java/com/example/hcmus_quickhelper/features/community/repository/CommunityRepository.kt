@@ -49,4 +49,9 @@ class CommunityRepository(
     suspend fun toggleLike(feedId: Int, userId: Int): Pair<Boolean, Int> {
         return dataSource.toggleLike(feedId, userId)
     }
+
+    suspend fun postFeed(userId: Int, content: String) {
+        dataSource.postFeed(userId, content)
+        Log.d("POST", "Post success")
+    }
 }

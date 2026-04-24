@@ -77,7 +77,16 @@
             android:id="@+id/action_community_to_feedDetail"
             app:destination="@id/feed_detail_fragment"
             tools:layout="@layout/fragment_feed_detail" />
+
+        <action
+            android:id="@+id/action_community_to_postFeed"
+            app:destination="@id/post_feed_fragment"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/post_feed_fragment"
+        android:name="com.example.hcmus_quickhelper.features.community.ui.PostFeedFragment"
+        tools:layout="@layout/fragment_post_feed" />
 
     <fragment
         android:id="@+id/feed_detail_fragment"

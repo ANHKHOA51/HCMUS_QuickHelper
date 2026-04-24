@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentFeedBinding
 import com.example.hcmus_quickhelper.features.community.datasource.CommunityRemoteDataSource
@@ -81,6 +83,10 @@ class CommunityFragment : Fragment() {
             setHasFixedSize(true)
 
             (itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
+        }
+
+        binding.btnAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_community_to_postFeed)
         }
 
         binding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->

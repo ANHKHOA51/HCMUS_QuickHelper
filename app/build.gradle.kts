@@ -115,7 +115,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(platform(libs.bom))
     implementation(libs.kotlinx.serialization.json)
-
+    implementation(libs.androidx.swiperefreshlayout)
     implementation("io.ktor:ktor-client-cio:3.1.1")
     implementation(libs.ktor.client.core)
 

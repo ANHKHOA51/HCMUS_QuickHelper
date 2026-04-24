@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.community.datasource
 
+import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.features.chat.model.Message
 import com.example.hcmus_quickhelper.features.community.model.Comment
@@ -51,5 +52,20 @@ class CommunityRemoteDataSource {
         ).decodeSingle<ToggleLikeResponse>()
 
         return Pair(result.liked, result.like_count)
+    }
+
+    suspend fun postFeed(userId: Int, content: String) {
+        SupabaseClient.client.postgrest
+            .from("feeds")
+//            .insert(mapOf(
+//                "owner_id" to userId,
+//                "content" to content
+//            ))
+
+            .insert(buildJsonObject {
+                put("owner_id", userId)
+                put("content", content)
+            })
+        Log.d("POST", "Post  at success")
     }
 }
