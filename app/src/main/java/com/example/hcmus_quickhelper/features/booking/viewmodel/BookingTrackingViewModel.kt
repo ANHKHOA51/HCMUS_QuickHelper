@@ -38,7 +38,7 @@ class BookingTrackingViewModel : ViewModel() {
             try {
 
                 val payment = paymentDataSource.getByBookingId(bookingId)
-                _isPaid.value = (payment != null)
+                _isPaid.value = (payment != null && payment.status == PaymentStatus.SUCCESS.toString())
 
                 // Lấy thông tin booking (full data có helper/service)
                 val currentBooking = dataSource.getByIdFullData(bookingId)

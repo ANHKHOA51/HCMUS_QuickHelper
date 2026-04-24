@@ -55,7 +55,6 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
         loadData()
 
         binding.btnGoToRating.setOnClickListener { handleGoToRating(viewModel.payment.value?.bookingId) }
-        binding.btnBack.setOnClickListener { handleBack() }
         binding.btnBackToHome.setOnClickListener { handleBackHome() }
         binding.btnDownload.setOnClickListener { handleDownload() }
     }
@@ -103,7 +102,6 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
         val buttonsToHide = listOf(
             binding.btnGoToRating,
             binding.btnBackToHome,
-            binding.btnBack,
             binding.btnDownload
         )
         buttonsToHide.forEach { it.visibility = View.GONE }
