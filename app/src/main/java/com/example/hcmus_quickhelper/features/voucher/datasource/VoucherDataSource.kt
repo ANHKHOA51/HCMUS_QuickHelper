@@ -10,7 +10,14 @@ import io.github.jan.supabase.postgrest.rpc
 
 class VoucherDataSource {
     suspend fun getAll(): List<Voucher> {
-        return SupabaseClient.client.from("vouchers").select().decodeList<Voucher>()
+        return SupabaseClient.client
+            .from("vouchers")
+            .select {
+                filter {
+                    eq("is_deleted", false)
+                }
+            }
+            .decodeList<Voucher>()
     }
 
     suspend fun getCollectible(userId: Int): List<Voucher> {
@@ -48,5 +55,13 @@ class VoucherDataSource {
         return SupabaseClient.client.from("vouchers").insert(voucher) {
             select()
         }.decodeSingle<Voucher>()
+    }
+
+    suspend fun softDeleteVoucher(voucherId: Int) {
+        SupabaseClient.client.from("vouchers").update(
+            mapOf("is_deleted" to true)
+        ) {
+            filter { eq("id", voucherId) }
+        }
     }
 }

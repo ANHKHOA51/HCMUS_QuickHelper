@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.databinding.FragmentSelectVoucherBinding
 import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
@@ -25,6 +26,8 @@ class SelectVoucherFragment : Fragment(R.layout.fragment_select_voucher) {
     private var _binding: FragmentSelectVoucherBinding? = null
     private val binding get() = _binding!!
 
+    private var userId = 1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +39,8 @@ class SelectVoucherFragment : Fragment(R.layout.fragment_select_voucher) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        userId = SessionManager.currentUser.value?.id!!
 
         setupViewModel()
         setupUI()
@@ -83,7 +88,7 @@ class SelectVoucherFragment : Fragment(R.layout.fragment_select_voucher) {
             binding.tvDiscount.text = MoneyUtils.formatVietnameseCurrency(voucher.discount)
         }
 
-        viewModel.loadVouchers()
+        viewModel.loadVouchers(userId)
     }
 
     private fun handleBack() {

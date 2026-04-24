@@ -26,6 +26,12 @@ class VoucherManagementViewModel (
     }
 
     fun deleteVoucher(voucherId: Int) {
-
+        viewModelScope.launch {
+            try {
+                voucherRepository.softDeleteVoucher(voucherId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

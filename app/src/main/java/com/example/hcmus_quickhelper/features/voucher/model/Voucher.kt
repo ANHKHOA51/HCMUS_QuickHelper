@@ -26,6 +26,9 @@ data class Voucher(
     @SerialName("expired_at")
     val expiredAt: String,
 
+    @SerialName("is_deleted")
+    val isDeleted: Boolean = false,
+
     @SerialName("created_at")
     val createdAt: String
 ): Parcelable
