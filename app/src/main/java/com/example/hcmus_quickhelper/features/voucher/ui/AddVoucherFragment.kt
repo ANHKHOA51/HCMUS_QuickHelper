@@ -14,6 +14,7 @@ import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentAddVoucherBinding
 import com.example.hcmus_quickhelper.databinding.FragmentCollectVoucherBinding
 import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
+import com.example.hcmus_quickhelper.features.voucher.model.VoucherInsert
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
 import com.example.hcmus_quickhelper.features.voucher.viewmodel.AddVoucherViewModel
 import com.example.hcmus_quickhelper.features.voucher.viewmodel.CollectVoucherViewModel
@@ -42,15 +43,13 @@ class AddVoucherFragment : Fragment() {
         setupViewModel()
 
         binding.btnSave.setOnClickListener {
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
             val code = binding.etCode.text.toString().trim()
             val quantityString = binding.etQuantity.text.toString().trim()
             val discountString = binding.etDiscount.text.toString().trim()
             val minPriceString = binding.etMinPrice.text.toString().trim()
-            val expiredAt = binding.btnDate.text.toString().trim() + " " + binding.btnTime.text.toString().trim()
+            val expiredAt = format.format(calendar.time)
 
-
-
-            // 2. Kiểm tra dữ liệu (Validation) - Dựa trên ràng buộc NOT NULL của DB
             if (code.isEmpty()) {
                 binding.etCode.error = "Mã voucher không được để trống"
                 return@setOnClickListener
@@ -61,29 +60,18 @@ class AddVoucherFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // 3. Chuyển đổi kiểu dữ liệu phù hợp với Database
-            // quantity mặc định là 0 nếu để trống (theo SQL: default 0)
             val quantity = quantityString.toIntOrNull() ?: 0
 
-            // discount và minPrice là numeric (thường dùng Double hoặc BigDecimal)
             val discount = discountString.toDoubleOrNull() ?: 0.0
             val minPrice = minPriceString.toDoubleOrNull() ?: 0.0
 
-            // 4. Log dữ liệu ra Logcat để kiểm tra
-            val logMessage = """
-                --- DỮ LIỆU VOUCHER MỚI ---
-                Mã: $code
-                Số lượng: $quantity
-                Giảm giá: $discount VNĐ
-                Đơn tối thiểu: $minPrice VNĐ
-                Hết hạn: $expiredAt
-                ---------------------------
-            """.trimIndent()
-
-            android.util.Log.d("VoucherData", logMessage)
-
-            // Thông báo cho người dùng (tùy chọn)
-            android.widget.Toast.makeText(requireContext(), "Đã ghi nhận dữ liệu Voucher!", android.widget.Toast.LENGTH_SHORT).show()
+            viewModel.addVoucher(VoucherInsert(
+                code = code,
+                quantity = quantity,
+                discount = discount,
+                minPrice = minPrice,
+                expiredAt = expiredAt
+            ))
         }
 
         setupListeners()

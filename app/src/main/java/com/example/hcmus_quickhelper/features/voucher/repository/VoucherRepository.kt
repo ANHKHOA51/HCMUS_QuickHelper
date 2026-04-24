@@ -3,6 +3,7 @@ package com.example.hcmus_quickhelper.features.voucher.repository
 import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
 import com.example.hcmus_quickhelper.features.voucher.model.CollectVoucherResponse
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
+import com.example.hcmus_quickhelper.features.voucher.model.VoucherInsert
 
 class VoucherRepository (
     private val voucherDataSource: VoucherDataSource
@@ -25,5 +26,9 @@ class VoucherRepository (
 
     suspend fun collectVoucher(voucherId: Int, userId: Int): CollectVoucherResponse {
         return voucherDataSource.collectVoucher(voucherId, userId)
+    }
+
+    suspend fun insertVoucher(voucher: VoucherInsert): Voucher {
+        return voucherDataSource.insertVoucher(voucher)
     }
 }

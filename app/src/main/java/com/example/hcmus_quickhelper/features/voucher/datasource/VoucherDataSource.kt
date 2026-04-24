@@ -3,6 +3,7 @@ package com.example.hcmus_quickhelper.features.voucher.datasource
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.features.voucher.model.CollectVoucherResponse
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
+import com.example.hcmus_quickhelper.features.voucher.model.VoucherInsert
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
@@ -41,5 +42,11 @@ class VoucherDataSource {
                 "p_user_id" to userId
             )
         ).decodeSingle<CollectVoucherResponse>()
+    }
+
+    suspend fun insertVoucher(voucher: VoucherInsert): Voucher {
+        return SupabaseClient.client.from("vouchers").insert(voucher) {
+            select()
+        }.decodeSingle<Voucher>()
     }
 }
