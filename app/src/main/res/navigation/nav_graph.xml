@@ -298,4 +298,10 @@
     </fragment>
 
 
+    <fragment
+        android:id="@+id/fragment_admin_statistic"
+        android:name="com.example.hcmus_quickhelper.features.admin_statistic.ui.StatisticFragment"
+        android:label="statistic"
+        tools:layout="@layout/fragment_admin_statistic" >
+    </fragment>
 </navigation>
