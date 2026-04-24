@@ -1,20 +1,30 @@
 package com.example.hcmus_quickhelper.features.booking.ui
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.databinding.ItemEvidenceImageBinding
+import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
 
 class EvidenceImageAdapter(
     private val onRemoveClick: (Int) -> Unit
 ) : RecyclerView.Adapter<EvidenceImageAdapter.ViewHolder>() {
 
-    private val images = mutableListOf<Uri>()
+    private var evidences: MutableList<BookingEvidence> = mutableListOf()
 
-    fun updateImages(newImages: List<Uri>) {
-        images.clear()
-        images.addAll(newImages)
+    private var bookingStatus: String = BookingStatus.IN_PROGRESS.toString();
+
+    fun updateEvidences(newEvidences: List<BookingEvidence>) {
+        evidences.clear()
+        evidences.addAll(newEvidences)
+        notifyDataSetChanged()
+    }
+
+    fun setStatus(status: String) {
+        bookingStatus = status
         notifyDataSetChanged()
     }
 
@@ -28,19 +38,38 @@ class EvidenceImageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(images[position], position)
+        holder.bind(evidences[position], position)
     }
 
-    override fun getItemCount(): Int = images.size
+    override fun getItemCount(): Int = evidences.size
 
     inner class ViewHolder(private val binding: ItemEvidenceImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(uri: Uri, position: Int) {
-            binding.ivEvidence.setImageURI(uri)
-            binding.btnRemove.setOnClickListener {
-                onRemoveClick(position)
+        fun bind(evidence: BookingEvidence, position: Int) {
+            val directImageUrl = convertDriveLinkToDirectLink(evidence.evidenceUrl)
+            binding.ivEvidence.load(directImageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_launcher_background)
+                error(R.drawable.ic_close)
             }
+
+            if(bookingStatus == BookingStatus.IN_PROGRESS.toString()) {
+                binding.btnRemove.setOnClickListener {
+                    onRemoveClick(position)
+                }
+            } else {
+                binding.btnRemove.visibility = ViewGroup.GONE
+            }
+        }
+    }
+
+    private fun convertDriveLinkToDirectLink(url: String): String {
+        return if (url.contains("drive.google.com/file/d/")) {
+            val id = url.substringAfter("/d/").substringBefore("/")
+            "https://drive.google.com/uc?export=view&id=$id"
+        } else {
+            url
         }
     }
 }

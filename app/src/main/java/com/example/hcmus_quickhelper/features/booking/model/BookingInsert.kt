@@ -41,7 +41,7 @@ fun Booking.toBookingInsert(): BookingInsert {
         customerId = this.customerId,
         helperId = this.helperId,
         serviceId = this.serviceId,
-        status = "PENDING",
+        status = this.status,
         quantity = this.quantity,
         totalPrice = this.totalPrice,
         note = this.note

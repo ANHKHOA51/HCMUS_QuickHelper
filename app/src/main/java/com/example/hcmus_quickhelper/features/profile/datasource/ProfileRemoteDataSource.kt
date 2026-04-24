@@ -10,10 +10,10 @@ class ProfileRemoteDataSource {
             {
                 set("username", user.username)
                 set("fullname", user.fullname)
+                set("phone", user.phone)
             }
         ) {
             filter { eq("id", user.id) }
-            // Ensure we are explicitly asking for all columns to match the User model
             select()
         }.decodeSingle<User>()
     }

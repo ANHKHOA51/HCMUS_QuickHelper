@@ -6,6 +6,7 @@ import com.example.hcmus_quickhelper.features.booking.model.BookingConversation
 import com.example.hcmus_quickhelper.features.booking.model.BookingEvidence
 import com.example.hcmus_quickhelper.features.booking.model.BookingInsert
 import com.example.hcmus_quickhelper.features.booking.model.ConversationInsert
+import com.example.hcmus_quickhelper.features.payment.model.Payment
 import com.example.hcmus_quickhelper.features.service_browsing.model.HelperWithServicesDto
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -139,5 +140,24 @@ class BookingDataSource {
             }
             order("created_at", Order.DESCENDING)
         }.decodeList<Booking>()
+    }
+
+    suspend fun createEvidences(evidences: List<BookingEvidence>) {
+        SupabaseClient.client.from("booking_evidences").insert(evidences)
+    }
+
+    suspend fun deleteEvidence(evidence: BookingEvidence) {
+        SupabaseClient.client.from("booking_evidences").delete {
+            filter {
+                eq("booking_id", evidence.bookingId)
+                eq("evidence_url", evidence.evidenceUrl)
+            }
+        }
+    }
+
+    suspend fun getPayment(bookingId: Int): Payment? {
+        return SupabaseClient.client.from("payments")
+            .select { filter { eq("booking_id", bookingId) } }
+            .decodeSingleOrNull<Payment>()
     }
 }

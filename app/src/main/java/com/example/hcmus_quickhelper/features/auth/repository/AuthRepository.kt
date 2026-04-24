@@ -8,8 +8,8 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
     suspend fun login(email: String, pass: String, fcmToken: String?): Result<User> {
         return try {
             val user = dataSource.loginWithEmail(email, pass)
-            fcmToken?.let { dataSource.saveFcmToken(user.id, it) } // Save token
-            SessionManager.login(user) // Save to global context
+            fcmToken?.let { dataSource.saveFcmToken(user.id, it) } 
+            SessionManager.login(user) 
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
@@ -19,7 +19,7 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
     suspend fun loginWithGoogle(idToken: String, fcmToken: String?): Result<User> {
         return try {
             val user = dataSource.loginWithGoogle(idToken)
-            fcmToken?.let { dataSource.saveFcmToken(user.id, it) } // Save token
+            fcmToken?.let { dataSource.saveFcmToken(user.id, it) }
             SessionManager.login(user)
             Result.success(user)
         } catch (e: Exception) {
@@ -30,6 +30,24 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
     suspend fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null): Result<Unit> {
         return try {
             dataSource.registerWithEmail(email, pass, fullname, phone, username)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updatePassword(userId: Int, newPass: String): Result<Unit> {
+        return try {
+            dataSource.updatePassword(userId, newPass)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updatePasswordByEmail(email: String, newPass: String): Result<Unit> {
+        return try {
+            dataSource.updatePasswordByEmail(email, newPass)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

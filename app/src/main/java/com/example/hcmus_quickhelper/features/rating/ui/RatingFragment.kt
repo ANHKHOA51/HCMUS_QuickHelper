@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentRatingBinding
 import com.example.hcmus_quickhelper.databinding.FragmentReceiptBinding
@@ -16,7 +18,6 @@ import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSour
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.PaymentViewModel
-import com.example.hcmus_quickhelper.features.rating.datasource.MockRatingDataSource
 import com.example.hcmus_quickhelper.features.rating.datasource.RatingDataSource
 import com.example.hcmus_quickhelper.features.rating.repository.RatingRepository
 import com.example.hcmus_quickhelper.features.rating.viewmodel.RatingViewModel
@@ -89,6 +90,9 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
         val comment = binding.etComment.text.toString()
 
         viewModel.submitRating(point, comment)
+        Toast.makeText(requireContext(), "Cảm ơn bạn đã đánh giá dịch vụ!", android.widget.Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_rating_fragment_to_home_fragment)
+
     }
 
     override fun onDestroyView() {

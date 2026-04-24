@@ -34,7 +34,6 @@ class HomeFragment : Fragment() {
 
     private val voucherAdapter = VoucherAdapter()
 
-    // Pass event điều hướng vào Adapter
     private lateinit var topHelperAdapter: TopHelperAdapter
     private lateinit var serviceAdapter: ServiceAdapter
 
@@ -77,12 +76,11 @@ class HomeFragment : Fragment() {
         tvViewAllTopHelpers = view.findViewById(R.id.tvViewAllTopHelpers)
 
         cvProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_profile)
+            findNavController().navigate(R.id.action_home_to_settings)
         }
     }
 
     private fun setupRecyclerViews() {
-        // Init Adapters kèm hành động click chuyển hướng
         topHelperAdapter = TopHelperAdapter { helper ->
             navigateToServiceList(helper.name)
         }
@@ -102,7 +100,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        // Lắng nghe sự kiện người dùng nhấn Enter / Search trên bàn phím
         etSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = v.text.toString().trim()
@@ -123,9 +120,7 @@ class HomeFragment : Fragment() {
         tvViewAllTopHelpers.setOnClickListener(viewAllClickListener)
     }
 
-    // Hàm trung tâm xử lý chuyển hướng sang trang Service List
     private fun navigateToServiceList(query: String) {
-        // THÊM ĐIỀU KIỆN NÀY: Chỉ chuyển trang khi Fragment hiện tại đúng là HomeFragment
         if (findNavController().currentDestination?.id == R.id.home_fragment) {
             val bundle = Bundle().apply {
                 putString("searchQuery", query)

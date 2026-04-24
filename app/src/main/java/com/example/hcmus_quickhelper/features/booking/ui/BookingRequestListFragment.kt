@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.databinding.FragmentBookingRequestListBinding
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
@@ -45,7 +46,7 @@ class BookingRequestListFragment : Fragment() {
         }
     }
 
-    private val helperId: Int = 5
+//    private val helperId: Int = 5
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +79,7 @@ class BookingRequestListFragment : Fragment() {
         }
         viewModel = ViewModelProvider(this, factory)[BookingRequestViewModel::class.java]
 
-        viewModel.loadBookings(helperId)
+        viewModel.loadBookings(SessionManager.currentUser.value?.id!!)
     }
 
     private fun setupRecyclerView() {

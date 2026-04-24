@@ -11,11 +11,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentOtpBinding
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
 import com.example.hcmus_quickhelper.features.auth.viewmodel.AuthViewModel
+import com.example.hcmus_quickhelper.features.auth.ui.OTPFragmentArgs
+import com.example.hcmus_quickhelper.features.auth.ui.OTPFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,6 +32,7 @@ class OTPFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: AuthViewModel
     private var generatedOtp: String = ""
+    private val args: OTPFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentOtpBinding.inflate(inflater, container, false)
@@ -41,10 +45,7 @@ class OTPFragment : Fragment() {
         setupUI()
         observeViewModel()
 
-        // 1. Generate local OTP
         generatedOtp = (100000..999999).random().toString()
-        
-        // 2. Automatically send the email via SMTP
         sendOtpEmail(generatedOtp)
     }
 
@@ -61,13 +62,7 @@ class OTPFragment : Fragment() {
         binding.btnVerify.setOnClickListener {
             val enteredOtp = binding.etOtp.text.toString().trim()
             if (enteredOtp == generatedOtp) {
-                // OTP Matches! Now actually register the user in Supabase
-                val email = arguments?.getString("email") ?: ""
-                val pass = arguments?.getString("password") ?: ""
-                val name = arguments?.getString("fullname") ?: ""
-                val phone = arguments?.getString("phone") ?: ""
-                val username = arguments?.getString("username")
-                viewModel.register(email, pass, name, phone, username)
+                handleOtpSuccess()
             } else {
                 Toast.makeText(context, "Invalid OTP", Toast.LENGTH_SHORT).show()
             }
@@ -84,11 +79,26 @@ class OTPFragment : Fragment() {
         }
     }
 
+    private fun handleOtpSuccess() {
+        if (args.flow == "password_reset") {
+            val action = OTPFragmentDirections.actionOtpToChangePassword(
+                isFromOtp = true,
+                email = args.email
+            )
+            findNavController().navigate(action)
+        } else {
+            val email = args.email
+            val pass = arguments?.getString("password") ?: ""
+            val name = arguments?.getString("fullname") ?: ""
+            val phone = arguments?.getString("phone") ?: ""
+            val username = arguments?.getString("username")
+            viewModel.register(email, pass, name, phone, username)
+        }
+    }
+
     private fun sendOtpEmail(otp: String) {
-        val recipientEmail = arguments?.getString("email") ?: return
+        val recipientEmail = args.email
         
-        // Configuration for Gmail (Example)
-        // IMPORTANT: Use an "App Password", not your actual Gmail password.
         val senderEmail = com.example.hcmus_quickhelper.BuildConfig.BUSINESS_EMAIL
         val senderPassword = com.example.hcmus_quickhelper.BuildConfig.BUSINESS_APP_PASS
 
@@ -106,14 +116,18 @@ class OTPFragment : Fragment() {
             }
         })
 
-        // Run in background thread
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val message = MimeMessage(session).apply {
                     setFrom(InternetAddress(senderEmail))
                     addRecipient(Message.RecipientType.TO, InternetAddress(recipientEmail))
-                    subject = "Your Verification Code"
-                    setText("Your OTP code is: $otp. Please enter this in the HCMUS QuickHelper app.")
+                    subject = if (args.flow == "password_reset") "Password Reset OTP" else "Your Verification Code"
+                    val body = if (args.flow == "password_reset") {
+                        "Your OTP for resetting your HCMUS QuickHelper password is: $otp"
+                    } else {
+                        "Your OTP code is: $otp. Please enter this in the HCMUS QuickHelper app."
+                    }
+                    setText(body)
                 }
                 Transport.send(message)
                 

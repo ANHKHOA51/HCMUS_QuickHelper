@@ -9,4 +9,12 @@ class RatingRepository (
     suspend fun insertRating(rating: Rating): Rating {
         return dataSource.insert(rating)
     }
+
+    suspend fun getRatingByHelperId(helperId: Int): List<Rating> {
+        return dataSource.getByHelperId(helperId)
+    }
+
+    suspend fun updateRatingByHelperId(rating: Int, helperId: Int) {
+        dataSource.updateRating(rating.toDouble(), helperId)
+    }
 }

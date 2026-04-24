@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.Booking
+import com.example.hcmus_quickhelper.core.service.MQService
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.rating.model.Rating
 import com.example.hcmus_quickhelper.features.rating.repository.RatingRepository
@@ -52,6 +53,14 @@ class RatingViewModel(
             )
 
             ratingRepository.insertRating(ratingData)
+
+            // update rating in user
+            val listRating = ratingRepository.getRatingByHelperId(_booking.value?.helperId ?: 1)
+            var sum = 0
+            for (rating in listRating) {
+                sum += rating.point
+            }
+            ratingRepository.updateRatingByHelperId(sum / listRating.size, _booking.value?.helperId ?: 1)
         }
     }
 
