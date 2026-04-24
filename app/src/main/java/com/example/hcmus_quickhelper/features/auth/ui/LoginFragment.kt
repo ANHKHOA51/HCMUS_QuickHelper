@@ -160,6 +160,8 @@ class LoginFragment : Fragment() {
                     findNavController().navigate(R.id.home_fragment)
                 } else if(user.role == UserRole.HELPER.toString()) {
                     findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
+                } else if(user.role == UserRole.ADMIN.toString()) {
+                    findNavController().navigate(R.id.action_login_fragment_to_fragment_admin_statistic)
                 }
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)

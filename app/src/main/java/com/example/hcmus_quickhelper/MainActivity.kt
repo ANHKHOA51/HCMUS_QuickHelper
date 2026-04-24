@@ -84,6 +84,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.booking_process_helper_fragment,
                 R.id.dashboard_helper_fragment,
                 R.id.booking_request_list_fragment,
+                R.id.fragment_admin_statistic,
+                R.id.payment_admin_fragment,
+                R.id.voucher_management_fragment,
                 R.id.feed_detail_fragment, // Kept from dev
                 R.id.OTPFragment -> {      // Prioritized from feature/settings
                     bottomNav.visibility = View.GONE

@@ -64,6 +64,10 @@ class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
         binding.cvTabOverview.setOnClickListener { selectTab(0) }
         binding.cvTabRevenue.setOnClickListener { selectTab(1) }
         binding.cvTabUX.setOnClickListener { selectTab(2) }
+
+        binding.btnManagePayment.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_payment_admin_fragment) }
+        binding.btnManageVoucher.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_voucher_management_fragment) }
+
     }
 
     private fun observeViewModel() {
