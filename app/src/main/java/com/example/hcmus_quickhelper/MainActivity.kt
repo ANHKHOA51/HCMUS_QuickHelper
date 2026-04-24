@@ -1,7 +1,5 @@
 package com.example.hcmus_quickhelper
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -10,9 +8,6 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -32,11 +27,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-
         setContentView(R.layout.main_activity)
 
-//        hideNavigationBar()
 
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
@@ -90,7 +82,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.booking_fragment,
                 R.id.booking_request_detail_fragment,
                 R.id.booking_process_helper_fragment,
-                R.id.dashboard_helper_fragment,
                 R.id.dashboard_helper_fragment,
                 R.id.feed_detail_fragment, // Kept from dev
                 R.id.OTPFragment -> {      // Prioritized from feature/settings
@@ -153,15 +144,4 @@ class MainActivity : AppCompatActivity() {
                 // sendTokenToServer(token)
             }
     }
-
-//    override fun onWindowFocusChanged(hasFocus: Boolean) {
-//        super.onWindowFocusChanged(hasFocus)
-//
-//        // Giữ trạng thái ẩn khi quay lại app
-//        if (hasFocus) {
-//            hideNavigationBar()
-//        }
-//    }
-
-//
 }

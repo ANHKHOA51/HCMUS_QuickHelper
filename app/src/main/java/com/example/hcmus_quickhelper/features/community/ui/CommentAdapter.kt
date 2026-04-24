@@ -8,10 +8,10 @@ import coil.load
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.utils.toRelativeTime
 import com.example.hcmus_quickhelper.databinding.ItemCommentBinding
-import com.example.hcmus_quickhelper.features.community.model.FeedDetail
+import com.example.hcmus_quickhelper.features.community.model.CommentUI
 
 class CommentAdapter  (
-    private var items: List<FeedDetail>,
+    private var items: List<CommentUI>,
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     class CommentViewHolder(val binding: ItemCommentBinding) : RecyclerView.ViewHolder(binding.root)
@@ -23,16 +23,6 @@ class CommentAdapter  (
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val item = items[position]
-
-//        holder.binding.tvCommentName.text = item.commentorName
-//        holder.binding.tvCommentTime.text = item.commentTime.toRelativeTime()
-//        holder.binding.tvCommentContent.text = item.commentContent
-//
-//        if (item != null)
-//        holder.binding.ivCommentAvatar.load(item.commentorAvt) {
-//            placeholder(R.drawable.default_avt)
-//            error(R.drawable.default_avt)
-//        }
 
         if (!item.commentContent.isNullOrBlank()) {
             // Hiển thị toàn bộ item (phòng trường hợp item trước đó bị GONE)
@@ -46,7 +36,6 @@ class CommentAdapter  (
             holder.binding.tvCommentTime.text = item.commentTime.toRelativeTime()
             holder.binding.tvCommentContent.text = item.commentContent
 
-            // LOAD ẢNH TẠI ĐÂY <caret>
             holder.binding.ivCommentAvatar.load(item.commentorAvt) {
                 crossfade(true)
                 placeholder(R.drawable.default_avt)
@@ -70,7 +59,7 @@ class CommentAdapter  (
     override fun getItemCount(): Int = items.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<FeedDetail>) {
+    fun updateData(newItems: List<CommentUI>) {
         this.items = newItems
         notifyDataSetChanged()
     }

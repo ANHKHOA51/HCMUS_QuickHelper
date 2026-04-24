@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
