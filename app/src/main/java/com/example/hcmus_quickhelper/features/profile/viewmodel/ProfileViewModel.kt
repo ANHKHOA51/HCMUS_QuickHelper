@@ -7,6 +7,7 @@ import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.profile.repository.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 sealed class ProfileUiState {
@@ -21,9 +22,9 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     val uiState: StateFlow<ProfileUiState> = _uiState
 
     fun saveProfile(username: String, fullname: String, phone: String) {
-        val currentUser = SessionManager.currentUser.value ?: return
-        
         viewModelScope.launch {
+            val currentUser = SessionManager.currentUser.value ?: return@launch
+            
             _uiState.value = ProfileUiState.Loading
             try {
                 val updatedUser = currentUser.copy(
@@ -32,6 +33,8 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
                     phone = phone
                 )
                 val result = repository.updateUserInfo(updatedUser)
+                // Use updateCurrentUser as per sync plan
+                SessionManager.updateCurrentUser(result)
                 _uiState.value = ProfileUiState.Success(result)
             } catch (e: Exception) {
                 _uiState.value = ProfileUiState.Error(e.localizedMessage ?: "Unknown Error")

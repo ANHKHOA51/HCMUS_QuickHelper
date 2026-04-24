@@ -92,7 +92,8 @@ class OTPFragment : Fragment() {
             val name = arguments?.getString("fullname") ?: ""
             val phone = arguments?.getString("phone") ?: ""
             val username = arguments?.getString("username")
-            viewModel.register(email, pass, name, phone, username)
+            val role = arguments?.getString("role") ?: "CUSTOMER"
+            viewModel.register(email, pass, name, phone, username, role)
         }
     }
 

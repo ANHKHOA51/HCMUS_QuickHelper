@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.database.SupabaseConfig
 import com.example.hcmus_quickhelper.core.model.UserRole
 import com.example.hcmus_quickhelper.databinding.FragmentLoginBinding
@@ -24,6 +25,7 @@ import com.example.hcmus_quickhelper.features.auth.viewmodel.AuthViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -50,6 +52,15 @@ class LoginFragment : Fragment() {
         setupViewModel()
         setupUI()
         observeViewModel()
+        
+        // Auto-login check (Reactive)
+        viewLifecycleOwner.lifecycleScope.launch {
+            SessionManager.isLoggedIn.collectLatest { loggedIn ->
+                if (loggedIn) {
+                    findNavController().navigate(R.id.home_fragment)
+                }
+            }
+        }
     }
 
     private fun setupViewModel() {
@@ -155,11 +166,21 @@ class LoginFragment : Fragment() {
 
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
-                Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-                if(user.role == UserRole.CUSTOMER.toString()) {
-                    findNavController().navigate(R.id.home_fragment)
-                } else if(user.role == UserRole.HELPER.toString()) {
-                    findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
+                lifecycleScope.launch {
+                    // 1. Persist the session (from feature/settings)
+                    SessionManager.login(user)
+                    
+                    Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
+                    
+                    // 2. Role-based navigation (from dev)
+                    if (user.role == UserRole.CUSTOMER.toString()) {
+                        findNavController().navigate(R.id.home_fragment)
+                    } else if (user.role == UserRole.HELPER.toString()) {
+                        findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
+                    } else {
+                        // Fallback navigation if role is undefined
+                        findNavController().navigate(R.id.home_fragment)
+                    }
                 }
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)

@@ -17,6 +17,7 @@ cardview = "1.0.0"
 navigationFragmentKtx = "2.9.7"
 navigationUiKtx = "2.9.7"
 supabase = "3.1.0"
+datastore = "1.1.2"
 swiperefreshlayout = "1.2.0"
 
 [libraries]
@@ -41,6 +42,7 @@ supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
