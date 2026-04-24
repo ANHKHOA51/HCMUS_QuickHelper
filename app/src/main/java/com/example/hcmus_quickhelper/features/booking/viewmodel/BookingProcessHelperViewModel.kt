@@ -54,7 +54,7 @@ class BookingProcessHelperViewModel(
 
                 if(_booking.value?.status == BookingStatus.COMPLETED.toString()) {
                     Log.d("TEST", "TEST status")
-//                    subscribeToPayment(bookingId)
+                    subscribeToPayment(bookingId)
                 }
 
                 val conv = bookingRepository.getConversationByBookingId(bookingId)
