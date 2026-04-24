@@ -32,6 +32,10 @@ class VoucherRepository (
         return voucherDataSource.insertVoucher(voucher)
     }
 
+    suspend fun updateVoucher(id: Int, voucher: VoucherInsert): Voucher {
+        return voucherDataSource.updateVoucher(id, voucher)
+    }
+
     suspend fun softDeleteVoucher(voucherId: Int) {
         voucherDataSource.softDeleteVoucher(voucherId)
     }

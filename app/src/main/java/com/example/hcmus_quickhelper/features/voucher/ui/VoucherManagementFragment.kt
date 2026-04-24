@@ -74,7 +74,6 @@ class VoucherManagementFragment : Fragment() {
         viewModel.vouchers.observe(viewLifecycleOwner) { list ->
             voucherAdapter.updateData(list)
         }
-
     }
 
     private fun goToAddVoucher() {
@@ -83,9 +82,9 @@ class VoucherManagementFragment : Fragment() {
 
     private fun goToEditVoucher(voucher: Voucher) {
         val bundle = Bundle().apply {
-            putParcelable("voucher", voucher)
+            putInt("voucherId", voucher.id)
         }
-//        findNavController().navigate(R.id.action_voucher_management_to_add_edit_voucher, bundle)
+        findNavController().navigate(R.id.action_voucher_management_fragment_to_add_voucher_fragment, bundle)
     }
 
     private fun showDeleteConfirmDialog(voucher: Voucher) {

@@ -57,6 +57,18 @@ class VoucherDataSource {
         }.decodeSingle<Voucher>()
     }
 
+    suspend fun updateVoucher(id: Int, voucher: VoucherInsert): Voucher {
+        return SupabaseClient.client
+            .from("vouchers")
+            .update(voucher) {
+                filter {
+                    eq("id", id)
+                }
+                select()
+            }
+            .decodeSingle<Voucher>()
+    }
+
     suspend fun softDeleteVoucher(voucherId: Int) {
         SupabaseClient.client.from("vouchers").update(
             mapOf("is_deleted" to true)

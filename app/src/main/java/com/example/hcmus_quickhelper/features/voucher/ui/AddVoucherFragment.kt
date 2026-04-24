@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import coil.util.Logger
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.databinding.FragmentAddVoucherBinding
 import com.example.hcmus_quickhelper.databinding.FragmentCollectVoucherBinding
@@ -30,6 +32,8 @@ class AddVoucherFragment : Fragment() {
 
     private val calendar = Calendar.getInstance()
 
+    private var voucherId = -1;
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +45,17 @@ class AddVoucherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        voucherId = arguments?.getInt("voucherId") ?: -1
+
+        Log.d("Voucher", voucherId.toString())
+
         setupViewModel()
+        setupObserver()
         setupListeners()
+
+        if(voucherId != -1) {
+            viewModel.loadVoucher(voucherId)
+        }
     }
 
     private fun setupViewModel() {
@@ -55,6 +68,40 @@ class AddVoucherFragment : Fragment() {
             }
         }
         viewModel = ViewModelProvider(this, factory)[AddVoucherViewModel::class.java]
+    }
+
+    private fun setupObserver() {
+        viewModel.voucher.observe(viewLifecycleOwner) { voucher ->
+            voucher?.let {
+                binding.apply {
+                    // Đổ dữ liệu vào EditText
+                    etCode.setText(it.code)
+                    etQuantity.setText(it.quantity.toString())
+                    etDiscount.setText(it.discount.toString())
+                    etMinPrice.setText(it.minPrice.toString())
+
+                    tvHeaderTitle.text = "Chỉnh sửa Voucher"
+                    btnSave.text = "Cập nhật Voucher"
+
+                    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                    val date = format.parse(it.expiredAt)
+
+                    date?.let { d ->
+                        calendar.time = d
+
+                        val dateShow = SimpleDateFormat(
+                            "dd/MM/yyyy",
+                            Locale.getDefault()
+                        ).format(calendar.time)
+                        val timeShow =
+                            SimpleDateFormat("HH:mm", Locale.getDefault()).format(calendar.time)
+
+                        binding.btnDate.text = dateShow
+                        binding.btnTime.text = timeShow
+                    }
+                }
+            }
+        }
     }
 
     private fun setupListeners() {
@@ -116,13 +163,23 @@ class AddVoucherFragment : Fragment() {
             val discount = discountString.toDoubleOrNull() ?: 0.0
             val minPrice = minPriceString.toDoubleOrNull() ?: 0.0
 
-            viewModel.addVoucher(VoucherInsert(
-                code = code,
-                quantity = quantity,
-                discount = discount,
-                minPrice = minPrice,
-                expiredAt = expiredAt
-            ))
+            if(voucherId != -1) {
+                viewModel.updateVoucher(voucherId, VoucherInsert(
+                    code = code,
+                    quantity = quantity,
+                    discount = discount,
+                    minPrice = minPrice,
+                    expiredAt = expiredAt
+                ))
+            } else {
+                viewModel.addVoucher(VoucherInsert(
+                    code = code,
+                    quantity = quantity,
+                    discount = discount,
+                    minPrice = minPrice,
+                    expiredAt = expiredAt
+                ))
+            }
 
             findNavController().popBackStack()
         }
