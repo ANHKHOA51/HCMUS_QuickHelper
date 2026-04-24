@@ -269,6 +269,9 @@
         <action
             android:id="@+id/action_dashboard_helper_fragment_to_booking_request_list_fragment"
             app:destination="@id/booking_request_list_fragment" />
+        <action
+            android:id="@+id/action_dashboard_helper_fragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
     </fragment>
 
     <fragment

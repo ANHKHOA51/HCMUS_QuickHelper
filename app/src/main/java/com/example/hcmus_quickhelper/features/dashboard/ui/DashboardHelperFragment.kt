@@ -118,6 +118,11 @@ class DashboardHelperFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+
+            btnLogout.setOnClickListener {
+                SessionManager.logout()
+                findNavController().navigate(R.id.action_dashboard_helper_fragment_to_login_fragment)
+            }
         }
     }
 
