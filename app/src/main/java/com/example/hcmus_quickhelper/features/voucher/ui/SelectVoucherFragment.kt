@@ -40,7 +40,7 @@ class SelectVoucherFragment : Fragment(R.layout.fragment_select_voucher) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userId = SessionManager.currentUser.value?.id!!
+        userId = SessionManager.currentUser.value?.id ?: userId
 
         setupViewModel()
         setupUI()
