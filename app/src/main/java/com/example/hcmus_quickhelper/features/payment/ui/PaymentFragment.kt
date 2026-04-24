@@ -42,7 +42,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bookingId = arguments?.getInt("booking_id") ?: bookingId
+        bookingId = arguments?.getInt("bookingId") ?: bookingId
 
         setupViewModel()
         setupObservers()
@@ -134,6 +134,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun handleBack() {
+        viewModel.savePayment()
         findNavController().popBackStack()
     }
 

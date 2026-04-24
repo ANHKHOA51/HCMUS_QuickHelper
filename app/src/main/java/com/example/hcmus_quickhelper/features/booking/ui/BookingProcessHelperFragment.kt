@@ -23,6 +23,7 @@ import com.example.hcmus_quickhelper.databinding.FragmentBookingProcessHelperBin
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingProcessHelperViewModel
+import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 
 class BookingProcessHelperFragment : Fragment() {
 
@@ -103,7 +104,7 @@ class BookingProcessHelperFragment : Fragment() {
         }
 
         viewModel.payment.observe(viewLifecycleOwner) { payment ->
-            if(payment != null) {
+            if(payment != null && payment.status == PaymentStatus.SUCCESS.toString()) {
                 binding.btnViewReceipt.isEnabled = true
                 binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.orange_primary)
                 binding.btnViewReceipt.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))

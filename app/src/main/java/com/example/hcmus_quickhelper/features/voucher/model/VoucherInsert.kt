@@ -2,15 +2,9 @@ package com.example.hcmus_quickhelper.features.voucher.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
 @Serializable
-@Parcelize
-data class Voucher(
-    @SerialName("id")
-    val id: Int,
-
+data class VoucherInsert (
     @SerialName("code")
     val code: String,
 
@@ -25,10 +19,4 @@ data class Voucher(
 
     @SerialName("expired_at")
     val expiredAt: String,
-
-    @SerialName("is_deleted")
-    val isDeleted: Boolean = false,
-
-    @SerialName("created_at")
-    val createdAt: String
-): Parcelable
+)

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentCollectVoucherBinding
 import com.example.hcmus_quickhelper.features.voucher.datasource.VoucherDataSource
 import com.example.hcmus_quickhelper.features.voucher.repository.VoucherRepository
@@ -36,7 +37,7 @@ class CollectVoucherFragment : Fragment() {
     private var _binding: FragmentCollectVoucherBinding? = null
     private val binding get() = _binding!!
 
-    private var userId: Int = 4 // MOCK
+    private var userId: Int = 9 // MOCK
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +49,8 @@ class CollectVoucherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        userId = SessionManager.currentUser.value?.id!!;
 
         setupViewModel()
         setupRecyclerView()
