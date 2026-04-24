@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,12 +16,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
+import com.example.hcmus_quickhelper.core.model.UserRole
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.FragmentReceiptBinding
 import com.example.hcmus_quickhelper.features.payment.datasource.PaymentDataSource
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.payment.viewmodel.ReceiptViewModel
+import kotlinx.coroutines.flow.drop
 import java.io.OutputStream
 
 class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
@@ -52,7 +56,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
 
         binding.btnGoToRating.setOnClickListener { handleGoToRating(viewModel.payment.value?.bookingId) }
         binding.btnBack.setOnClickListener { handleBack() }
-        binding.btnBackToHome.setOnClickListener { findNavController().navigate(R.id.home_fragment) }
+        binding.btnBackToHome.setOnClickListener { handleBackHome() }
         binding.btnDownload.setOnClickListener { handleDownload() }
     }
 
@@ -80,6 +84,12 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
                 binding.tvTotalPrice.text = "${MoneyUtils.formatVietnameseCurrency(it.amount)}"
 
                 binding.tvServiceName.text = it.booking?.service?.name ?: "Dịch vụ"
+
+                if(SessionManager.currentUser.value?.role == UserRole.CUSTOMER.toString()) {
+                    binding.btnGoToRating.visibility = View.VISIBLE
+                } else {
+                    binding.btnGoToRating.visibility = View.GONE
+                }
             }
         }
     }
@@ -106,6 +116,12 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
 
         // 3. Hiện lại các nút bấm ngay lập tức
         buttonsToHide.forEach { it.visibility = View.VISIBLE }
+
+        if(SessionManager.currentUser.value?.role == UserRole.CUSTOMER.toString()) {
+            binding.btnGoToRating.visibility = View.VISIBLE
+        } else {
+            binding.btnGoToRating.visibility = View.GONE
+        }
 
         // 4. Lưu Bitmap vào thư viện ảnh của thiết bị
         saveBitmapToGallery(bitmap)
@@ -143,6 +159,14 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt) {
                 e.printStackTrace()
                 Toast.makeText(requireContext(), "Lỗi khi lưu ảnh!", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun handleBackHome() {
+        if(SessionManager.currentUser.value?.role == UserRole.CUSTOMER.toString()) {
+            findNavController().navigate(R.id.action_receipt_fragment_to_home)
+        } else {
+            findNavController().navigate(R.id.action_receipt_fragment_to_dashboard_helper_fragment)
         }
     }
 

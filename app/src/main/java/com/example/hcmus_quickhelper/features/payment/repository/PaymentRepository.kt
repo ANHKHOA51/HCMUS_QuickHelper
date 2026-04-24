@@ -11,6 +11,10 @@ class PaymentRepository (
         return paymentDataSource.getById(id)
     }
 
+    suspend fun getPaymentByIdFullData(id: Int): Payment {
+        return paymentDataSource.getByIdFullData(id)
+    }
+
     suspend fun getPaymentByBookingId(id: Int): Payment? {
         return paymentDataSource.getByBookingId(id)
     }
@@ -21,6 +25,10 @@ class PaymentRepository (
 
     suspend fun getAllPayments(): List<Payment> {
         return paymentDataSource.getAll()
+    }
+
+    suspend fun getAllPaymentsFullData(): List<Payment> {
+        return paymentDataSource.getAllFullData()
     }
 
     suspend fun insertPayment(payment: PaymentInsert): Payment {

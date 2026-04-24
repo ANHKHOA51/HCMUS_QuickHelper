@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
@@ -74,12 +75,25 @@ class BookingRequestDetailFragment : Fragment() {
 
         binding.btnAccept.setOnClickListener {
             viewModel.acceptBooking(helperId)
-            // findNavController().popBackStack()
+             findNavController().popBackStack()
         }
 
         binding.btnDecline.setOnClickListener {
             viewModel.rejectBooking(helperId)
-            // findNavController().popBackStack()
+             findNavController().popBackStack()
+        }
+
+        binding.btnChat.setOnClickListener {
+            val convId = viewModel.conversationId.value
+            if (convId != null) {
+                val customer = viewModel.booking.value?.customer
+                val bundle = Bundle().apply {
+                    putInt("conversationId", convId)
+                    putString("senderName", customer?.fullname)
+                    putString("senderAvtUrl", customer?.avatarUrl)
+                }
+                findNavController().navigate(R.id.action_booking_request_detail_fragment_to_chat_fragment, bundle)
+            }
         }
     }
 
@@ -87,7 +101,6 @@ class BookingRequestDetailFragment : Fragment() {
         binding.apply {
             tvUserName.text = booking.customer?.fullname
             tvPhone.text = booking.customer?.phone
-            tvRating.text = booking.customer?.rating.toString()
             tvIncomeAmount.text = MoneyUtils.formatVietnameseCurrency(booking.totalPrice)
             tvServiceName.text = booking.service?.name
             tvAddress.text = booking.address

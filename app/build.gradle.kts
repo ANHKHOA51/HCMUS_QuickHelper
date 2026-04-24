@@ -115,8 +115,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(platform(libs.bom))
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.ktor.client.android)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation("io.ktor:ktor-client-cio:3.1.1")
     implementation(libs.ktor.client.core)
 
     implementation(platform(libs.supabase.bom))
@@ -150,4 +150,6 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+    // chart
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

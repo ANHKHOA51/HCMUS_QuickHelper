@@ -22,12 +22,12 @@ class SelectVoucherViewModel (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun loadVouchers() {
+    fun loadVouchers(userId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
 
             try {
-                val data = repository.getAllVoucherGlobal()
+                val data = repository.getVouchersByUserId(userId)
                 _vouchers.value = data
             } catch (e: Exception) {
                 e.printStackTrace()

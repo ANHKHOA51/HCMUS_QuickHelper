@@ -3,16 +3,19 @@ package com.example.hcmus_quickhelper.features.booking.ui
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.core.utils.toRemainingTime
@@ -20,6 +23,7 @@ import com.example.hcmus_quickhelper.databinding.FragmentBookingProcessHelperBin
 import com.example.hcmus_quickhelper.features.booking.datasource.BookingDataSource
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingProcessHelperViewModel
+import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 
 class BookingProcessHelperFragment : Fragment() {
 
@@ -36,7 +40,7 @@ class BookingProcessHelperFragment : Fragment() {
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
         if (uris.isNotEmpty()) {
-            viewModel.addEvidence(uris)
+            viewModel.addEvidence(requireContext(), uris)
         }
     }
 
@@ -95,8 +99,27 @@ class BookingProcessHelperFragment : Fragment() {
             }
         }
 
-        viewModel.imageEvidence.observe(viewLifecycleOwner) { uris ->
-            evidenceAdapter.updateImages(uris)
+        viewModel.evidences.observe(viewLifecycleOwner) { evidences ->
+            evidenceAdapter.updateEvidences(evidences)
+        }
+
+        viewModel.payment.observe(viewLifecycleOwner) { payment ->
+            if(payment != null && payment.status == PaymentStatus.SUCCESS.toString()) {
+                binding.btnViewReceipt.isEnabled = true
+                binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.orange_primary)
+                binding.btnViewReceipt.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                binding.btnViewReceipt.setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putInt("payment_id", payment.id!!)
+                    }
+                    findNavController().navigate(R.id.action_booking_process_helper_fragment_to_receipt_fragment, bundle)
+                }
+            } else {
+                binding.btnViewReceipt.isEnabled = false
+                binding.btnViewReceipt.text = "Đang chờ thanh toán"
+                binding.btnViewReceipt.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.gray_light)
+                binding.btnViewReceipt.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_hint))
+            }
         }
     }
 
@@ -107,15 +130,31 @@ class BookingProcessHelperFragment : Fragment() {
                 binding.btnCompleteWork.visibility = View.GONE
                 // Khi chưa bắt đầu thì chưa cho thêm ảnh
                 binding.cardEvidence.visibility = View.GONE
+                binding.cardTime.visibility = View.VISIBLE
+                binding.btnViewReceipt.visibility = View.GONE
             }
             BookingStatus.IN_PROGRESS.toString() -> {
                 binding.btnStartWork.visibility = View.GONE
                 binding.btnCompleteWork.visibility = View.VISIBLE
                 binding.cardEvidence.visibility = View.VISIBLE
+                binding.cardTime.visibility = View.GONE
+                binding.btnViewReceipt.visibility = View.GONE
+
+                evidenceAdapter.setStatus(BookingStatus.IN_PROGRESS.toString())
+            }
+            BookingStatus.COMPLETED.toString() -> {
+                evidenceAdapter.setStatus(BookingStatus.COMPLETED.toString())
+                binding.btnStartWork.visibility = View.GONE
+                binding.btnCompleteWork.visibility = View.GONE
+                binding.btnAddImage.visibility = View.GONE
+                binding.cardEvidence.visibility = View.VISIBLE
+                binding.cardTime.visibility = View.GONE
+                binding.btnViewReceipt.visibility = View.VISIBLE
             }
             else -> {
                 binding.btnStartWork.visibility = View.GONE
                 binding.btnCompleteWork.visibility = View.GONE
+                binding.btnAddImage.visibility = View.GONE
                 binding.cardEvidence.visibility = View.VISIBLE
             }
         }
@@ -143,17 +182,24 @@ class BookingProcessHelperFragment : Fragment() {
         }
 
         binding.btnStartWork.setOnClickListener {
-            // Cập nhật trạng thái sang IN_PROGRESS trong ViewModel
             viewModel.updateBookingStatus(BookingStatus.IN_PROGRESS.toString())
         }
 
         binding.btnCompleteWork.setOnClickListener {
-            // Logic hoàn tất công việc
             viewModel.updateBookingStatus(BookingStatus.COMPLETED.toString())
         }
 
         binding.btnChat.setOnClickListener {
-            // Logic mở chat
+            val convId = viewModel.conversationId.value
+            if (convId != null) {
+                val customer = viewModel.booking.value?.customer
+                val bundle = Bundle().apply {
+                    putInt("conversationId", convId)
+                    putString("senderName", customer?.fullname)
+                    putString("senderAvtUrl", customer?.avatarUrl)
+                }
+                findNavController().navigate(R.id.action_booking_process_helper_fragment_to_chat_fragment, bundle)
+            }
         }
     }
 

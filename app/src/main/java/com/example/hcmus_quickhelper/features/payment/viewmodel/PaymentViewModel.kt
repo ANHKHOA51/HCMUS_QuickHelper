@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.payment.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,9 @@ import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import com.example.hcmus_quickhelper.features.payment.model.toPaymentInsert
 import com.example.hcmus_quickhelper.features.payment.repository.PaymentRepository
 import com.example.hcmus_quickhelper.features.voucher.model.Voucher
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PaymentViewModel (
     private val paymentRepository: PaymentRepository
@@ -26,32 +29,34 @@ class PaymentViewModel (
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val paymentData = paymentRepository.getPaymentByBookingIdFullData(bookingId)
-
-                val currentVoucher = _payment.value?.voucher
-                if (currentVoucher != null) {
-                    paymentData.voucher = currentVoucher
-                    paymentData.voucherId = currentVoucher.id
-                }
-
-                val servicePrice = paymentData.booking?.totalPrice ?: 0.0
-                val discount = paymentData.voucher?.discount ?: 0.0
-                paymentData.amount = (servicePrice - discount).coerceAtLeast(0.0)
-
-                _payment.value = paymentData
-            } catch (e: Exception) {
-                if(e is NoSuchElementException) {
-                    val paymentDataInsert = PaymentInsert(
+                val finalPayment = try {
+                    paymentRepository.getPaymentByBookingIdFullData(bookingId)
+                } catch (e: NoSuchElementException) {
+                    val newItem = PaymentInsert(
                         bookingId = bookingId,
                         amount = 0.0,
                         status = PaymentStatus.PENDING.toString(),
                         method = PaymentMethod.CASH.toString(),
                         voucherId = null
                     )
-                    paymentRepository.insertPayment(paymentDataInsert)
-                } else {
-                    e.printStackTrace()
+                    paymentRepository.insertPayment(newItem)
+                    paymentRepository.getPaymentByBookingIdFullData(bookingId)
                 }
+
+                val servicePrice = finalPayment.booking?.totalPrice ?: 0.0
+                val currentVoucher = _payment.value?.voucher
+                val discount = currentVoucher?.discount ?: 0.0
+
+                val calculatedAmount = (servicePrice - discount).coerceAtLeast(0.0)
+
+                _payment.value = finalPayment.copy(
+                    amount = calculatedAmount,
+                    voucher = currentVoucher,
+                    voucherId = currentVoucher?.id
+                )
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
@@ -84,6 +89,21 @@ class PaymentViewModel (
             voucher = finalVoucher,
             amount = newAmount
         )
+    }
+
+    fun savePayment() {
+        viewModelScope.launch {
+            try {
+                withContext(NonCancellable) {
+                    paymentRepository.updatePayment(
+                        _payment.value!!.id!!,
+                        _payment.value!!.toPaymentInsert()
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun submitPayment(method: String) {

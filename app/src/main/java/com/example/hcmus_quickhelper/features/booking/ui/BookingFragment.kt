@@ -21,7 +21,9 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import coil.load
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.features.booking.viewmodel.BookingViewModel
 import com.google.android.material.imageview.ShapeableImageView
@@ -163,8 +165,8 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
             val addressString = tvLocationAddress.text.toString()
             val noteString = edtNote.text.toString()
 
-            // Fix cứng
-            val currentCustomerId = 7
+            // Fix for id
+            val currentCustomerId = SessionManager.currentUser.asLiveData().value?.id ?: -1
 
             viewModel.createBooking(
                 customerId = currentCustomerId,

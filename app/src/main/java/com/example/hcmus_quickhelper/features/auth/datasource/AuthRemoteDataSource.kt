@@ -3,6 +3,7 @@ package com.example.hcmus_quickhelper.features.auth.datasource
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.FcmToken
 import com.example.hcmus_quickhelper.core.model.User
+import com.example.hcmus_quickhelper.core.model.UserRole
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email

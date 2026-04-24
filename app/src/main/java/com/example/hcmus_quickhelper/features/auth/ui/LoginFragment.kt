@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.database.SupabaseConfig
+import com.example.hcmus_quickhelper.core.model.UserRole
 import com.example.hcmus_quickhelper.databinding.FragmentLoginBinding
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
@@ -166,9 +167,20 @@ class LoginFragment : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
                 lifecycleScope.launch {
+                    // 1. Persist the session (from feature/settings)
                     SessionManager.login(user)
+                    
                     Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.home_fragment)
+                    
+                    // 2. Role-based navigation (from dev)
+                    if (user.role == UserRole.CUSTOMER.toString()) {
+                        findNavController().navigate(R.id.home_fragment)
+                    } else if (user.role == UserRole.HELPER.toString()) {
+                        findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
+                    } else {
+                        // Fallback navigation if role is undefined
+                        findNavController().navigate(R.id.home_fragment)
+                    }
                 }
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)

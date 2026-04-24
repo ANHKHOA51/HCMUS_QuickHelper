@@ -3,7 +3,9 @@ package com.example.hcmus_quickhelper.features.booking.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.features.booking.model.BookingHistory
 import com.example.hcmus_quickhelper.features.booking.repository.BookingRepository
@@ -25,8 +27,8 @@ class BookingHistoryViewModel(private val repository: BookingRepository) : ViewM
     private val _currentTab = MutableLiveData(BookingTab.ONGOING)
     val currentTab: LiveData<BookingTab> = _currentTab
 
-    // Fix cứng ID customer trước để test
-    private val currentCustomerId = 7
+    // Fix id
+    private val currentCustomerId = SessionManager.currentUser.asLiveData().value?.id ?: -1
 
     fun loadHistories() {
         viewModelScope.launch {

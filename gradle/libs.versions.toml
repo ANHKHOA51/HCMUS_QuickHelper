@@ -9,7 +9,6 @@ espressoCore = "3.7.0"
 appcompat = "1.7.1"
 kotlinxSerializationJson = "1.10.0"
 ktor = "3.0.1"
-ktorClientAndroid = "3.4.1"
 lifecycleExtensions = "2.2.0"
 material = "1.13.0"
 activity = "1.13.0"
@@ -17,29 +16,22 @@ constraintlayout = "2.2.1"
 cardview = "1.0.0"
 navigationFragmentKtx = "2.9.7"
 navigationUiKtx = "2.9.7"
-postgrestKt = "3.5.0"
-postgrestKtVersion = "3.5.0"
-realtimeKt = "3.5.0"
 supabase = "3.1.0"
 datastore = "1.1.2"
+swiperefreshlayout = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensions" }
-auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
-postgrest-kt-v200 = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "postgrestKtVersion" }
-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "realtimeKt" }
-storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
