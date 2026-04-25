@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
@@ -20,7 +21,6 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     
     val isLoading = MutableLiveData<Boolean>(false)
 
-    // State to hold the correct OTP for local verification if needed
     private val _correctOtp = MutableLiveData<String>()
     val correctOtp: LiveData<String> = _correctOtp
 
@@ -39,9 +39,27 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     fun signInWithGoogle(idToken: String, fcmToken: String?) {
         viewModelScope.launch {
             isLoading.value = true
-            loginResult.value = repository.loginWithGoogle(idToken, fcmToken)
-            isLoading.value = false
+            try {
+                // Decode email from Google ID Token
+                // Note: In a real app, use a proper JWT library or Google's API to verify the token.
+                // For this migration, we extract the email from the payload.
+                val email = decodeGoogleEmail(idToken)
+                loginResult.value = repository.loginWithGoogle(email, fcmToken)
+            } catch (e: Exception) {
+                loginResult.value = Result.failure(e)
+            } finally {
+                isLoading.value = false
+            }
         }
+    }
+
+    private fun decodeGoogleEmail(idToken: String): String {
+        // Simple extraction for demonstration. Replace with secure decoding.
+        val parts = idToken.split(".")
+        if (parts.size < 2) throw Exception("Invalid ID Token")
+        val payload = String(android.util.Base64.decode(parts[1], android.util.Base64.DEFAULT))
+        val emailRegex = "\"email\":\"([^\"]+)\"".toRegex()
+        return emailRegex.find(payload)?.groupValues?.get(1) ?: throw Exception("Email not found in token")
     }
 
     fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null, role: String = "CUSTOMER") {
@@ -64,6 +82,14 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             isLoading.value = true
             _verifyResult.value = repository.verifyEmailOtp(email, token)
+            isLoading.value = false
+        }
+    }
+
+    fun verifyOldPassword(oldPass: String) {
+        viewModelScope.launch {
+            isLoading.value = true
+            _verifyResult.value = repository.verifyOldPassword(oldPass)
             isLoading.value = false
         }
     }

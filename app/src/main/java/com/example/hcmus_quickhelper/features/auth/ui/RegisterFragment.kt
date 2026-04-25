@@ -1,7 +1,6 @@
 package com.example.hcmus_quickhelper.features.auth.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +40,6 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        // Manual DI consistent with LoginFragment
         val dataSource = AuthRemoteDataSource()
         val repository = AuthRepository(dataSource)
         
@@ -56,7 +54,6 @@ class RegisterFragment : Fragment() {
 
     private fun setupUI() {
         binding.btnRegister.setOnClickListener {
-            // Step 1: Extract username
             val username = binding.etUsername.text.toString().trim()
             val fullname = binding.etFullname.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
@@ -65,24 +62,20 @@ class RegisterFragment : Fragment() {
 
             val selectedRole = if (binding.rbCustomer.isChecked) "CUSTOMER" else "HELPER"
             
-            // Check required fields (username is optional)
             if (fullname.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty() && password.isNotEmpty()) {
                 val bundle = Bundle().apply {
-                    putString("username", username) // Step 2: Add to bundle
+                    putString("username", username)
                     putString("fullname", fullname)
                     putString("email", email)
                     putString("phone", phone)
                     putString("password", password)
                     putString("role", selectedRole)
                 }
-                // Navigate to OTP Fragment
                 findNavController().navigate(R.id.action_register_to_otp, bundle)
             } else {
                 Toast.makeText(context, "Please fill in all required fields", Toast.LENGTH_SHORT).show()
             }
         }
-
-        // Step 3: Social/Biometric logic removed (no click listeners for btnGoogle or btnTouchId)
 
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
@@ -98,17 +91,7 @@ class RegisterFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.btnRegister.isEnabled = !isLoading
         }
-
-        viewModel.registerResult.observe(viewLifecycleOwner) { result ->
-            result?.onSuccess {
-                Toast.makeText(context, "Account created successfully!", Toast.LENGTH_SHORT).show()
-                findNavController().popBackStack() // Go back to login
-            }?.onFailure { error ->
-                Log.e("AUTH_ERROR", "Registration failed", error)
-                val message = error.localizedMessage ?: "Could not create account"
-                Toast.makeText(context, "Error: $message", Toast.LENGTH_LONG).show()
-            }
-        }
+        // Registration result is now observed in OTPFragment
     }
 
     override fun onDestroyView() {
