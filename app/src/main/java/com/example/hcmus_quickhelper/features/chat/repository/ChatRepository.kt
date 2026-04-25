@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class ChatRepository(
     private val dataSource: ChatRemoteDataSource
 ) {
-    suspend fun getConservations(userId: Int): Result<List<ConversationItem>> {
+    suspend fun getConversations(userId: Int): Result<List<ConversationItem>> {
         return try {
             val result = dataSource.getChatList(userId)
             Result.success(result)

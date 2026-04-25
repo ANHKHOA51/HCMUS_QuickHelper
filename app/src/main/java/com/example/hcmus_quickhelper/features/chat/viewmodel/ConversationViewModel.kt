@@ -21,7 +21,7 @@ class ConversationViewModel(
         Log.d("fetchConversations", "userId: $userId")
         if (userId == -1) return;
         viewModelScope.launch {
-            val result = repository.getConservations(userId)
+            val result = repository.getConversations(userId)
 
             result.onSuccess { list ->
                 conversationList.value = list

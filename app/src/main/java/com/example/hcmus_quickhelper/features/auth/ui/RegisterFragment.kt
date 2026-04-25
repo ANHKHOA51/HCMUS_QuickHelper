@@ -62,6 +62,8 @@ class RegisterFragment : Fragment() {
             val email = binding.etEmail.text.toString().trim()
             val phone = binding.etPhone.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
+
+            val selectedRole = if (binding.rbCustomer.isChecked) "CUSTOMER" else "HELPER"
             
             // Check required fields (username is optional)
             if (fullname.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty() && password.isNotEmpty()) {
@@ -71,6 +73,7 @@ class RegisterFragment : Fragment() {
                     putString("email", email)
                     putString("phone", phone)
                     putString("password", password)
+                    putString("role", selectedRole)
                 }
                 // Navigate to OTP Fragment
                 findNavController().navigate(R.id.action_register_to_otp, bundle)
