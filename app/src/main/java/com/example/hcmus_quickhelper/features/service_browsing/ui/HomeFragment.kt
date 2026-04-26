@@ -37,6 +37,8 @@ class HomeFragment : Fragment() {
     private lateinit var topHelperAdapter: TopHelperAdapter
     private lateinit var serviceAdapter: ServiceAdapter
 
+    private lateinit var tvViewAllVoucher: TextView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.home_activity, container, false)
     }
@@ -97,6 +99,8 @@ class HomeFragment : Fragment() {
 
         rvPopularServices.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rvPopularServices.adapter = serviceAdapter
+
+        tvViewAllVoucher = view?.findViewById(R.id.tvViewAllVoucher)!!
     }
 
     private fun setupInteractions() {
@@ -118,6 +122,7 @@ class HomeFragment : Fragment() {
 
         tvViewAllServices.setOnClickListener(viewAllClickListener)
         tvViewAllTopHelpers.setOnClickListener(viewAllClickListener)
+        tvViewAllVoucher.setOnClickListener { findNavController().navigate(R.id.action_home_fragment_to_collect_voucher_fragment) }
     }
 
     private fun navigateToServiceList(query: String) {

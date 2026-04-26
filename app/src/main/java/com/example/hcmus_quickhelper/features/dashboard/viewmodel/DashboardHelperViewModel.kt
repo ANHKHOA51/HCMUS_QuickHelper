@@ -8,6 +8,8 @@ import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.features.dashboard.model.DashboardHelper
 import com.example.hcmus_quickhelper.features.dashboard.repository.DashboardHelperRepository
+import com.example.hcmus_quickhelper.features.payment.model.Payment
+import com.example.hcmus_quickhelper.features.payment.model.PaymentStatus
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,6 +27,10 @@ class DashboardHelperViewModel (
     private val _totalIncome = MutableLiveData<Double>(0.0)
     val totalIncome: LiveData<Double> = _totalIncome
 
+    private val _payments = MutableLiveData<List<Payment>>()
+    val payments: LiveData<List<Payment>> = _payments
+
+
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
     fun loadData(helperId: Int) {
@@ -32,6 +38,8 @@ class DashboardHelperViewModel (
             try {
                 val data = dashboardHelperRepository.getDashboardClientData(helperId)
                 _dataHelper.value = data
+                val paymentData = dashboardHelperRepository.getPayments()
+                _payments.value = paymentData
                 filter("Tất cả")
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -57,8 +65,12 @@ class DashboardHelperViewModel (
 
         _filterBooking.value = filtered
 
+        val paymentsList = _payments.value ?: emptyList()
+
         val income = filtered.sumOf { booking ->
-            if (booking.status == BookingStatus.COMPLETED.name) booking.totalPrice else 0.0
+            val isPaid = paymentsList.any { it.bookingId == booking.id && it.status == PaymentStatus.SUCCESS.toString() }
+
+            if (isPaid) booking.totalPrice else 0.0
         }
 
         _totalIncome.value = income

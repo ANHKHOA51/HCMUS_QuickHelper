@@ -162,8 +162,12 @@ class LoginFragment : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
                 lifecycleScope.launch {
-                    SessionManager.login(user)
+                    // 1. Persist the session (from localization branch)
+                    SessionManager.login(user) 
+                    
                     Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
+                    
+                    // 2. Navigate based on role (using our updated helper)
                     navigateToDashboard(user.role)
                 }
             }?.onFailure { error ->
@@ -178,12 +182,18 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToDashboard(role: String) {
-        if (role == UserRole.HELPER.toString()) {
+    when (role) {
+        UserRole.HELPER.toString() -> {
             findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
-        } else {
+        }
+        UserRole.ADMIN.toString() -> {
+            findNavController().navigate(R.id.action_login_fragment_to_fragment_admin_statistic)
+        }
+        else -> {
             findNavController().navigate(R.id.home_fragment)
         }
     }
+}
 
     override fun onDestroyView() {
         super.onDestroyView()

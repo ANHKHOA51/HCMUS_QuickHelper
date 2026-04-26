@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_login_fragment_to_dashboard_helper_fragment"
             app:destination="@id/dashboard_helper_fragment" />
+        <action
+            android:id="@+id/action_login_fragment_to_fragment_admin_statistic"
+            app:destination="@id/fragment_admin_statistic" />
     </fragment>
 
     <fragment
@@ -266,6 +269,9 @@
         <action
             android:id="@+id/action_dashboard_helper_fragment_to_booking_request_list_fragment"
             app:destination="@id/booking_request_list_fragment" />
+        <action
+            android:id="@+id/action_dashboard_helper_fragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
     </fragment>
 
     <fragment
@@ -340,5 +346,14 @@
         android:name="com.example.hcmus_quickhelper.features.admin_statistic.ui.StatisticFragment"
         android:label="statistic"
         tools:layout="@layout/fragment_admin_statistic" >
+        <action
+            android:id="@+id/action_fragment_admin_statistic_to_voucher_management_fragment"
+            app:destination="@id/voucher_management_fragment" />
+        <action
+            android:id="@+id/action_fragment_admin_statistic_to_payment_admin_fragment"
+            app:destination="@id/payment_admin_fragment" />
+        <action
+            android:id="@+id/action_fragment_admin_statistic_to_login_fragment"
+            app:destination="@id/login_fragment" />
     </fragment>
 </navigation>
