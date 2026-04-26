@@ -6,9 +6,9 @@ import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSour
 import kotlinx.coroutines.flow.firstOrNull
 
 class AuthRepository(private val dataSource: AuthRemoteDataSource) {
-    suspend fun login(email: String, pass: String, fcmToken: String?): Result<User> {
+    suspend fun login(identifier: String, pass: String, fcmToken: String?): Result<User> {
         return try {
-            val user = dataSource.loginWithEmail(email, pass)
+            val user = dataSource.login(identifier, pass)
             fcmToken?.let { dataSource.saveFcmToken(user.id, it) } 
             SessionManager.login(user) 
             Result.success(user)

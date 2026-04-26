@@ -7,18 +7,21 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
 
 class AuthRemoteDataSource {
-    suspend fun loginWithEmail(email: String, pass: String): User {
+    suspend fun login(identifier: String, pass: String): User {
         val user = SupabaseClient.client.postgrest["users"]
             .select {
                 filter {
-                    eq("email", email)
+                    or {
+                        eq("email", identifier)
+                        eq("phone", identifier)
+                    }
                 }
             }.decodeSingleOrNull<User>()
 
         if (user != null && user.password == pass) {
             return user
         } else {
-            throw Exception("401: Invalid email or password")
+            throw Exception("401: Invalid email/phone or password")
         }
     }
 

@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.UserPreferences
 import com.example.hcmus_quickhelper.databinding.FragmentSettingsBinding
 import com.example.hcmus_quickhelper.features.settings.repository.SettingsRepository
 import com.example.hcmus_quickhelper.features.settings.viewmodel.SettingsViewModel
@@ -47,11 +48,12 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val repository = SettingsRepository()
+        val userPreferences = UserPreferences(requireContext().applicationContext)
+        val repository = SettingsRepository(userPreferences)
         val factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SettingsViewModel(repository, requireContext().applicationContext) as T
+                return SettingsViewModel(repository) as T
             }
         }
         viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
@@ -74,6 +76,14 @@ class SettingsFragment : Fragment() {
             showLanguageDialog()
         }
 
+        binding.switchDeviceNotifications.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.togglePushNotifications(isChecked)
+        }
+
+        binding.switchEmailNotifications.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.toggleEmailNotifications(isChecked)
+        }
+
         binding.btnLogout.setOnClickListener {
             logout()
         }
@@ -83,6 +93,22 @@ class SettingsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.language.collectLatest { language ->
                 binding.tvCurrentLanguage.text = language
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.pushNotificationsEnabled.collectLatest { enabled ->
+                if (binding.switchDeviceNotifications.isChecked != enabled) {
+                    binding.switchDeviceNotifications.isChecked = enabled
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.emailNotificationsEnabled.collectLatest { enabled ->
+                if (binding.switchEmailNotifications.isChecked != enabled) {
+                    binding.switchEmailNotifications.isChecked = enabled
+                }
             }
         }
     }

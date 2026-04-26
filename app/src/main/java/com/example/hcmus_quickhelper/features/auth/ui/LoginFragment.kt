@@ -89,15 +89,15 @@ class LoginFragment : Fragment() {
 
     private fun setupUI() {
         binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString()
+            val identifier = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
             
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            if (identifier.isNotEmpty() && password.isNotEmpty()) {
                 getFcmToken { token ->
-                    viewModel.login(email, password, token)
+                    viewModel.login(identifier, password, token)
                 }
             } else {
-                Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter email/phone and password", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -169,7 +169,7 @@ class LoginFragment : Fragment() {
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)
                 val message = when {
-                    error.message?.contains("401") == true -> "Invalid email or password"
+                    error.message?.contains("401") == true -> "Invalid email/phone or password"
                     else -> error.localizedMessage ?: "Connection error"
                 }
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()

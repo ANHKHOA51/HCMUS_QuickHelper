@@ -28,10 +28,10 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         _correctOtp.value = otp
     }
 
-    fun login(email: String, pass: String, fcmToken: String?) {
+    fun login(identifier: String, pass: String, fcmToken: String?) {
         viewModelScope.launch {
             isLoading.value = true
-            loginResult.value = repository.login(email, pass, fcmToken)
+            loginResult.value = repository.login(identifier, pass, fcmToken)
             isLoading.value = false
         }
     }
