@@ -21,6 +21,17 @@
     <string name="google">Google</string>
     <string name="touch_id">Touch ID</string>
     <string name="terms_note">By continuing, you agree to our Terms of Service</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_language">Select Language</string>
+    <string name="cancel">Cancel</string>
+    <string name="language_changed">Language changed to %1$s</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="settings">Settings</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="language">Language</string>
+    <string name="notifications">Notifications</string>
+    <string name="email_notifications">Email Notifications</string>
+    <string name="device_notifications">Device Notifications</string>
+    <string name="logout">Log Out</string>
 </resources>

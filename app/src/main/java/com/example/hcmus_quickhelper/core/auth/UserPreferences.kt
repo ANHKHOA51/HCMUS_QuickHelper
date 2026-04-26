@@ -10,7 +10,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.hcmus_quickhelper.core.model.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
 
@@ -29,6 +31,13 @@ class UserPreferences(private val context: Context) {
         private val EMAIL_NOTIFICATIONS = booleanPreferencesKey("email_notifications")
     }
 
+    private fun normalizeLanguage(lang: String?): String {
+        return when (lang?.lowercase()) {
+            "vi", "vietnamese", "tiếng việt" -> "vi"
+            else -> "en"
+        }
+    }
+
     val userFlow: Flow<User?> = context.dataStore.data.map { preferences ->
         if (preferences[IS_LOGGED_IN] == true) {
             User(
@@ -37,7 +46,7 @@ class UserPreferences(private val context: Context) {
                 username = preferences[USER_USERNAME],
                 email = preferences[USER_EMAIL] ?: "",
                 phone = preferences[USER_PHONE] ?: "",
-                password = "", // Do not store password
+                password = "",
                 role = preferences[USER_ROLE] ?: ""
             )
         } else {
@@ -50,7 +59,7 @@ class UserPreferences(private val context: Context) {
     }
 
     val language: Flow<String> = context.dataStore.data.map { preferences ->
-        preferences[LANGUAGE] ?: "English"
+        normalizeLanguage(preferences[LANGUAGE])
     }
 
     val pushNotificationsEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
@@ -88,6 +97,13 @@ class UserPreferences(private val context: Context) {
     suspend fun updateLanguage(language: String) {
         context.dataStore.edit { preferences ->
             preferences[LANGUAGE] = language
+        }
+    }
+
+    fun getLanguageBlocking(): String {
+        return runBlocking {
+            val lang = context.dataStore.data.map { it[LANGUAGE] }.first()
+            normalizeLanguage(lang)
         }
     }
 

@@ -15,10 +15,8 @@ class SettingsViewModel(
     val pushNotificationsEnabled: Flow<Boolean> = repository.pushNotificationsEnabled
     val emailNotificationsEnabled: Flow<Boolean> = repository.emailNotificationsEnabled
 
-    fun updateLanguage(language: String) {
-        viewModelScope.launch {
-            repository.updateLanguage(language)
-        }
+    suspend fun updateLanguage(language: String) {
+        repository.updateLanguage(language)
     }
 
     fun togglePushNotifications(enabled: Boolean) {
