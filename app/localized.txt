@@ -1,0 +1,16 @@
+settingsfragment
+loginfragment
+registerfragment
+changepasswordfragment
+homefragment
+dashboardhelperfragment
+otpfragment
+servicelistfragment
+profilefragment
+chatlistfragment
+chatfragment
+communityfragment
+postfeedfragment
+bookingfragment
+bookinghistoryfragment
+bookingtrackinghelpersfragment

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.Booking
 import com.example.hcmus_quickhelper.core.model.BookingStatus
 import com.example.hcmus_quickhelper.core.utils.MoneyUtils
@@ -41,6 +42,7 @@ class BookingRequestDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bookingId = arguments?.getInt("bookingId") ?: -1
+        helperId = SessionManager.currentUser.value?.id ?: helperId;
 
         setupViewModel()
         setupObserve()

@@ -93,6 +93,10 @@ class LoginFragment : Fragment() {
             val password = binding.etPassword.text.toString()
             
             if (identifier.isNotEmpty() && password.isNotEmpty()) {
+                // Step A: Start loading before FCM fetch
+                binding.btnLogin.isEnabled = false
+                binding.progressBar.visibility = View.VISIBLE
+                
                 getFcmToken { token ->
                     viewModel.login(identifier, password, token)
                 }
@@ -143,6 +147,10 @@ class LoginFragment : Fragment() {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val idToken = googleIdTokenCredential.idToken
                 
+                // Start loading for Google Sign In as well
+                binding.btnGoogle.isEnabled = false
+                binding.progressBar.visibility = View.VISIBLE
+                
                 getFcmToken { token ->
                     viewModel.signInWithGoogle(idToken, token)
                 }
@@ -162,9 +170,13 @@ class LoginFragment : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
                 lifecycleScope.launch {
-                    SessionManager.login(user)
+                    // Step B: SessionManager.login now uses Dispatchers.IO internally
+                    SessionManager.login(user) 
+                    
                     Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-                    navigateToDashboard(user.role)
+                    
+                    // Step C: Simple Navigation is handled by the reactive collectLatest in onViewCreated
+                    // We don't call navigateToDashboard(user.role) here to avoid race conditions
                 }
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)
@@ -178,10 +190,19 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToDashboard(role: String) {
-        if (role == UserRole.HELPER.toString()) {
-            findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
-        } else {
-            findNavController().navigate(R.id.home_fragment)
+        // Only navigate if we are currently at the login fragment to avoid crashes/double navigation
+        if (findNavController().currentDestination?.id == R.id.login_fragment) {
+            when (role) {
+                UserRole.HELPER.toString() -> {
+                    findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
+                }
+                UserRole.ADMIN.toString() -> {
+                    findNavController().navigate(R.id.action_login_fragment_to_fragment_admin_statistic)
+                }
+                else -> {
+                    findNavController().navigate(R.id.home_fragment)
+                }
+            }
         }
     }
 

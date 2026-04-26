@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hcmus_quickhelper.R
@@ -21,6 +22,7 @@ import com.example.hcmus_quickhelper.features.dashboard.datasource.DashboardHelp
 import com.example.hcmus_quickhelper.features.dashboard.model.DashboardHelper
 import com.example.hcmus_quickhelper.features.dashboard.repository.DashboardHelperRepository
 import com.example.hcmus_quickhelper.features.dashboard.viewmodel.DashboardHelperViewModel
+import kotlinx.coroutines.launch
 
 class DashboardHelperFragment : Fragment() {
     private var _binding: FragmentDashboardHelperBinding? = null
@@ -111,11 +113,23 @@ class DashboardHelperFragment : Fragment() {
 
             spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = parent?.getItemAtPosition(position).toString()
+                    val filterOptions = resources.getStringArray(R.array.filter_time_options)
+                    val selectedItem = if (position < filterOptions.size) filterOptions[position] else parent?.getItemAtPosition(position).toString()
                     viewModel.filter(selectedItem)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
+
+            btnSettings.setOnClickListener {
+                findNavController().navigate(R.id.action_dashboard_helper_fragment_to_settings_fragment)
+            }
+
+            btnLogout.setOnClickListener {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    SessionManager.logout()
+                    findNavController().navigate(R.id.action_dashboard_helper_fragment_to_login_fragment)
                 }
             }
         }

@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
+import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.databinding.FragmentAdminStatisticBinding
 import com.example.hcmus_quickhelper.features.admin_statistic.viewmodel.StatisticViewModel
 import java.text.NumberFormat
@@ -16,6 +18,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.data.Entry
+import kotlinx.coroutines.launch
 
 class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
 
@@ -58,12 +61,22 @@ class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
     }
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+//        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
 
         // Chuyển Tabs
         binding.cvTabOverview.setOnClickListener { selectTab(0) }
         binding.cvTabRevenue.setOnClickListener { selectTab(1) }
         binding.cvTabUX.setOnClickListener { selectTab(2) }
+
+        binding.btnManagePayment.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_payment_admin_fragment) }
+        binding.btnManageVoucher.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_voucher_management_fragment) }
+
+        binding.btnLogout.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                SessionManager.logout()
+                findNavController().navigate(R.id.action_fragment_admin_statistic_to_login_fragment)
+            }
+        }
     }
 
     private fun observeViewModel() {

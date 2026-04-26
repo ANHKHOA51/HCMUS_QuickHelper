@@ -57,7 +57,7 @@ class OTPFragment : Fragment() {
             if (enteredOtp == generatedOtp) {
                 handleOtpSuccess()
             } else {
-                Toast.makeText(context, "Invalid OTP", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.invalid_otp), Toast.LENGTH_SHORT).show()
             }
         }
         
@@ -68,7 +68,7 @@ class OTPFragment : Fragment() {
         binding.tvResendOtp.setOnClickListener {
             generatedOtp = (100000..999999).random().toString()
             sendOtpEmail(generatedOtp)
-            Toast.makeText(context, "Resending code...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.resending_code), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -96,11 +96,15 @@ class OTPFragment : Fragment() {
         val recipientEmail = args.email
         val isPasswordReset = args.flow == "password_reset"
         
-        val subject = if (isPasswordReset) "Password Reset OTP" else "Your Verification Code"
-        val body = if (isPasswordReset) {
-            "Your OTP for resetting your HCMUS QuickHelper password is: $otp"
+        val subject = if (isPasswordReset) {
+            getString(R.string.otp_email_subject_reset)
         } else {
-            "Your OTP code is: $otp. Please enter this in the HCMUS QuickHelper app."
+            getString(R.string.otp_email_subject_verify)
+        }
+        val body = if (isPasswordReset) {
+            getString(R.string.otp_email_body_reset, otp)
+        } else {
+            getString(R.string.otp_email_body_verify, otp)
         }
 
         lifecycleScope.launch {
@@ -108,9 +112,9 @@ class OTPFragment : Fragment() {
             
             if (isAdded) {
                 result.onSuccess {
-                    Toast.makeText(context, "OTP sent to $recipientEmail", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.otp_sent_success, recipientEmail), Toast.LENGTH_SHORT).show()
                 }.onFailure {
-                    Toast.makeText(context, "Failed to send email automatically.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.otp_send_failed), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -124,14 +128,14 @@ class OTPFragment : Fragment() {
 
         viewModel.registerResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess {
-                Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.registration_successful), Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_otp_to_login)
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Registration failed", error)
                 val errorMessage = if (error.message?.contains("user_already_exists") == true) {
-                    "This email is already registered. Please try logging in."
+                    getString(R.string.error_user_exists)
                 } else {
-                    "Error: ${error.message}"
+                    getString(R.string.error_prefix, error.message)
                 }
 
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()

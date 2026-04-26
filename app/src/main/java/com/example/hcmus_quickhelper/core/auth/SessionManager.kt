@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 object SessionManager {
     private var userPreferences: UserPreferences? = null
@@ -36,17 +37,17 @@ object SessionManager {
         userPreferences?.isLoggedIn?.firstOrNull() ?: false
     }
 
-    suspend fun login(user: User) {
+    suspend fun login(user: User) = withContext(Dispatchers.IO) {
         userPreferences?.saveSession(user)
         _currentUser.value = user
     }
 
-    suspend fun updateCurrentUser(user: User) {
+    suspend fun updateCurrentUser(user: User) = withContext(Dispatchers.IO) {
         userPreferences?.saveSession(user)
         _currentUser.value = user
     }
 
-    suspend fun logout() {
+    suspend fun logout() = withContext(Dispatchers.IO) {
         userPreferences?.clearSession()
         _currentUser.value = null
     }

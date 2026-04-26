@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
@@ -16,11 +15,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.UserPreferences
+import com.example.hcmus_quickhelper.core.utils.LanguageUtils
 import com.example.hcmus_quickhelper.databinding.FragmentSettingsBinding
 import com.example.hcmus_quickhelper.features.settings.repository.SettingsRepository
 import com.example.hcmus_quickhelper.features.settings.viewmodel.SettingsViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
@@ -91,8 +93,12 @@ class SettingsFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.language.collectLatest { language ->
-                binding.tvCurrentLanguage.text = language
+            viewModel.language.collectLatest { languageCode ->
+                binding.tvCurrentLanguage.text = if (languageCode == LanguageUtils.LANG_VI) {
+                    getString(R.string.vietnamese)
+                } else {
+                    getString(R.string.english)
+                }
             }
         }
 
@@ -114,16 +120,48 @@ class SettingsFragment : Fragment() {
     }
 
     private fun showLanguageDialog() {
-        val languages = arrayOf("English", "Vietnamese")
-        AlertDialog.Builder(requireContext())
-            .setTitle("Select Language")
-            .setItems(languages) { _, which ->
-                val selected = languages[which]
-                viewModel.updateLanguage(selected)
-                Toast.makeText(context, "Language changed to $selected", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val languages = arrayOf(getString(R.string.english), getString(R.string.vietnamese))
+            val languageCodes = arrayOf(LanguageUtils.LANG_EN, LanguageUtils.LANG_VI)
+            
+            // Get current language from ViewModel to set the initial checked item
+            val currentLang = viewModel.language.first()
+            val checkedItem = if (currentLang == LanguageUtils.LANG_VI) 1 else 0
+            
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.select_language))
+                .setSingleChoiceItems(languages, checkedItem) { dialog, which ->
+                    val selectedCode = languageCodes[which]
+                    if (selectedCode != currentLang) {
+                        lifecycleScope.launch {
+                            // Ensure language is saved before activity is recreated
+                            val userPreferences = UserPreferences(requireContext().applicationContext)
+                            userPreferences.updateLanguage(selectedCode)
+                            
+                            updateLocale(selectedCode)
+                            dialog.dismiss()
+                        }
+                    } else {
+                        dialog.dismiss()
+                    }
+                }
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show()
+        }
+    }
+
+    private fun updateLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        
+        val config = resources.configuration
+        config.setLocale(locale)
+        
+        // Update the context for current resources
+        requireContext().createConfigurationContext(config)
+        
+        // Restart the activity to apply changes globally
+        activity?.recreate()
     }
 
     private fun logout() {
