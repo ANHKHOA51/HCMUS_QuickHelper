@@ -3,68 +3,43 @@ package com.example.hcmus_quickhelper.features.auth.datasource
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.core.model.FcmToken
 import com.example.hcmus_quickhelper.core.model.User
-import com.example.hcmus_quickhelper.core.model.UserRole
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.Google
-import io.github.jan.supabase.auth.providers.builtin.IDToken
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
 
 class AuthRemoteDataSource {
-    suspend fun loginWithEmail(email: String, pass: String): User {
-        // Treating public.users as the source of truth for custom auth
+    suspend fun login(identifier: String, pass: String): User {
         val user = SupabaseClient.client.postgrest["users"]
             .select {
                 filter {
-                    eq("email", email)
-                    eq("password", pass)
+                    or {
+                        eq("email", identifier)
+                        eq("phone", identifier)
+                    }
                 }
             }.decodeSingleOrNull<User>()
 
-        return user ?: throw Exception("401: Invalid email or password")
+        if (user != null && user.password == pass) {
+            return user
+        } else {
+            throw Exception("401: Invalid email/phone or password")
+        }
     }
 
-    suspend fun loginWithGoogle(idToken: String): User {
-        SupabaseClient.client.auth.signInWith(IDToken) { 
-            this.idToken = idToken
-            this.provider = Google
-        }
-
-        val session = SupabaseClient.client.auth.currentSessionOrNull()
-            ?: throw Exception("Failed to retrieve Supabase session after Google sign-in")
-
-        val email = session.user?.email ?: throw Exception("No email found in Google session")
-
-        var user = SupabaseClient.client.postgrest["users"]
+    suspend fun getUserByEmail(email: String): User? {
+        return SupabaseClient.client.postgrest["users"]
             .select {
                 filter {
                     eq("email", email)
                 }
             }.decodeSingleOrNull<User>()
-
-        if (user == null) {
-            val highestUser = SupabaseClient.client.postgrest["users"]
-                .select {
-                    order("id", order = Order.DESCENDING)
-                    limit(1)
-                }.decodeSingleOrNull<User>()
-
-            val nextId = (highestUser?.id ?: 0) + 1
-            user = User(
-                id = nextId,
-                fullname = session.user?.userMetadata?.get("full_name")?.toString() ?: "Google User",
-                email = email,
-                phone = "",
-                password = "", 
-                role = "user"
-            )
-            SupabaseClient.client.postgrest["users"].insert(user)
-        }
-
-        return user
     }
 
-    suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String, username: String? = null) {
+    suspend fun verifyPassword(email: String, pass: String): Boolean {
+        val user = getUserByEmail(email)
+        return user?.password == pass
+    }
+
+    suspend fun registerWithEmail(email: String, pass: String, fullname: String, phone: String, username: String? = null, role: String = "CUSTOMER") {
         val highestUser = SupabaseClient.client.postgrest["users"]
             .select {
                 order("id", order = Order.DESCENDING)
@@ -80,7 +55,7 @@ class AuthRemoteDataSource {
             email = email,
             phone = phone,
             password = pass,
-            role = UserRole.CUSTOMER.toString()
+            role = role
         )
 
         SupabaseClient.client.postgrest["users"].insert(publicUser)
@@ -112,10 +87,10 @@ class AuthRemoteDataSource {
     }
 
     suspend fun sendOtp(email: String) {
-        // No-op
+        // Implement manual OTP logic if needed
     }
 
     suspend fun verifyOtp(email: String, token: String) {
-        // No-op
+        // Implement manual OTP verification logic if needed
     }
 }

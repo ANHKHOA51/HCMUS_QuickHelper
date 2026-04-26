@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.SessionManager
@@ -57,13 +59,18 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUI() {
-        // Initial setup from current session
-        val user = SessionManager.currentUser.value
-        user?.let {
-            binding.etFullname.setText(it.fullname)
-            binding.etUsername.setText(it.username ?: "")
-            binding.etPhone.setText(it.phone ?: "")
-            binding.tvEmail.text = it.email
+        // Observe current session reactively using repeatOnLifecycle
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                SessionManager.currentUser.collect { user ->
+                    user?.let {
+                        binding.etFullname.setText(it.fullname)
+                        binding.etUsername.setText(it.username ?: "")
+                        binding.etPhone.setText(it.phone ?: "")
+                        binding.tvEmail.text = it.email
+                    }
+                }
+            }
         }
 
         binding.btnSave.setOnClickListener {
@@ -85,27 +92,29 @@ class ProfileFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is ProfileUiState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.btnSave.isEnabled = false
-                    }
-                    is ProfileUiState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnSave.isEnabled = true
-                        Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                        viewModel.resetToIdle()
-                    }
-                    is ProfileUiState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnSave.isEnabled = true
-                        Toast.makeText(context, "Update failed: ${state.message}", Toast.LENGTH_LONG).show()
-                        viewModel.resetToIdle()
-                    }
-                    is ProfileUiState.Idle -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnSave.isEnabled = true
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is ProfileUiState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.btnSave.isEnabled = false
+                        }
+                        is ProfileUiState.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.btnSave.isEnabled = true
+                            Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                            viewModel.resetToIdle()
+                        }
+                        is ProfileUiState.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.btnSave.isEnabled = true
+                            Toast.makeText(context, "Update failed: ${state.message}", Toast.LENGTH_LONG).show()
+                            viewModel.resetToIdle()
+                        }
+                        is ProfileUiState.Idle -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.btnSave.isEnabled = true
+                        }
                     }
                 }
             }

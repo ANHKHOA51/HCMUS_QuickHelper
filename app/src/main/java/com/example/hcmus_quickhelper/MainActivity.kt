@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.hcmus_quickhelper.core.auth.UserPreferences
+import com.example.hcmus_quickhelper.core.utils.LanguageUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -21,14 +24,18 @@ class MainActivity : AppCompatActivity() {
                 getFCMToken()
             } else {
                 Log.d("NOTI", "Permission denied")
-                // Có thể show dialog giải thích lại
             }
         }
+
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = UserPreferences(newBase)
+        val lang = prefs.getLanguageBlocking()
+        super.attachBaseContext(LanguageUtils.wrapContext(newBase, lang))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-
 
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
@@ -40,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
 
         bottomNav.setupWithNavController(navController)
 
@@ -87,8 +93,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_admin_statistic,
                 R.id.payment_admin_fragment,
                 R.id.voucher_management_fragment,
-                R.id.feed_detail_fragment, // Kept from dev
-                R.id.OTPFragment -> {      // Prioritized from feature/settings
+                R.id.feed_detail_fragment,
+                R.id.OTPFragment -> {
                     bottomNav.visibility = View.GONE
                 }
             else -> {
@@ -103,22 +109,18 @@ class MainActivity : AppCompatActivity() {
             when {
                 checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
                         == PackageManager.PERMISSION_GRANTED -> {
-                    // Đã có quyền
                     getFCMToken()
                 }
 
                 shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS) -> {
-                    // Giải thích trước khi xin
                     showPermissionDialog()
                 }
 
                 else -> {
-                    // Xin quyền trực tiếp
                     requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         } else {
-            // Android < 13
             getFCMToken()
         }
     }
@@ -140,12 +142,8 @@ class MainActivity : AppCompatActivity() {
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful) return@addOnCompleteListener
-
                 val token = task.result
                 Log.d("FCM_TOKEN", token)
-
-                // TODO: gửi token lên server của bạn
-                // sendTokenToServer(token)
             }
     }
 }

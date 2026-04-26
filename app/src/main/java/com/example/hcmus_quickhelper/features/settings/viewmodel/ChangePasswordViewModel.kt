@@ -22,8 +22,9 @@ class ChangePasswordViewModel(private val repository: AuthRepository) : ViewMode
     val uiState: LiveData<ChangePasswordUiState> = _uiState
 
     fun verifyOldPassword(oldPassword: String) {
-        val user = SessionManager.currentUser.value ?: return
-        if (user.password == oldPassword) {
+        // Manual verification against the current session's User object
+        val currentUser = SessionManager.currentUser.value
+        if (currentUser?.password == oldPassword) {
             _uiState.value = ChangePasswordUiState.Verified
         } else {
             _uiState.value = ChangePasswordUiState.Error("Incorrect current password")
@@ -31,18 +32,23 @@ class ChangePasswordViewModel(private val repository: AuthRepository) : ViewMode
     }
 
     fun updatePassword(newPassword: String) {
-        val user = SessionManager.currentUser.value ?: return
         viewModelScope.launch {
+            val user = SessionManager.currentUser.value ?: run {
+                _uiState.value = ChangePasswordUiState.Error("User session not found")
+                return@launch
+            }
             _uiState.value = ChangePasswordUiState.Loading
             val result = repository.updatePassword(user.id, newPassword)
-            result.onSuccess {
-                // Update local session
-                val updatedUser = user.copy(password = newPassword)
-                SessionManager.login(updatedUser)
-                _uiState.value = ChangePasswordUiState.Success
-            }.onFailure {
-                _uiState.value = ChangePasswordUiState.Error(it.localizedMessage ?: "Failed to update password")
-            }
+            result.fold(
+                onSuccess = {
+                    val updatedUser = user.copy(password = newPassword)
+                    SessionManager.updateCurrentUser(updatedUser)
+                    _uiState.value = ChangePasswordUiState.Success
+                },
+                onFailure = { error ->
+                    _uiState.value = ChangePasswordUiState.Error(error.localizedMessage ?: "Failed to update password")
+                }
+            )
         }
     }
 
@@ -50,11 +56,12 @@ class ChangePasswordViewModel(private val repository: AuthRepository) : ViewMode
         viewModelScope.launch {
             _uiState.value = ChangePasswordUiState.Loading
             val result = repository.updatePasswordByEmail(email, newPassword)
-            result.onSuccess {
-                _uiState.value = ChangePasswordUiState.Success
-            }.onFailure {
-                _uiState.value = ChangePasswordUiState.Error(it.localizedMessage ?: "Failed to update password")
-            }
+            result.fold(
+                onSuccess = { _uiState.value = ChangePasswordUiState.Success },
+                onFailure = { error ->
+                    _uiState.value = ChangePasswordUiState.Error(error.localizedMessage ?: "Failed to update password")
+                }
+            )
         }
     }
 

@@ -3,11 +3,12 @@ package com.example.hcmus_quickhelper.features.auth.repository
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
+import kotlinx.coroutines.flow.firstOrNull
 
 class AuthRepository(private val dataSource: AuthRemoteDataSource) {
-    suspend fun login(email: String, pass: String, fcmToken: String?): Result<User> {
+    suspend fun login(identifier: String, pass: String, fcmToken: String?): Result<User> {
         return try {
-            val user = dataSource.loginWithEmail(email, pass)
+            val user = dataSource.login(identifier, pass)
             fcmToken?.let { dataSource.saveFcmToken(user.id, it) } 
             SessionManager.login(user) 
             Result.success(user)
@@ -16,9 +17,28 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
         }
     }
 
-    suspend fun loginWithGoogle(idToken: String, fcmToken: String?): Result<User> {
+    suspend fun getUserByEmail(email: String): Result<User?> {
         return try {
-            val user = dataSource.loginWithGoogle(idToken)
+            val user = dataSource.getUserByEmail(email)
+            Result.success(user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun verifyOldPassword(oldPass: String): Result<Unit> {
+        return try {
+            val currentUser = SessionManager.currentUser.value ?: throw Exception("User not logged in")
+            val isCorrect = dataSource.verifyPassword(currentUser.email, oldPass)
+            if (isCorrect) Result.success(Unit) else Result.failure(Exception("Incorrect current password"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun loginWithGoogle(email: String, fcmToken: String?): Result<User> {
+        return try {
+            val user = dataSource.getUserByEmail(email) ?: throw Exception("No account found for this Google email")
             fcmToken?.let { dataSource.saveFcmToken(user.id, it) }
             SessionManager.login(user)
             Result.success(user)
@@ -27,9 +47,9 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
         }
     }
 
-    suspend fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null): Result<Unit> {
+    suspend fun register(email: String, pass: String, fullname: String, phone: String, username: String? = null, role: String = "CUSTOMER"): Result<Unit> {
         return try {
-            dataSource.registerWithEmail(email, pass, fullname, phone, username)
+            dataSource.registerWithEmail(email, pass, fullname, phone, username, role)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

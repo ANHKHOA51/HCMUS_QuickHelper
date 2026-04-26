@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">HCMUS_QuickHelper</string>
+    <string name="login_title">Chào mừng trở lại</string>
+    <string name="login_subtitle">Đăng nhập vào tài khoản của bạn</string>
+    <string name="register_title">Tạo tài khoản</string>
+    <string name="register_subtitle">Điền thông tin bên dưới hoặc đăng ký bằng tài khoản mạng xã hội</string>
+    <string name="tab_login">Đăng nhập</string>
+    <string name="tab_register">Đăng ký</string>
+    <string name="label_email">Email</string>
+    <string name="hint_email">Nhập email của bạn</string>
+    <string name="label_email_phone">Email hoặc Số điện thoại</string>
+    <string name="hint_email_phone">Nhập email của bạn</string>
+    <string name="label_fullname">Họ và tên</string>
+    <string name="hint_fullname">Nhập họ và tên của bạn</string>
+    <string name="label_phone">Số điện thoại</string>
+    <string name="hint_phone">Nhập số điện thoại của bạn</string>
+    <string name="label_password">Mật khẩu</string>
+    <string name="hint_password">Nhập mật khẩu của bạn</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="or_continue_with">Hoặc tiếp tục với</string>
+    <string name="google">Google</string>
+    <string name="touch_id">Touch ID</string>
+    <string name="terms_note">Bằng cách tiếp tục, bạn đồng ý với Điều khoản dịch vụ của chúng tôi</string>
+    <string name="select_language">Chọn ngôn ngữ</string>
+    <string name="cancel">Hủy</string>
+    <string name="language_changed">Ngôn ngữ đã thay đổi thành %1$s</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="settings">Cài đặt</string>
+    <string name="edit_profile">Chỉnh sửa hồ sơ</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="notifications">Thông báo</string>
+    <string name="email_notifications">Thông báo Email</string>
+    <string name="device_notifications">Thông báo thiết bị</string>
+    <string name="logout">Đăng xuất</string>
+</resources>

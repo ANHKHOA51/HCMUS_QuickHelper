@@ -22,10 +22,11 @@
             app:tint="@color/black" />
 
         <TextView
+            android:id="@+id/tvSettingsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -59,10 +60,11 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tvEditProfile"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Edit Profile"
+                        android:text="@string/edit_profile"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -78,6 +80,38 @@
                 android:id="@+id/cvChangePassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvChangePassword"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/change_password"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_media_play"
+                        app:tint="@color/gray_hint" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
@@ -90,12 +124,21 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tvLanguage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Change Password"
+                        android:text="@string/language"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentLanguage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="English"
+                        android:textColor="@color/gray_hint"
+                        android:layout_marginEnd="8dp" />
 
                     <ImageView
                         android:layout_width="24dp"
@@ -106,9 +149,10 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
+                android:id="@+id/tvNotifications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notifications"
+                android:text="@string/notifications"
                 android:textColor="@color/gray_hint"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"/>
@@ -117,7 +161,7 @@
                 android:id="@+id/switchEmailNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email Notifications"
+                android:text="@string/email_notifications"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:checked="true"
@@ -127,7 +171,7 @@
                 android:id="@+id/switchDeviceNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Device Notifications"
+                android:text="@string/device_notifications"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:checked="true"
@@ -142,7 +186,7 @@
         android:layout_height="56dp"
         android:layout_margin="16dp"
         android:backgroundTint="@color/white"
-        android:text="Log Out"
+        android:text="@string/logout"
         android:textColor="@android:color/holo_red_dark"
         android:textStyle="bold"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"

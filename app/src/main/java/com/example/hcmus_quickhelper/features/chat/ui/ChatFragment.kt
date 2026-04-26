@@ -95,8 +95,6 @@ class ChatFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             if (conversationId == null) return@setOnClickListener
 
-//            val conversationId = arguments?.getInt("conversationId") ?: return@setOnClickListener
-
             val content = binding.etMessage.text.toString().trim()
 
             if (content.isEmpty()) return@setOnClickListener
