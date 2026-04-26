@@ -70,7 +70,7 @@ class ChangePasswordFragment : Fragment() {
             if (oldPass.isNotEmpty()) {
                 viewModel.verifyOldPassword(oldPass)
             } else {
-                Toast.makeText(context, "Please enter your current password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_enter_current_password), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -85,7 +85,7 @@ class ChangePasswordFragment : Fragment() {
                     )
                     findNavController().navigate(action)
                 } else {
-                    Toast.makeText(context, "Unable to identify user session", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.error_identify_session), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -95,7 +95,7 @@ class ChangePasswordFragment : Fragment() {
             val confirmPass = binding.etConfirmPassword.text.toString()
 
             if (newPass.length < 6) {
-                Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_password_min_length), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -106,7 +106,7 @@ class ChangePasswordFragment : Fragment() {
                     viewModel.updatePassword(newPass)
                 }
             } else {
-                Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_passwords_dont_match), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -125,7 +125,7 @@ class ChangePasswordFragment : Fragment() {
                 }
                 is ChangePasswordUiState.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(context, "Password updated successfully!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.password_updated_success), Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
                 is ChangePasswordUiState.Error -> {

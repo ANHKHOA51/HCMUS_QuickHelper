@@ -34,4 +34,28 @@
     <string name="email_notifications">Thông báo Email</string>
     <string name="device_notifications">Thông báo thiết bị</string>
     <string name="logout">Đăng xuất</string>
+
+    <!-- Profile -->
+    <string name="username">Tên đăng nhập</string>
+    <string name="hint_username">Nhập tên đăng nhập</string>
+    <string name="save_changes">Lưu thay đổi</string>
+    <string name="error_empty_fullname">Họ tên không được để trống</string>
+    <string name="profile_updated_success">Cập nhật hồ sơ thành công!</string>
+    <string name="update_failed">Cập nhật thất bại: %1$s</string>
+
+    <!-- Change Password -->
+    <string name="current_password">Mật khẩu hiện tại</string>
+    <string name="hint_current_password">Nhập mật khẩu hiện tại</string>
+    <string name="verify">Xác minh</string>
+    <string name="forgot_password_send_otp">Quên mật khẩu? Gửi OTP</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="hint_new_password">Nhập mật khẩu mới</string>
+    <string name="confirm_new_password">Xác nhận mật khẩu mới</string>
+    <string name="hint_confirm_new_password">Xác nhận mật khẩu mới</string>
+    <string name="save_new_password">Lưu mật khẩu mới</string>
+    <string name="error_enter_current_password">Vui lòng nhập mật khẩu hiện tại</string>
+    <string name="error_password_min_length">Mật khẩu phải có ít nhất 6 ký tự</string>
+    <string name="error_passwords_dont_match">Mật khẩu không khớp</string>
+    <string name="password_updated_success">Cập nhật mật khẩu thành công!</string>
+    <string name="error_identify_session">Không thể xác định phiên người dùng</string>
 </resources>

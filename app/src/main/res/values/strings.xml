@@ -34,4 +34,28 @@
     <string name="email_notifications">Email Notifications</string>
     <string name="device_notifications">Device Notifications</string>
     <string name="logout">Log Out</string>
+
+    <!-- Profile -->
+    <string name="username">Username</string>
+    <string name="hint_username">Enter username</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="error_empty_fullname">Full name cannot be empty</string>
+    <string name="profile_updated_success">Profile updated successfully!</string>
+    <string name="update_failed">Update failed: %1$s</string>
+
+    <!-- Change Password -->
+    <string name="current_password">Current Password</string>
+    <string name="hint_current_password">Enter current password</string>
+    <string name="verify">Verify</string>
+    <string name="forgot_password_send_otp">Forgot Password? Send OTP</string>
+    <string name="new_password">New Password</string>
+    <string name="hint_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="hint_confirm_new_password">Confirm new password</string>
+    <string name="save_new_password">Save New Password</string>
+    <string name="error_enter_current_password">Please enter your current password</string>
+    <string name="error_password_min_length">Password must be at least 6 characters</string>
+    <string name="error_passwords_dont_match">Passwords do not match</string>
+    <string name="password_updated_success">Password updated successfully!</string>
+    <string name="error_identify_session">Unable to identify user session</string>
 </resources>

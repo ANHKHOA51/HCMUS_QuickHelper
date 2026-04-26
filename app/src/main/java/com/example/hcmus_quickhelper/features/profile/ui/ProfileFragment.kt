@@ -81,7 +81,7 @@ class ProfileFragment : Fragment() {
             if (fullname.isNotEmpty()) {
                 viewModel.saveProfile(username, fullname, phone)
             } else {
-                Toast.makeText(context, "Full name cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_empty_fullname), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -102,13 +102,13 @@ class ProfileFragment : Fragment() {
                         is ProfileUiState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.btnSave.isEnabled = true
-                            Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, getString(R.string.profile_updated_success), Toast.LENGTH_SHORT).show()
                             viewModel.resetToIdle()
                         }
                         is ProfileUiState.Error -> {
                             binding.progressBar.visibility = View.GONE
                             binding.btnSave.isEnabled = true
-                            Toast.makeText(context, "Update failed: ${state.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, getString(R.string.update_failed, state.message), Toast.LENGTH_LONG).show()
                             viewModel.resetToIdle()
                         }
                         is ProfileUiState.Idle -> {

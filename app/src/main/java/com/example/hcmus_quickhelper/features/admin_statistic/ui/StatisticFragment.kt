@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.SessionManager
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.data.Entry
+import kotlinx.coroutines.launch
 
 class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
 
@@ -70,8 +72,10 @@ class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
         binding.btnManageVoucher.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_voucher_management_fragment) }
 
         binding.btnLogout.setOnClickListener {
-            SessionManager.logout()
-            findNavController().navigate(R.id.action_fragment_admin_statistic_to_login_fragment)
+            viewLifecycleOwner.lifecycleScope.launch {
+                SessionManager.logout()
+                findNavController().navigate(R.id.action_fragment_admin_statistic_to_login_fragment)
+            }
         }
     }
 
