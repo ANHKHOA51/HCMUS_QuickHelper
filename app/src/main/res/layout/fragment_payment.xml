@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_weight="1"
-            android:text="Thanh toán"
+            android:text="@string/title_payment"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -80,7 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Tóm tắt dịch vụ"
+                            android:text="@string/summary_service"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -119,7 +119,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Địa chỉ: "
+                            android:text="@string/label_address"
                             app:layout_constraintStart_toStartOf="@+id/tvServiceName"
                             app:layout_constraintTop_toBottomOf="@+id/tvServiceName" />
 
@@ -140,7 +140,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="10dp"
-                            android:text="Ngày: "
+                            android:text="@string/label_date"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView20"
                             app:layout_constraintTop_toBottomOf="@+id/textView20" />
@@ -186,7 +186,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Người giúp việc"
+                            android:text="@string/label_helper_info"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -201,7 +201,7 @@
                             android:id="@+id/tvHelperLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Họ và tên:"
+                            android:text="@string/label_helper_name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -220,7 +220,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Đánh giá:"
+                            android:text="@string/label_rating"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvHelperLabel" />
 
@@ -270,7 +270,7 @@
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:text="Voucher" />
+                            android:text="@string/label_voucher" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -301,7 +301,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:text="Mã giảm giá" />
+                            android:text="@string/label_discount_code" />
 
                         <ImageView
                             android:id="@+id/imageView10"
@@ -388,7 +388,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Phương thức thanh toán"
+                            android:text="@string/label_payment_method"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -407,7 +407,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:buttonTint="@color/orange_primary"
-                            android:text="Tiền mặt"
+                            android:text="@string/payment_cash"
                             android:checked="true" />
                         <RadioButton
                             android:id="@+id/rbMoMo"
@@ -415,7 +415,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:buttonTint="@color/orange_primary"
-                            android:text="Ví MoMo" />
+                            android:text="@string/payment_momo" />
 
                         <RadioButton
                             android:id="@+id/rbBankTransfer"
@@ -423,7 +423,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:buttonTint="@color/orange_primary"
-                            android:text="Chuyển khoản ngân hàng" />
+                            android:text="@string/payment_bank" />
 
                         <RadioButton
                             android:id="@+id/rbCreditCard"
@@ -431,7 +431,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:buttonTint="@color/orange_primary"
-                            android:text="Thẻ tín dụng" />
+                            android:text="@string/payment_card" />
 
                     </RadioGroup>
 
@@ -468,7 +468,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:text="Chi tiết thanh toán"
+                            android:text="@string/label_payment_details"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -478,7 +478,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="Giá dịch vụ"
+                        android:text="@string/label_service_price"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
@@ -533,7 +533,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Khuyến mãi"
+                        android:text="@string/label_discount"
                         app:layout_constraintStart_toStartOf="@+id/textView19"
                         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
@@ -550,7 +550,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:text="Tổng cộng"
+                        android:text="@string/label_total"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
@@ -596,7 +596,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_margin="20dp"
-                android:text="Xác nhận và thanh toán"
+                android:text="@string/btn_confirm_payment"
                 app:layout_constraintTop_toBottomOf="@+id/tvResultPrice"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

@@ -27,7 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Dashboard Đối tác"
+                android:text="@string/partner_dashboard"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -63,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Thống kê theo"
+                android:text="@string/statistics_by"
                 android:textSize="16sp" />
 
             <androidx.cardview.widget.CardView
@@ -113,7 +113,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Doanh thu dự kiến"
+                        android:text="@string/expected_revenue"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -172,7 +172,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Yêu cầu"
+                            android:text="@string/requests"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -213,7 +213,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Đánh giá"
+                            android:text="@string/rating"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -230,7 +230,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Lịch"
+                    android:text="@string/schedule"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -240,7 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="Xem tất cả"
+                    android:text="@string/view_all"
                     android:textColor="@color/orange_primary"
                     android:textSize="14sp"
                     android:textStyle="bold" />

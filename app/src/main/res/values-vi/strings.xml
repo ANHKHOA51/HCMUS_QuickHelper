@@ -58,4 +58,159 @@
     <string name="error_passwords_dont_match">Mật khẩu không khớp</string>
     <string name="password_updated_success">Cập nhật mật khẩu thành công!</string>
     <string name="error_identify_session">Không thể xác định phiên người dùng</string>
+
+    <!-- Home -->
+    <string name="greeting_user">Chào %1$s</string>
+    <string name="home_subtitle">Bạn cần giúp đỡ việc gì hôm nay nào?</string>
+    <string name="search_hint">Tìm dịch vụ, người giúp việc...</string>
+    <string name="popular_services">Dịch vụ phổ biến</string>
+    <string name="view_all">Xem tất cả</string>
+    <string name="offers_for_you">Ưu đãi cho bạn</string>
+    <string name="all">Tất cả</string>
+    <string name="top_helpers">Người giúp việc ưu tú</string>
+    <string name="trust_banner_title">An tâm tuyệt đối</string>
+    <string name="trust_banner_desc">Mọi người giúp việc đều được xác minh danh tính và tay nghề kĩ lưỡng.</string>
+
+    <!-- Dashboard Helper -->
+    <string name="partner_dashboard">Dashboard Đối tác</string>
+    <string name="statistics_by">Thống kê theo</string>
+    <string name="expected_revenue">Doanh thu dự kiến</string>
+    <string name="requests">Yêu cầu</string>
+    <string name="rating">Đánh giá</string>
+    <string name="schedule">Lịch</string>
+
+    <!-- OTP -->
+    <string name="verify_email">Xác minh Email</string>
+    <string name="otp_subtitle">Vui lòng nhập mã 6 chữ số đã được gửi đến email của bạn</string>
+    <string name="invalid_otp">Mã OTP không hợp lệ</string>
+    <string name="resending_code">Đang gửi lại mã...</string>
+    <string name="otp_email_subject_reset">Mã OTP đặt lại mật khẩu</string>
+    <string name="otp_email_subject_verify">Mã xác minh của bạn</string>
+    <string name="otp_email_body_reset">Mã OTP để đặt lại mật khẩu HCMUS QuickHelper của bạn là: %1$s</string>
+    <string name="otp_email_body_verify">Mã OTP của bạn là: %1$s. Vui lòng nhập mã này vào ứng dụng HCMUS QuickHelper.</string>
+    <string name="otp_sent_success">Đã gửi mã OTP đến %1$s</string>
+    <string name="otp_send_failed">Không thể gửi email tự động.</string>
+    <string name="registration_successful">Đăng ký thành công!</string>
+    <string name="error_user_exists">Email này đã được đăng ký. Vui lòng thử đăng nhập.</string>
+    <string name="error_prefix">Lỗi: %1$s</string>
+
+    <!-- Service List -->
+    <string name="title_find_expert">Tìm chuyên gia</string>
+    <string name="hint_search_service">Bạn đang tìm dịch vụ gì?</string>
+    <string name="filter_price_low_high">Giá: Thấp - Cao</string>
+    <string name="filter_rating_high">Đánh giá 4.5+</string>
+    <string name="result_count_format">Tìm thấy %1$d chuyên gia phù hợp</string>
+    <string name="sort_best_match">Sắp xếp: Phù hợp nhất</string>
+
+    <!-- Chat -->
+    <string name="title_messages">Tin nhắn</string>
+    <string name="hint_type_message">Nhập tin nhắn...</string>
+    <string name="label_eta">Thời gian đến dự kiến: %1$s</string>
+    <string name="label_arriving">Đang đến</string>
+
+    <!-- Auth -->
+    <string name="error_fill_all_fields">Vui lòng điền đầy đủ các trường bắt buộc</string>
+    <string name="welcome_user">Chào mừng trở lại, %1$s</string>
+    <string name="error_invalid_credentials">Email/số điện thoại hoặc mật khẩu không hợp lệ</string>
+    <string name="error_connection">Lỗi kết nối</string>
+    <string name="sign_in_with_google">Đăng nhập với Google</string>
+    <string name="hint_username_optional">Tên đăng nhập (Tùy chọn)</string>
+    <string name="label_register_as">Đăng ký với tư cách</string>
+    <string name="role_customer">Khách hàng</string>
+    <string name="role_helper">Người giúp việc</string>
+
+    <!-- Community -->
+    <string name="hint_search_posts">Tìm kiếm bài viết cộng đồng...</string>
+    <string name="chip_all_posts">Tất cả bài viết</string>
+    <string name="chip_popular">Phổ biến</string>
+    <string name="title_community">Cộng đồng</string>
+    <string name="title_create_post">Tạo bài viết</string>
+    <string name="hint_post_content">Bạn đang nghĩ gì?...</string>
+    <string name="btn_post">Đăng</string>
+    <string name="title_post_detail">Chi tiết bài đăng</string>
+    <string name="hint_write_comment">Viết bình luận...</string>
+    <string name="label_share">Chia sẻ</string>
+
+    <!-- Booking -->
+    <string name="title_booking">Đặt dịch vụ</string>
+    <string name="label_required_service">Dịch vụ yêu cầu</string>
+    <string name="btn_select_date">Chọn ngày</string>
+    <string name="btn_select_time">Chọn giờ</string>
+    <string name="label_hours">Số giờ</string>
+    <string name="label_additional_note">Ghi chú thêm</string>
+    <string name="label_location">Địa điểm</string>
+    <string name="hint_search_address">Tìm kiếm địa chỉ...</string>
+    <string name="label_total_price">Tổng tiền tạm tính</string>
+    <string name="btn_confirm">Xác nhận</string>
+
+    <!-- Booking History -->
+    <string name="title_history">Lịch sử</string>
+    <string name="title_booking_history">Lịch sử đặt lịch</string>
+    <string name="history_subtitle">Theo dõi và quản lý các dịch vụ nhà cửa của bạn.</string>
+    <string name="tab_ongoing">Đang thực hiện</string>
+    <string name="tab_completed">Đã hoàn thành</string>
+    <string name="tab_cancelled">Đã hủy</string>
+
+    <!-- Tracking -->
+    <string name="title_tracking">Theo dõi dịch vụ</string>
+    <string name="label_helper">Người hỗ trợ</string>
+    <string name="btn_chat">Nhắn tin</string>
+    <string name="label_service_details">Chi tiết dịch vụ</string>
+    <string name="label_work_evidence">Minh chứng công việc</string>
+    <string name="msg_no_evidence">Helper chưa tải lên minh chứng nào.</string>
+    <string name="btn_go_to_payment">Chuyển đến Thanh toán</string>
+    <string name="btn_back_to_home">Về trang chủ</string>
+    <string name="status_pending">Đang chờ xác nhận</string>
+    <string name="status_rejected">Booking đã bị từ chối</string>
+    <string name="status_confirmed">Đã xác nhận - Chờ thực hiện</string>
+    <string name="status_in_progress">Đang thực hiện</string>
+    <string name="status_completed">Công việc đã hoàn tất</string>
+    <string name="paid">Đã thanh toán</string>
+    <string name="service_label">Dịch vụ: %1$s</string>
+    <string name="time_label">Thời gian: %1$s</string>
+    <string name="address_label">Địa điểm: %1$s</string>
+    <string name="hours_label">Số giờ làm: %1$d giờ</string>
+    <string name="note_label">Ghi chú: %1$s</string>
+    <string name="no_note">Không có</string>
+
+    <!-- Payment -->
+    <string name="title_payment">Thanh toán</string>
+    <string name="summary_service">Tóm tắt dịch vụ</string>
+    <string name="label_address">Địa chỉ: </string>
+    <string name="label_date">Ngày: </string>
+    <string name="label_helper_info">Người giúp việc</string>
+    <string name="label_helper_name">Họ và tên:</string>
+    <string name="label_rating">Đánh giá:</string>
+    <string name="label_voucher">Voucher</string>
+    <string name="label_discount_code">Mã giảm giá</string>
+    <string name="label_payment_method">Phương thức thanh toán</string>
+    <string name="payment_cash">Tiền mặt</string>
+    <string name="payment_momo">Ví MoMo</string>
+    <string name="payment_bank">Chuyển khoản ngân hàng</string>
+    <string name="payment_card">Thẻ tín dụng</string>
+    <string name="label_payment_details">Chi tiết thanh toán</string>
+    <string name="label_service_price">Giá dịch vụ</string>
+    <string name="label_discount">Khuyến mãi</string>
+    <string name="label_total">Tổng cộng</string>
+    <string name="btn_confirm_payment">Xác nhận và thanh toán</string>
+    <string name="error_select_payment_method">Vui lòng chọn phương thức thanh toán</string>
+    <string name="label_discount_format">giảm %1$s</string>
+
+    <!-- Voucher Selection -->
+    <string name="title_select_voucher">Chọn Voucher</string>
+    <string name="label_your_vouchers">Voucher của bạn</string>
+    <string name="label_all_vouchers">Tất cả (%1$d)</string>
+    <string name="label_savings">Tiết kiệm được</string>
+
+    <!-- Receipt & Rating -->
+    <string name="title_receipt">Hóa đơn</string>
+    <string name="status_payment">Trạng thái thanh toán</string>
+    <string name="label_receipt_id">Mã hóa đơn: %1$s</string>
+    <string name="label_duration">Thời gian</string>
+    <string name="label_voucher_discount">Voucher giảm giá</string>
+    <string name="btn_go_to_rating">Đánh giá dịch vụ</string>
+    <string name="title_rate_service">Đánh giá dịch vụ</string>
+    <string name="hint_feedback">Chia sẻ trải nghiệm của bạn...</string>
+    <string name="btn_send_rating">Gửi đánh giá</string>
+    <string name="msg_rating_thanks">Cảm ơn bạn đã đánh giá dịch vụ của chúng tôi!</string>
 </resources>

@@ -99,7 +99,7 @@ class ServiceListFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.helpers.observe(viewLifecycleOwner) { list ->
             adapter.updateData(list)
-            binding.tvResultCount.text = "Tìm thấy ${list.size} chuyên gia phù hợp"
+            binding.tvResultCount.text = getString(R.string.result_count_format, list.size)
         }
     }
 

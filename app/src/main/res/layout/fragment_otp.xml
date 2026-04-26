@@ -20,7 +20,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Verify Email"
+        android:text="@string/verify_email"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:gravity="center"
-        android:text="Please enter the 6-digit code sent to your email"
+        android:text="@string/otp_subtitle"
         android:textColor="@color/gray_hint"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
@@ -61,7 +61,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/orange_primary"
-        android:text="Verify"
+        android:text="@string/verify"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/etOtp" />
@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Resend Code"
+        android:text="@string/forgot_password_send_otp"
         android:textColor="@color/orange_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

@@ -235,7 +235,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Sign in with Google"
+                    android:text="@string/sign_in_with_google"
                     android:textColor="#1f1f1f"
                     android:textSize="14sp" />
             </LinearLayout>

@@ -22,12 +22,17 @@ class ChangePasswordViewModel(private val repository: AuthRepository) : ViewMode
     val uiState: LiveData<ChangePasswordUiState> = _uiState
 
     fun verifyOldPassword(oldPassword: String) {
-        // Manual verification against the current session's User object
-        val currentUser = SessionManager.currentUser.value
-        if (currentUser?.password == oldPassword) {
-            _uiState.value = ChangePasswordUiState.Verified
-        } else {
-            _uiState.value = ChangePasswordUiState.Error("Incorrect current password")
+        viewModelScope.launch {
+            _uiState.value = ChangePasswordUiState.Loading
+            val result = repository.verifyOldPassword(oldPassword)
+            result.fold(
+                onSuccess = {
+                    _uiState.value = ChangePasswordUiState.Verified
+                },
+                onFailure = { error ->
+                    _uiState.value = ChangePasswordUiState.Error(error.localizedMessage ?: "Incorrect current password")
+                }
+            )
         }
     }
 

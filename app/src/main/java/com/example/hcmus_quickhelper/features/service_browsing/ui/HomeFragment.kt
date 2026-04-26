@@ -136,7 +136,7 @@ class HomeFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.userProfile.observe(viewLifecycleOwner) { user ->
-            tvGreeting.text = "Chào ${user?.fullname}"
+            tvGreeting.text = getString(R.string.greeting_user, user?.fullname ?: "")
         }
 
         viewModel.vouchers.observe(viewLifecycleOwner) { vouchers ->

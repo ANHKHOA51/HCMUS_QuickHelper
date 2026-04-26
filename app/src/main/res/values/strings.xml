@@ -58,4 +58,159 @@
     <string name="error_passwords_dont_match">Passwords do not match</string>
     <string name="password_updated_success">Password updated successfully!</string>
     <string name="error_identify_session">Unable to identify user session</string>
+
+    <!-- Home -->
+    <string name="greeting_user">Hello %1$s</string>
+    <string name="home_subtitle">How can we help you today?</string>
+    <string name="search_hint">Search services, helpers...</string>
+    <string name="popular_services">Popular Services</string>
+    <string name="view_all">View all</string>
+    <string name="offers_for_you">Offers for you</string>
+    <string name="all">All</string>
+    <string name="top_helpers">Top Helpers</string>
+    <string name="trust_banner_title">Absolute Peace of Mind</string>
+    <string name="trust_banner_desc">Every helper is identity-verified and thoroughly vetted.</string>
+
+    <!-- Dashboard Helper -->
+    <string name="partner_dashboard">Partner Dashboard</string>
+    <string name="statistics_by">Statistics by</string>
+    <string name="expected_revenue">Expected Revenue</string>
+    <string name="requests">Requests</string>
+    <string name="rating">Rating</string>
+    <string name="schedule">Schedule</string>
+
+    <!-- OTP -->
+    <string name="verify_email">Verify Email</string>
+    <string name="otp_subtitle">Please enter the 6-digit code sent to your email</string>
+    <string name="invalid_otp">Invalid OTP</string>
+    <string name="resending_code">Resending code...</string>
+    <string name="otp_email_subject_reset">Password Reset OTP</string>
+    <string name="otp_email_subject_verify">Your Verification Code</string>
+    <string name="otp_email_body_reset">Your OTP for resetting your HCMUS QuickHelper password is: %1$s</string>
+    <string name="otp_email_body_verify">Your OTP code is: %1$s. Please enter this in the HCMUS QuickHelper app.</string>
+    <string name="otp_sent_success">OTP sent to %1$s</string>
+    <string name="otp_send_failed">Failed to send email automatically.</string>
+    <string name="registration_successful">Registration Successful!</string>
+    <string name="error_user_exists">This email is already registered. Please try logging in.</string>
+    <string name="error_prefix">Error: %1$s</string>
+
+    <!-- Service List -->
+    <string name="title_find_expert">Find Experts</string>
+    <string name="hint_search_service">What service are you looking for?</string>
+    <string name="filter_price_low_high">Price: Low - High</string>
+    <string name="filter_rating_high">Rating 4.5+</string>
+    <string name="result_count_format">Found %1$d suitable experts</string>
+    <string name="sort_best_match">Sort: Best Match</string>
+
+    <!-- Chat -->
+    <string name="title_messages">Messages</string>
+    <string name="hint_type_message">Type a message...</string>
+    <string name="label_eta">ETA: %1$s</string>
+    <string name="label_arriving">Arriving</string>
+
+    <!-- Auth -->
+    <string name="error_fill_all_fields">Please fill in all required fields</string>
+    <string name="welcome_user">Welcome back, %1$s</string>
+    <string name="error_invalid_credentials">Invalid email/phone or password</string>
+    <string name="error_connection">Connection error</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="hint_username_optional">Username (Optional)</string>
+    <string name="label_register_as">Register as</string>
+    <string name="role_customer">Customer</string>
+    <string name="role_helper">Helper</string>
+
+    <!-- Community -->
+    <string name="hint_search_posts">Search community posts...</string>
+    <string name="chip_all_posts">All Posts</string>
+    <string name="chip_popular">Popular</string>
+    <string name="title_community">Community</string>
+    <string name="title_create_post">Create Post</string>
+    <string name="hint_post_content">What\'s on your mind?...</string>
+    <string name="btn_post">Post</string>
+    <string name="title_post_detail">Post Detail</string>
+    <string name="hint_write_comment">Write a comment...</string>
+    <string name="label_share">Share</string>
+
+    <!-- Booking -->
+    <string name="title_booking">Book Service</string>
+    <string name="label_required_service">Required Service</string>
+    <string name="btn_select_date">Select Date</string>
+    <string name="btn_select_time">Select Time</string>
+    <string name="label_hours">Hours</string>
+    <string name="label_additional_note">Additional Note</string>
+    <string name="label_location">Location</string>
+    <string name="hint_search_address">Search address...</string>
+    <string name="label_total_price">Total (Estimated)</string>
+    <string name="btn_confirm">Confirm</string>
+
+    <!-- Booking History -->
+    <string name="title_history">History</string>
+    <string name="title_booking_history">Booking History</string>
+    <string name="history_subtitle">Track and manage your home services.</string>
+    <string name="tab_ongoing">Ongoing</string>
+    <string name="tab_completed">Completed</string>
+    <string name="tab_cancelled">Cancelled</string>
+
+    <!-- Tracking -->
+    <string name="title_tracking">Service Tracking</string>
+    <string name="label_helper">Helper</string>
+    <string name="btn_chat">Chat</string>
+    <string name="label_service_details">Service Details</string>
+    <string name="label_work_evidence">Work Evidence</string>
+    <string name="msg_no_evidence">Helper has not uploaded any evidence yet.</string>
+    <string name="btn_go_to_payment">Go to Payment</string>
+    <string name="btn_back_to_home">Back to Home</string>
+    <string name="status_pending">Awaiting confirmation</string>
+    <string name="status_rejected">Booking rejected</string>
+    <string name="status_confirmed">Confirmed - Awaiting execution</string>
+    <string name="status_in_progress">In Progress</string>
+    <string name="status_completed">Work Completed</string>
+    <string name="paid">Paid</string>
+    <string name="service_label">Service: %1$s</string>
+    <string name="time_label">Time: %1$s</string>
+    <string name="address_label">Address: %1$s</string>
+    <string name="hours_label">Hours: %1$d hours</string>
+    <string name="note_label">Note: %1$s</string>
+    <string name="no_note">None</string>
+
+    <!-- Payment -->
+    <string name="title_payment">Payment</string>
+    <string name="summary_service">Service Summary</string>
+    <string name="label_address">Address: </string>
+    <string name="label_date">Date: </string>
+    <string name="label_helper_info">Helper Information</string>
+    <string name="label_helper_name">Full Name:</string>
+    <string name="label_rating">Rating:</string>
+    <string name="label_voucher">Voucher</string>
+    <string name="label_discount_code">Discount Code</string>
+    <string name="label_payment_method">Payment Method</string>
+    <string name="payment_cash">Cash</string>
+    <string name="payment_momo">MoMo Wallet</string>
+    <string name="payment_bank">Bank Transfer</string>
+    <string name="payment_card">Credit Card</string>
+    <string name="label_payment_details">Payment Details</string>
+    <string name="label_service_price">Service Price</string>
+    <string name="label_discount">Discount</string>
+    <string name="label_total">Total</string>
+    <string name="btn_confirm_payment">Confirm and Pay</string>
+    <string name="error_select_payment_method">Please select a payment method</string>
+    <string name="label_discount_format">off %1$s</string>
+
+    <!-- Voucher Selection -->
+    <string name="title_select_voucher">Select Voucher</string>
+    <string name="label_your_vouchers">Your Vouchers</string>
+    <string name="label_all_vouchers">All (%1$d)</string>
+    <string name="label_savings">Total Savings</string>
+
+    <!-- Receipt & Rating -->
+    <string name="title_receipt">Receipt</string>
+    <string name="status_payment">Payment Status</string>
+    <string name="label_receipt_id">Receipt ID: %1$s</string>
+    <string name="label_duration">Duration</string>
+    <string name="label_voucher_discount">Voucher Discount</string>
+    <string name="btn_go_to_rating">Rate Service</string>
+    <string name="title_rate_service">Rate Service</string>
+    <string name="hint_feedback">Share your experience...</string>
+    <string name="btn_send_rating">Send Rating</string>
+    <string name="msg_rating_thanks">Thank you for rating our service!</string>
 </resources>
