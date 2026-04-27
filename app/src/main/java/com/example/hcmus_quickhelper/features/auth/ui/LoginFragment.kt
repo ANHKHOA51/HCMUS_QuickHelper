@@ -178,7 +178,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToDashboard(role: String) {
-        if (role == UserRole.HELPER.toString()) {
+        if (role == UserRole.ADMIN.toString()) {
+            findNavController().navigate(R.id.action_login_admin)
+        }
+        else if (role == UserRole.HELPER.toString()) {
             findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
         } else {
             findNavController().navigate(R.id.home_fragment)

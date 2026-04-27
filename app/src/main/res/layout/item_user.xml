@@ -16,15 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="?attr/selectableItemBackground"> <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivUserAvatar"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/CircleImageViewStyle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        android:background="?attr/selectableItemBackground">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivUserAvatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tvUserFullName"
@@ -50,12 +50,28 @@
             android:background="@drawable/bg_pill_light_orange"
             android:paddingHorizontal="8dp"
             android:paddingVertical="2dp"
-            android:textColor="#E56B3D"
+            android:textColor="@color/orange_primary"
             android:textSize="11sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvUserFullName"
             app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
-            tools:text="HELPER" />
+            tools:text="#HELPER" />
+
+        <TextView
+            android:id="@+id/tvUserBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_pill_light_red"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tvUserRole"
+            app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
+            tools:text="BLOCKED" />
 
         <TextView
             android:id="@+id/tvUserPhone"
@@ -69,6 +85,7 @@
             android:textColor="#6C757D"
             android:textSize="13sp"
             app:drawableStartCompat="@drawable/ic_phone"
+            android:gravity="center_vertical"
             app:drawableTint="#6C757D"
             app:layout_constraintEnd_toStartOf="@id/tvUserRating"
             app:layout_constraintStart_toStartOf="@id/tvUserFullName"
@@ -85,8 +102,10 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="#6C757D"
+            android:gravity="center_vertical"
             android:textSize="13sp"
-            app:drawableStartCompat="@drawable/ic_email" app:drawableTint="#6C757D"
+            app:drawableStartCompat="@drawable/ic_email"
+            app:drawableTint="#6C757D"
             app:layout_constraintEnd_toStartOf="@id/tvUserRating"
             app:layout_constraintStart_toStartOf="@id/tvUserFullName"
             app:layout_constraintTop_toBottomOf="@id/tvUserPhone"
@@ -100,6 +119,7 @@
             android:textColor="#FFB300"
             android:textSize="13sp"
             android:textStyle="bold"
+            android:gravity="center_vertical"
             app:drawableStartCompat="@drawable/ic_star"
             app:drawableTint="#FFB300"
             app:layout_constraintBottom_toBottomOf="@id/tvUserEmail" app:layout_constraintEnd_toEndOf="parent"

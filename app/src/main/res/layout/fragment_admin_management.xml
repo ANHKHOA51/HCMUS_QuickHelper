@@ -133,7 +133,8 @@
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false"
                     android:paddingBottom="16dp"
-                    tools:listitem="@layout/item_post_normal" /> </LinearLayout>
+                    tools:listitem="@layout/item_user" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llTabFeed"
@@ -150,7 +151,8 @@
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false"
                     android:paddingBottom="16dp"
-                    tools:listitem="@layout/item_post_normal" /> </LinearLayout>
+                    tools:listitem="@layout/item_post" />
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -2,13 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_edit_user"
+        android:id="@+id/action_reset_password_user"
         android:icon="@drawable/ic_edit"
         android:title="Đặt lại mật khẩu" />
 
     <item
-        android:id="@+id/action_delete_user"
+        android:id="@+id/action_waring_user"
+        android:icon="@drawable/ic_warning"
+        android:title="Cảnh cáo" />
+
+    <item
+        android:id="@+id/action_block_user"
         android:icon="@drawable/ic_delete"
-        android:title="Xóa người dùng" />
+        android:title="Chặn người dùng" />
+
 
 </menu>

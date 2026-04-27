@@ -27,6 +27,7 @@ class UserPreferences(private val context: Context) {
         private val LANGUAGE = stringPreferencesKey("language")
         private val PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications")
         private val EMAIL_NOTIFICATIONS = booleanPreferencesKey("email_notifications")
+        private val IS_BLOCKED = booleanPreferencesKey("is_blocked")
     }
 
     val userFlow: Flow<User?> = context.dataStore.data.map { preferences ->
@@ -38,7 +39,8 @@ class UserPreferences(private val context: Context) {
                 email = preferences[USER_EMAIL] ?: "",
                 phone = preferences[USER_PHONE] ?: "",
                 password = "", // Do not store password
-                role = preferences[USER_ROLE] ?: ""
+                role = preferences[USER_ROLE] ?: "",
+                isBLocked = preferences[IS_BLOCKED] ?: false
             )
         } else {
             null
