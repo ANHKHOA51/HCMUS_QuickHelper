@@ -36,4 +36,40 @@ class ManagementRepository (
             Result.failure(e)
         }
     }
+
+    suspend fun toggleBlockUser(userId: Int, isBlocked: Boolean): Result<Unit> {
+        return try {
+            dataSource.toggleBlockUser(userId, isBlocked)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteFeed(feedId: Int): Result<Unit> {
+        return try {
+            dataSource.deleteFeeds(feedId)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteComment(commentId: Int): Result<Unit> {
+        return try {
+            dataSource.deleteComment(commentId)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun resetPassword(userId: Int, newPassword: String): Result<Unit> {
+        return try {
+            dataSource.resetPassword(userId, newPassword)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

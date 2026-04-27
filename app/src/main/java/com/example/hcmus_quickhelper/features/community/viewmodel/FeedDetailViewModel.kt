@@ -31,6 +31,7 @@ class FeedDetailViewModel (
                     val comments = list.mapNotNull { item ->
                         item.commentContent?.let { content ->
                             CommentUI(
+                                commentId = item.commentId,
                                 commentContent = content,
                                 commentorName = item.commentorName,
                                 commentorAvt = item.commentorAvt,

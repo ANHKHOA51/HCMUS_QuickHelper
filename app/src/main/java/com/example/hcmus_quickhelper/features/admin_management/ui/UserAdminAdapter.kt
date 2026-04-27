@@ -18,6 +18,9 @@ import com.example.hcmus_quickhelper.features.community.model.Feed
 
 class UserAdminAdapter (
     private var items: List<User>,
+    private val onResetPasswordClick: (userId: Int, userEmail: String) -> Unit,
+    private val onWarningClick: (userEmail: String) -> Unit,
+    private val onBlockClick: (userId: Int, isBlocked: Boolean) -> Unit
 ) : RecyclerView.Adapter<UserAdminAdapter.UserViewHolder>() {
 
     class UserViewHolder(val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
@@ -69,15 +72,15 @@ class UserAdminAdapter (
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_reset_password_user -> {
-                        // TODO: Mở màn hình chỉnh sửa hoặc gọi callback báo cho Fragment biết
+                        onResetPasswordClick.invoke(item.id, item.email)
                         true
                     }
                     R.id.action_waring_user -> {
-                        // TODO: Gọi API khóa tài khoản
+                        onWarningClick.invoke(item.email)
                         true
                     }
                     R.id.action_block_user -> {
-                        // TODO: Hiện Dialog xác nhận xóa rồi mới gọi API
+                        onBlockClick.invoke(item.id, item.isBLocked)
                         true
                     }
                     else -> false

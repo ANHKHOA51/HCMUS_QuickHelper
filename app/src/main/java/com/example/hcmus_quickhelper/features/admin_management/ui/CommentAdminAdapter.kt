@@ -14,6 +14,7 @@ import com.example.hcmus_quickhelper.features.community.model.CommentUI
 
 class CommentAdminAdapter  (
     private var items: List<CommentUI>,
+    private val onDeleteClick: (commentId: Int) -> Unit
 ) : RecyclerView.Adapter<CommentAdminAdapter.CommentViewHolder>() {
 
     class CommentViewHolder(val binding: ItemCommentBinding) : RecyclerView.ViewHolder(binding.root)
@@ -58,7 +59,7 @@ class CommentAdminAdapter  (
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_delete_item -> {
-                        // TODO: Mở màn hình chỉnh sửa hoặc gọi callback báo cho Fragment biết
+                        onDeleteClick.invoke(item.commentId ?: -1)
                         true
                     }
                     else -> false

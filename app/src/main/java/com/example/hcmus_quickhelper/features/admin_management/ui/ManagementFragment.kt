@@ -54,15 +54,27 @@ class ManagementFragment : Fragment(R.layout.fragment_admin_management) {
     }
 
     private fun setupRecyclerViews() {
-//         Cài đặt cho rvUsers
-         userAdapter = UserAdminAdapter(emptyList())
+         userAdapter = UserAdminAdapter(emptyList(),
+             onResetPasswordClick = { userId, userEmail ->
+                 // Fragment nhận được tín hiệu Reset Pass
+                 viewModel.resetPassword(userId, userEmail)
+             },
+             onWarningClick = { userEmail ->
+                 // Fragment nhận được tín hiệu Cảnh cáo
+                 viewModel.warningUser(userEmail)
+             },
+             onBlockClick = { userId, isBlocked ->
+                 viewModel.toggleBlockUser(userId, isBlocked)
+             })
          binding.rvUsers.apply {
              layoutManager = LinearLayoutManager(requireContext())
              adapter = userAdapter
          }
 
 //         Cài đặt cho rvFeeds
-         feedAdapter = FeedAdminAdapter(emptyList())
+         feedAdapter = FeedAdminAdapter(emptyList()) { feedId ->
+             viewModel.deleteFeed(feedId)
+         }
          binding.rvFeeds.apply {
              layoutManager = LinearLayoutManager(requireContext())
              adapter = feedAdapter

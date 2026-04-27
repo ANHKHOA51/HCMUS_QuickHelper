@@ -15,6 +15,7 @@ import com.example.hcmus_quickhelper.features.community.model.Feed
 
 class FeedAdminAdapter (
     private var items: List<Feed>,
+    private val onDeleteClick: (feedId: Int) -> Unit
 ) : RecyclerView.Adapter<FeedAdminAdapter.CommunityViewHolder>() {
 
     class CommunityViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root)
@@ -55,7 +56,7 @@ class FeedAdminAdapter (
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_delete_item -> {
-                        // TODO: Mở màn hình chỉnh sửa hoặc gọi callback báo cho Fragment biết
+                        onDeleteClick.invoke(item.id)
                         true
                     }
                     else -> false

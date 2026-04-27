@@ -1,8 +1,10 @@
 package com.example.hcmus_quickhelper.features.admin_management.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.admin_management.repository.ManagementRepository
 import com.example.hcmus_quickhelper.features.community.model.CommentUI
@@ -31,6 +33,7 @@ class FeedDetailAdminViewModel (
                     val comments = list.mapNotNull { item ->
                         item.commentContent?.let { content ->
                             CommentUI(
+                                commentId = item.commentId,
                                 commentContent = content,
                                 commentorName = item.commentorName,
                                 commentorAvt = item.commentorAvt,
@@ -46,8 +49,21 @@ class FeedDetailAdminViewModel (
         }
     }
 
-    fun updateFeed(updated: FeedDetail) {
-        feedContent.value = updated
+    suspend fun deleteFeed(feedId: Int): Result<Unit> {
+        return repository.deleteFeed(feedId)
+    }
+
+    fun deleteComment(commentId: Int)  {
+        viewModelScope.launch {
+            val result = repository.deleteComment(commentId)
+
+            result.onSuccess {
+                val currentList = commentList.value ?: mutableListOf()
+                val newList = currentList.filterNot { it.commentId == commentId }
+                commentList.value = newList.toMutableList()
+            }
+        }
+
     }
 
 }

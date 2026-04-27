@@ -71,7 +71,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tvUserRole"
             app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
-            tools:text="BLOCKED" />
+            android:text="BLOCKED" />
 
         <TextView
             android:id="@+id/tvUserPhone"

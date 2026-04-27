@@ -34,14 +34,43 @@ class ManagementDataSource {
     }
 
     suspend fun deleteFeeds(feedId: Int) {
-
+        SupabaseClient.client.postgrest.from("feeds")
+            .delete {
+                filter {
+                    eq("id", feedId)
+                }
+            }
     }
 
-    suspend fun resetPassword(userId: Int) {
-
+    suspend fun deleteComment(commentId: Int) {
+        SupabaseClient.client.postgrest.from("comments")
+            .delete {
+                filter {
+                    eq("id", commentId)
+                }
+            }
     }
 
-    suspend fun blockUser(userId: Int) {
+    suspend fun resetPassword(userId: Int, newPassword: String) {
+        SupabaseClient.client.postgrest.from("users")
+            .update({
+                set("password", newPassword) // Bạn có thể thay đổi mật khẩu mặc định tại đây
+            }) {
+                filter {
+                    eq("id", userId)
+                }
+            }
+    }
 
+    suspend fun toggleBlockUser(userId: Int, isCurrentlyBlocked: Boolean) {
+        SupabaseClient.client.postgrest.from("users")
+            .update({
+                // Dùng dấu ! để đảo ngược: true thành false, false thành true
+                set("is_blocked", !isCurrentlyBlocked)
+            }) {
+                filter {
+                    eq("id", userId)
+                }
+            }
     }
 }

@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -24,6 +26,7 @@ import com.example.hcmus_quickhelper.features.community.datasource.CommunityRemo
 import com.example.hcmus_quickhelper.features.community.repository.CommunityRepository
 import com.example.hcmus_quickhelper.features.community.ui.CommentAdapter
 import com.example.hcmus_quickhelper.features.community.viewmodel.FeedDetailViewModel
+import kotlinx.coroutines.launch
 import kotlin.text.lowercase
 
 class FeedDetailAdminFragment : Fragment() {
@@ -74,7 +77,9 @@ class FeedDetailAdminFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        commentAdapter = CommentAdminAdapter(emptyList())
+        commentAdapter = CommentAdminAdapter(emptyList()) { commentId ->
+            viewModel.deleteComment(commentId)
+        }
 
         binding.btnBack.setOnClickListener {
             view?.findNavController()?.navigateUp()
@@ -90,7 +95,13 @@ class FeedDetailAdminFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_delete_item -> {
-                        // TODO: Mở màn hình chỉnh sửa hoặc gọi callback báo cho Fragment biết
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val result = viewModel.deleteFeed(feedId ?: -1)
+
+                            result.onSuccess {
+                                findNavController().navigateUp()
+                            }
+                        }
                         true
                     }
                     else -> false
@@ -98,7 +109,6 @@ class FeedDetailAdminFragment : Fragment() {
             }
 
             popupMenu.show()
-
         }
 
         binding.rvComments.apply {
@@ -139,26 +149,6 @@ class FeedDetailAdminFragment : Fragment() {
                 binding.tvHeart.text = item.likeCount.toString()
                 binding.tvCmt.text = item.commentCount.toString()
                 binding.cbHeart.isEnabled = false
-
-                binding.btnFeedOptions.setOnClickListener { view ->
-                    val popupMenu = androidx.appcompat.widget.PopupMenu(view.context, view)
-
-                    popupMenu.menuInflater.inflate(R.menu.menu_feed_actions, popupMenu.menu)
-
-                    popupMenu.setOnMenuItemClickListener { menuItem ->
-                        when (menuItem.itemId) {
-                            R.id.action_delete_item -> {
-                                // TODO: Mở màn hình chỉnh sửa hoặc gọi callback báo cho Fragment biết
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-
-                    popupMenu.show()
-
-                }
-
             }
         }
 
