@@ -55,7 +55,8 @@ class AuthRemoteDataSource {
             email = email,
             phone = phone,
             password = pass,
-            role = role
+            role = role,
+            isBLocked = false
         )
 
         SupabaseClient.client.postgrest["users"].insert(publicUser)

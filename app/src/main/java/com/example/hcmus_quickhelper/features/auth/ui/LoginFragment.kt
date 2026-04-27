@@ -96,7 +96,7 @@ class LoginFragment : Fragment() {
                 // Step A: Start loading before FCM fetch
                 binding.btnLogin.isEnabled = false
                 binding.progressBar.visibility = View.VISIBLE
-                
+
                 getFcmToken { token ->
                     viewModel.login(identifier, password, token)
                 }
@@ -150,7 +150,7 @@ class LoginFragment : Fragment() {
                 // Start loading for Google Sign In as well
                 binding.btnGoogle.isEnabled = false
                 binding.progressBar.visibility = View.VISIBLE
-                
+
                 getFcmToken { token ->
                     viewModel.signInWithGoogle(idToken, token)
                 }
@@ -171,10 +171,10 @@ class LoginFragment : Fragment() {
             result?.onSuccess { user ->
                 lifecycleScope.launch {
                     // Step B: SessionManager.login now uses Dispatchers.IO internally
-                    SessionManager.login(user) 
-                    
+                    SessionManager.login(user)
+
                     Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-                    
+
                     // Step C: Simple Navigation is handled by the reactive collectLatest in onViewCreated
                     // We don't call navigateToDashboard(user.role) here to avoid race conditions
                 }

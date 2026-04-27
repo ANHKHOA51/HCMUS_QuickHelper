@@ -29,6 +29,7 @@ class UserPreferences(private val context: Context) {
         private val LANGUAGE = stringPreferencesKey("language")
         private val PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications")
         private val EMAIL_NOTIFICATIONS = booleanPreferencesKey("email_notifications")
+        private val IS_BLOCKED = booleanPreferencesKey("is_blocked")
     }
 
     private fun normalizeLanguage(lang: String?): String {
@@ -47,7 +48,8 @@ class UserPreferences(private val context: Context) {
                 email = preferences[USER_EMAIL] ?: "",
                 phone = preferences[USER_PHONE] ?: "",
                 password = "",
-                role = preferences[USER_ROLE] ?: ""
+                role = preferences[USER_ROLE] ?: "",
+                isBLocked = preferences[IS_BLOCKED] ?: false
             )
         } else {
             null

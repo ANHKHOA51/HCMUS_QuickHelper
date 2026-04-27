@@ -13,6 +13,9 @@ data class User(
     val password: String,
     val role: String,
 
+    @SerialName("is_blocked")
+    var isBLocked: Boolean,
+
     @SerialName("avatar_url")
     val avatarUrl: String? = null,
 

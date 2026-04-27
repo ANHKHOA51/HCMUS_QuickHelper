@@ -1,4 +1,4 @@
-package com.example.hcmus_quickhelper.features.community.ui
+package com.example.hcmus_quickhelper.features.admin_management.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,24 +8,32 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.core.utils.toRelativeTime
 import com.example.hcmus_quickhelper.databinding.FragmentFeedDetailBinding
+import com.example.hcmus_quickhelper.features.admin_management.datasource.ManagementDataSource
+import com.example.hcmus_quickhelper.features.admin_management.repository.ManagementRepository
+import com.example.hcmus_quickhelper.features.admin_management.viewmodel.FeedDetailAdminViewModel
 import com.example.hcmus_quickhelper.features.community.datasource.CommunityRemoteDataSource
 import com.example.hcmus_quickhelper.features.community.repository.CommunityRepository
+import com.example.hcmus_quickhelper.features.community.ui.CommentAdapter
 import com.example.hcmus_quickhelper.features.community.viewmodel.FeedDetailViewModel
+import kotlinx.coroutines.launch
 import kotlin.text.lowercase
 
-class FeedDetailFragment : Fragment() {
+class FeedDetailAdminFragment : Fragment() {
     private var _binding: FragmentFeedDetailBinding? = null
     private val binding get() = _binding!!
 
     var feedId: Int? = null
-    val currentUser: User? = SessionManager.currentUser.asLiveData().value
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,49 +47,73 @@ class FeedDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val currentUserId = currentUser?.id ?: -1
-
         setupViewModel()
-        setupRecyclerView(currentUserId)
+        setupRecyclerView()
         observeViewModel()
 
         feedId = arguments?.getInt("feedId")!!
 
-        viewModel.fetchFeedDetail(feedId, currentUserId)
+        viewModel.fetchFeedDetail(feedId)
     }
 
-    private lateinit var viewModel: FeedDetailViewModel
-    private lateinit var commentAdapter: CommentAdapter
+    private lateinit var viewModel: FeedDetailAdminViewModel
+    private lateinit var commentAdapter: CommentAdminAdapter
 
     private fun setupViewModel() {
-        val dataSource = CommunityRemoteDataSource()
-        val repository = CommunityRepository(dataSource)
+        val dataSource = ManagementDataSource()
+        val repository = ManagementRepository(dataSource)
 
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(FeedDetailViewModel::class.java)) {
+                if (modelClass.isAssignableFrom(FeedDetailAdminViewModel::class.java)) {
                     @Suppress("UNCHECKED_CAST")
-                    return FeedDetailViewModel(repository, currentUser) as T
+                    return FeedDetailAdminViewModel(repository) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
         }
 
-        viewModel = ViewModelProvider(this, factory)[FeedDetailViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[FeedDetailAdminViewModel::class.java]
     }
 
-    private fun setupRecyclerView(currentUserId: Int) {
-        commentAdapter = CommentAdapter(emptyList())
+    private fun setupRecyclerView() {
+        commentAdapter = CommentAdminAdapter(emptyList()) { commentId ->
+            viewModel.deleteComment(commentId)
+        }
 
         binding.btnBack.setOnClickListener {
             view?.findNavController()?.navigateUp()
         }
 
-        binding.btnFeedOptions.visibility = View.GONE
+        binding.layoutBottomInput.visibility = View.GONE
+
+        binding.btnFeedOptions.setOnClickListener { view ->
+            val popupMenu = androidx.appcompat.widget.PopupMenu(view.context, view)
+
+            popupMenu.menuInflater.inflate(R.menu.menu_feed_actions, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_delete_item -> {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val result = viewModel.deleteFeed(feedId ?: -1)
+
+                            result.onSuccess {
+                                findNavController().navigateUp()
+                            }
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
+        }
 
         binding.rvComments.apply {
             adapter = commentAdapter
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
 
@@ -92,11 +124,6 @@ class FeedDetailFragment : Fragment() {
 
             if (content.isEmpty()) return@setOnClickListener
 
-            viewModel.postComment(
-                feedId!!,
-                currentUserId,
-                content
-            )
 
             binding.etComment.text?.clear()
         }
@@ -114,17 +141,14 @@ class FeedDetailFragment : Fragment() {
                 binding.ivAvatar.load(it.ownerAvatar) {
                     placeholder(R.drawable.default_avt)
                     error(R.drawable.default_avt)
-                    transformations(coil.transform.CircleCropTransformation())
+                    transformations(CircleCropTransformation())
                 }
 
                 binding.cbHeart.setOnCheckedChangeListener(null)
                 binding.cbHeart.isChecked = item.isLiked
                 binding.tvHeart.text = item.likeCount.toString()
                 binding.tvCmt.text = item.commentCount.toString()
-
-                binding.cbHeart.setOnClickListener {
-                    viewModel.toggleLike(viewModel.feedContent.value, currentUser?.id ?: -1)
-                }
+                binding.cbHeart.isEnabled = false
             }
         }
 

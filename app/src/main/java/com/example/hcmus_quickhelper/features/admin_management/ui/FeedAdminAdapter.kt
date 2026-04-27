@@ -1,9 +1,8 @@
-package com.example.hcmus_quickhelper.features.community.ui
+package com.example.hcmus_quickhelper.features.admin_management.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -11,15 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.utils.toRelativeTime
-import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.ItemPostBinding
 import com.example.hcmus_quickhelper.features.community.model.Feed
 
-class FeedAdapter (
+class FeedAdminAdapter (
     private var items: List<Feed>,
-    private val currentUserId: Int,
-    val onLikeClick: (Feed) -> Unit
-) : RecyclerView.Adapter<FeedAdapter.CommunityViewHolder>() {
+    private val onDeleteClick: (feedId: Int) -> Unit
+) : RecyclerView.Adapter<FeedAdminAdapter.CommunityViewHolder>() {
 
     class CommunityViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -30,7 +27,6 @@ class FeedAdapter (
 
     override fun onBindViewHolder(holder: CommunityViewHolder, position: Int) {
         val item = items[position]
-
 
         holder.binding.tvName.text = item.ownerFullname
 
@@ -47,15 +43,27 @@ class FeedAdapter (
             error(R.drawable.default_avt)
         }
 
-        holder.binding.btnFeedOptions.visibility = View.GONE
-
         holder.binding.cbHeart.setOnCheckedChangeListener(null)
-        holder.binding.cbHeart.isChecked = item.isLiked
+        holder.binding.cbHeart.isEnabled = false
         holder.binding.tvHeart.text = item.likeCount.toString()
         holder.binding.tvCmt.text = item.commentCount.toString()
 
-        holder.binding.cbHeart.setOnClickListener {
-            onLikeClick(item)
+        holder.binding.btnFeedOptions.setOnClickListener { view ->
+            val popupMenu = androidx.appcompat.widget.PopupMenu(view.context, view)
+
+            popupMenu.menuInflater.inflate(R.menu.menu_feed_actions, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_delete_item -> {
+                        onDeleteClick.invoke(item.id)
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
         }
 
         holder.itemView.setOnClickListener {
@@ -63,7 +71,7 @@ class FeedAdapter (
                 putInt("feedId", item.id)
             }
 
-            holder.itemView.findNavController().navigate(R.id.action_community_to_feedDetail, bundle)
+            holder.itemView.findNavController().navigate(R.id.action_admin_feed_to_admin_feed_detail, bundle)
         }
 
     }

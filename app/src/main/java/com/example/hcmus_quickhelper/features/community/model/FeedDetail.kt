@@ -28,6 +28,9 @@ data class FeedDetail(
     val ownerAvatar: String?,
 
     // --- Thông tin của Bình luận (Comment) ---
+    @SerialName("comment_id")
+    val commentId: Int,
+
     @SerialName("comment_content")
     val commentContent: String? = null,
 

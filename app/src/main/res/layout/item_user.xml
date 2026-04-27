@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivUserAvatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvUserFullName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#212529"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btnUserOptions"
+            app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivUserAvatar"
+            tools:text="Nguyễn Văn A" />
+
+        <TextView
+            android:id="@+id/tvUserRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_pill_light_orange"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/orange_primary"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvUserFullName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
+            tools:text="#HELPER" />
+
+        <TextView
+            android:id="@+id/tvUserBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_pill_light_red"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tvUserRole"
+            app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
+            android:text="BLOCKED" />
+
+        <TextView
+            android:id="@+id/tvUserPhone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"
+            android:drawablePadding="6dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#6C757D"
+            android:textSize="13sp"
+            app:drawableStartCompat="@drawable/ic_phone"
+            android:gravity="center_vertical"
+            app:drawableTint="#6C757D"
+            app:layout_constraintEnd_toStartOf="@id/tvUserRating"
+            app:layout_constraintStart_toStartOf="@id/tvUserFullName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserRole"
+            tools:text="0901234567" />
+
+        <TextView
+            android:id="@+id/tvUserEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:drawablePadding="6dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#6C757D"
+            android:gravity="center_vertical"
+            android:textSize="13sp"
+            app:drawableStartCompat="@drawable/ic_email"
+            app:drawableTint="#6C757D"
+            app:layout_constraintEnd_toStartOf="@id/tvUserRating"
+            app:layout_constraintStart_toStartOf="@id/tvUserFullName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserPhone"
+            tools:text="nguyenvana123@gmail.com" />
+
+        <TextView
+            android:id="@+id/tvUserRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="4dp"
+            android:textColor="#FFB300"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            app:drawableStartCompat="@drawable/ic_star"
+            app:drawableTint="#FFB300"
+            app:layout_constraintBottom_toBottomOf="@id/tvUserEmail" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvUserEmail"
+            tools:text="4.9" />
+
+        <ImageView
+            android:id="@+id/btnUserOptions"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_more_vert"
+            app:tint="#6C757D"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvUserFullName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

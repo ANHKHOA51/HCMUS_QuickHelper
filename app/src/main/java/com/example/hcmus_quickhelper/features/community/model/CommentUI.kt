@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CommentUI(
+    @SerialName("id")
+    val commentId: Int? = null,
+
     @SerialName("content")
     val commentContent: String? = null,
 

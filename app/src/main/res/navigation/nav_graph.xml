@@ -22,6 +22,10 @@
         <action
             android:id="@+id/action_login_fragment_to_fragment_admin_statistic"
             app:destination="@id/fragment_admin_statistic" />
+
+        <action
+            android:id="@+id/action_login_admin"
+            app:destination="@id/admin_management_fragment" />
     </fragment>
 
     <fragment
@@ -358,5 +362,23 @@
         <action
             android:id="@+id/action_fragment_admin_statistic_to_login_fragment"
             app:destination="@id/login_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/admin_management_fragment"
+        android:name="com.example.hcmus_quickhelper.features.admin_management.ui.ManagementFragment"
+        android:label="management"
+        tools:layout="@layout/fragment_admin_management" >
+
+        <action
+            android:id="@+id/action_admin_feed_to_admin_feed_detail"
+            app:destination="@id/admin_feed_detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/admin_feed_detail_fragment"
+        android:name="com.example.hcmus_quickhelper.features.admin_management.ui.FeedDetailAdminFragment"
+        android:label="statistic"
+        tools:layout="@layout/fragment_feed_detail" >
     </fragment>
 </navigation>
