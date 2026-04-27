@@ -25,6 +25,8 @@ class UserPreferences(private val context: Context) {
         private val USER_ROLE = stringPreferencesKey("user_role")
         private val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
         private val LANGUAGE = stringPreferencesKey("language")
+        private val PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications")
+        private val EMAIL_NOTIFICATIONS = booleanPreferencesKey("email_notifications")
     }
 
     val userFlow: Flow<User?> = context.dataStore.data.map { preferences ->
@@ -49,6 +51,14 @@ class UserPreferences(private val context: Context) {
 
     val language: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[LANGUAGE] ?: "English"
+    }
+
+    val pushNotificationsEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[PUSH_NOTIFICATIONS] ?: true
+    }
+
+    val emailNotificationsEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[EMAIL_NOTIFICATIONS] ?: true
     }
 
     suspend fun saveSession(user: User) {
@@ -78,6 +88,18 @@ class UserPreferences(private val context: Context) {
     suspend fun updateLanguage(language: String) {
         context.dataStore.edit { preferences ->
             preferences[LANGUAGE] = language
+        }
+    }
+
+    suspend fun setPushNotificationsEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PUSH_NOTIFICATIONS] = enabled
+        }
+    }
+
+    suspend fun setEmailNotificationsEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[EMAIL_NOTIFICATIONS] = enabled
         }
     }
 }

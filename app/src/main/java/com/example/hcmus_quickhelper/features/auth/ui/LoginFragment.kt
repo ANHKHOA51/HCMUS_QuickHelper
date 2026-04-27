@@ -55,9 +55,9 @@ class LoginFragment : Fragment() {
         
         // Auto-login check (Reactive)
         viewLifecycleOwner.lifecycleScope.launch {
-            SessionManager.isLoggedIn.collectLatest { loggedIn ->
-                if (loggedIn) {
-                    findNavController().navigate(R.id.home_fragment)
+            SessionManager.currentUser.collectLatest { user ->
+                user?.let {
+                    navigateToDashboard(it.role)
                 }
             }
         }
@@ -89,15 +89,15 @@ class LoginFragment : Fragment() {
 
     private fun setupUI() {
         binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString()
+            val identifier = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
             
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            if (identifier.isNotEmpty() && password.isNotEmpty()) {
                 getFcmToken { token ->
-                    viewModel.login(email, password, token)
+                    viewModel.login(identifier, password, token)
                 }
             } else {
-                Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter email/phone and password", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -111,15 +111,12 @@ class LoginFragment : Fragment() {
     }
 
     private fun triggerGoogleSignIn() {
-        // 1. Configure the Google-specific option
         val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false) // Set to true if you only want to show accounts already linked
+            .setFilterByAuthorizedAccounts(false)
             .setServerClientId(SupabaseConfig.GOOGLE_WEB_CLIENT_ID)
             .setAutoSelectEnabled(true)
             .build()
 
-        // 2. Build the request EXCLUSIVELY with the Google option
-        // This removes any "Touch ID" / Passkey / Saved Password prompts
         val request = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
@@ -152,8 +149,6 @@ class LoginFragment : Fragment() {
             } catch (e: Exception) {
                 Log.e("GOOGLE_AUTH", "Failed to parse Google ID Token", e)
             }
-        } else {
-            Log.e("GOOGLE_AUTH", "Unexpected credential type: ${credential.type}")
         }
     }
 
@@ -167,29 +162,26 @@ class LoginFragment : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
                 lifecycleScope.launch {
-                    // 1. Persist the session (from feature/settings)
                     SessionManager.login(user)
-                    
                     Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-                    
-                    // 2. Role-based navigation (from dev)
-                    if (user.role == UserRole.CUSTOMER.toString()) {
-                        findNavController().navigate(R.id.home_fragment)
-                    } else if (user.role == UserRole.HELPER.toString()) {
-                        findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
-                    } else {
-                        // Fallback navigation if role is undefined
-                        findNavController().navigate(R.id.home_fragment)
-                    }
+                    navigateToDashboard(user.role)
                 }
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)
                 val message = when {
-                    error.message?.contains("401") == true || error.message?.contains("Invalid email or password") == true -> "Invalid email or password"
+                    error.message?.contains("401") == true -> "Invalid email/phone or password"
                     else -> error.localizedMessage ?: "Connection error"
                 }
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun navigateToDashboard(role: String) {
+        if (role == UserRole.HELPER.toString()) {
+            findNavController().navigate(R.id.action_login_fragment_to_dashboard_helper_fragment)
+        } else {
+            findNavController().navigate(R.id.home_fragment)
         }
     }
 

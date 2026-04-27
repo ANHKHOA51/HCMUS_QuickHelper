@@ -84,8 +84,10 @@ class OTPFragment : Fragment() {
             val pass = arguments?.getString("password") ?: ""
             val name = arguments?.getString("fullname") ?: ""
             val phone = arguments?.getString("phone") ?: ""
-            val username = arguments?.getString("username")
+            val username = arguments?.getString("username") ?: email.substringBefore("@")
             val role = arguments?.getString("role") ?: "CUSTOMER"
+            
+            // This call must trigger the repository to write to public.users
             viewModel.register(email, pass, name, phone, username, role)
         }
     }
@@ -104,7 +106,7 @@ class OTPFragment : Fragment() {
         lifecycleScope.launch {
             val result = EmailUtils.sendEmail(recipientEmail, subject, body)
             
-            if (isAdded) { // Check if fragment is still attached
+            if (isAdded) {
                 result.onSuccess {
                     Toast.makeText(context, "OTP sent to $recipientEmail", Toast.LENGTH_SHORT).show()
                 }.onFailure {
