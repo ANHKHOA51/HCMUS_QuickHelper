@@ -362,6 +362,10 @@
         <action
             android:id="@+id/action_fragment_admin_statistic_to_login_fragment"
             app:destination="@id/login_fragment" />
+
+        <action
+            android:id="@+id/action_fragment_admin_statistic_to_admin_management"
+            app:destination="@id/admin_management_fragment" />
     </fragment>
 
     <fragment

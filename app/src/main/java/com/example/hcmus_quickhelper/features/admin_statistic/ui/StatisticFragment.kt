@@ -70,6 +70,7 @@ class StatisticFragment : Fragment(R.layout.fragment_admin_statistic) {
 
         binding.btnManagePayment.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_payment_admin_fragment) }
         binding.btnManageVoucher.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_voucher_management_fragment) }
+        binding.btnManageCommunity.setOnClickListener { findNavController().navigate(R.id.action_fragment_admin_statistic_to_admin_management) }
 
         binding.btnLogout.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {

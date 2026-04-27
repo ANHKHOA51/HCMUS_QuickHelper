@@ -49,8 +49,7 @@ class ManagementFragment : Fragment(R.layout.fragment_admin_management) {
         setupListeners()
         observeViewModel()
 
-        // Mặc định chọn Tab Người dùng (User) khi mở màn hình
-        selectTab(isUserTab = true)
+        selectTab(viewModel.isUserTabSelected)
     }
 
     private fun setupRecyclerViews() {
@@ -89,10 +88,12 @@ class ManagementFragment : Fragment(R.layout.fragment_admin_management) {
 
         // Bắt sự kiện chuyển Tab
         binding.cvTabUser.setOnClickListener {
+            viewModel.isUserTabSelected = true // Lưu trí nhớ
             selectTab(isUserTab = true)
         }
 
         binding.cvTabFeed.setOnClickListener {
+            viewModel.isUserTabSelected = false // Lưu trí nhớ
             selectTab(isUserTab = false)
         }
     }

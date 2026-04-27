@@ -20,6 +20,7 @@ class ManagementViewModel(
 
     private val _feeds = MutableLiveData<List<Feed>>()
     val feeds: LiveData<List<Feed>> get() = _feeds
+    var isUserTabSelected: Boolean = true
 
     fun getUsers() {
         viewModelScope.launch {
