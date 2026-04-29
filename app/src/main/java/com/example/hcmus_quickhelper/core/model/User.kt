@@ -14,7 +14,7 @@ data class User(
     val role: String,
 
     @SerialName("is_blocked")
-    var isBLocked: Boolean,
+    var isBlocked: Boolean,
 
     @SerialName("avatar_url")
     val avatarUrl: String? = null,

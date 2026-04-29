@@ -57,7 +57,12 @@ class LoginFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             SessionManager.currentUser.collectLatest { user ->
                 user?.let {
-                    navigateToDashboard(it.role)
+                    if (!it.isBlocked) {
+                        navigateToDashboard(it.role)
+                    } else {
+                        SessionManager.logout()
+                        Toast.makeText(context, "Your account is blocked", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -93,7 +98,6 @@ class LoginFragment : Fragment() {
             val password = binding.etPassword.text.toString()
             
             if (identifier.isNotEmpty() && password.isNotEmpty()) {
-                // Step A: Start loading before FCM fetch
                 binding.btnLogin.isEnabled = false
                 binding.progressBar.visibility = View.VISIBLE
 
@@ -147,7 +151,6 @@ class LoginFragment : Fragment() {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val idToken = googleIdTokenCredential.idToken
                 
-                // Start loading for Google Sign In as well
                 binding.btnGoogle.isEnabled = false
                 binding.progressBar.visibility = View.VISIBLE
 
@@ -169,28 +172,29 @@ class LoginFragment : Fragment() {
 
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess { user ->
+                if (user.isBlocked) {
+                    Toast.makeText(context, "Your account is blocked", Toast.LENGTH_LONG).show()
+                    viewModel.loginResult.value = null 
+                    return@onSuccess
+                }
                 lifecycleScope.launch {
-                    // Step B: SessionManager.login now uses Dispatchers.IO internally
                     SessionManager.login(user)
-
                     Toast.makeText(context, "Welcome back, ${user.fullname}", Toast.LENGTH_SHORT).show()
-
-                    // Step C: Simple Navigation is handled by the reactive collectLatest in onViewCreated
-                    // We don't call navigateToDashboard(user.role) here to avoid race conditions
                 }
             }?.onFailure { error ->
                 Log.e("AUTH_ERROR", "Login failed", error)
                 val message = when {
+                    error.message?.contains("403") == true -> "Your account is blocked"
                     error.message?.contains("401") == true -> "Invalid email/phone or password"
                     else -> error.localizedMessage ?: "Connection error"
                 }
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                viewModel.loginResult.value = null
             }
         }
     }
 
     private fun navigateToDashboard(role: String) {
-        // Only navigate if we are currently at the login fragment to avoid crashes/double navigation
         if (findNavController().currentDestination?.id == R.id.login_fragment) {
             when (role) {
                 UserRole.HELPER.toString() -> {

@@ -52,7 +52,7 @@ class UserAdminAdapter (
             error(R.drawable.default_avt)
         }
 
-        if (!item.isBLocked) {
+        if (!item.isBlocked) {
             holder.binding.tvUserBlock.visibility = View.GONE
         } else {
             holder.binding.tvUserBlock.visibility = View.VISIBLE
@@ -64,7 +64,7 @@ class UserAdminAdapter (
             popupMenu.menuInflater.inflate(R.menu.menu_user_actions, popupMenu.menu)
 
             val lockItem = popupMenu.menu.findItem(R.id.action_block_user)
-            if (item.isBLocked) {
+            if (item.isBlocked) {
                 lockItem.title = "Mở khóa tài khoản"
             } else {
                 lockItem.title = "Khóa tài khoản"
@@ -80,7 +80,7 @@ class UserAdminAdapter (
                         true
                     }
                     R.id.action_block_user -> {
-                        onBlockClick.invoke(item.id, item.isBLocked)
+                        onBlockClick.invoke(item.id, item.isBlocked)
                         true
                     }
                     else -> false

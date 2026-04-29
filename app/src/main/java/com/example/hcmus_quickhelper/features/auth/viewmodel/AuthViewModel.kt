@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.auth.repository.AuthRepository
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
@@ -31,7 +30,8 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     fun login(identifier: String, pass: String, fcmToken: String?) {
         viewModelScope.launch {
             isLoading.value = true
-            loginResult.value = repository.login(identifier, pass, fcmToken)
+            val result = repository.login(identifier, pass, fcmToken)
+            loginResult.value = result
             isLoading.value = false
         }
     }
@@ -40,11 +40,9 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             isLoading.value = true
             try {
-                // Decode email from Google ID Token
-                // Note: In a real app, use a proper JWT library or Google's API to verify the token.
-                // For this migration, we extract the email from the payload.
                 val email = decodeGoogleEmail(idToken)
-                loginResult.value = repository.loginWithGoogle(email, fcmToken)
+                val result = repository.loginWithGoogle(email, fcmToken)
+                loginResult.value = result
             } catch (e: Exception) {
                 loginResult.value = Result.failure(e)
             } finally {
@@ -54,7 +52,6 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     }
 
     private fun decodeGoogleEmail(idToken: String): String {
-        // Simple extraction for demonstration. Replace with secure decoding.
         val parts = idToken.split(".")
         if (parts.size < 2) throw Exception("Invalid ID Token")
         val payload = String(android.util.Base64.decode(parts[1], android.util.Base64.DEFAULT))

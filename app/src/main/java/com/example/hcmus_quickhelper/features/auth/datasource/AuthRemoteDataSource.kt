@@ -19,6 +19,9 @@ class AuthRemoteDataSource {
             }.decodeSingleOrNull<User>()
 
         if (user != null && user.password == pass) {
+            if (user.isBlocked) {
+                throw Exception("403: Your account is blocked")
+            }
             return user
         } else {
             throw Exception("401: Invalid email/phone or password")
@@ -56,7 +59,7 @@ class AuthRemoteDataSource {
             phone = phone,
             password = pass,
             role = role,
-            isBLocked = false
+            isBlocked = false
         )
 
         SupabaseClient.client.postgrest["users"].insert(publicUser)

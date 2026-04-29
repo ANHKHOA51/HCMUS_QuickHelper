@@ -52,7 +52,7 @@ class ManagementViewModel(
                 val newList = currentList.map { user ->
                     if (user.id == userId) {
 
-                        user.copy(isBLocked = !isCurrentlyBlocked)
+                        user.copy(isBlocked = !isCurrentlyBlocked)
                     } else {
                         user
                     }

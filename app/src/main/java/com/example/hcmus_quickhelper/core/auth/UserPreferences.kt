@@ -49,7 +49,7 @@ class UserPreferences(private val context: Context) {
                 phone = preferences[USER_PHONE] ?: "",
                 password = "",
                 role = preferences[USER_ROLE] ?: "",
-                isBLocked = preferences[IS_BLOCKED] ?: false
+                isBlocked = preferences[IS_BLOCKED] ?: false
             )
         } else {
             null
@@ -80,6 +80,7 @@ class UserPreferences(private val context: Context) {
             preferences[USER_EMAIL] = user.email
             preferences[USER_PHONE] = user.phone
             preferences[USER_ROLE] = user.role
+            preferences[IS_BLOCKED] = user.isBlocked
             preferences[IS_LOGGED_IN] = true
         }
     }
@@ -92,6 +93,7 @@ class UserPreferences(private val context: Context) {
             preferences.remove(USER_EMAIL)
             preferences.remove(USER_PHONE)
             preferences.remove(USER_ROLE)
+            preferences.remove(IS_BLOCKED)
             preferences[IS_LOGGED_IN] = false
         }
     }

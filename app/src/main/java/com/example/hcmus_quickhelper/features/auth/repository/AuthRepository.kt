@@ -3,7 +3,6 @@ package com.example.hcmus_quickhelper.features.auth.repository
 import com.example.hcmus_quickhelper.core.auth.SessionManager
 import com.example.hcmus_quickhelper.core.model.User
 import com.example.hcmus_quickhelper.features.auth.datasource.AuthRemoteDataSource
-import kotlinx.coroutines.flow.firstOrNull
 
 class AuthRepository(private val dataSource: AuthRemoteDataSource) {
     suspend fun login(identifier: String, pass: String, fcmToken: String?): Result<User> {
@@ -39,6 +38,9 @@ class AuthRepository(private val dataSource: AuthRemoteDataSource) {
     suspend fun loginWithGoogle(email: String, fcmToken: String?): Result<User> {
         return try {
             val user = dataSource.getUserByEmail(email) ?: throw Exception("No account found for this Google email")
+            if (user.isBlocked) {
+                throw Exception("403: Your account is blocked")
+            }
             fcmToken?.let { dataSource.saveFcmToken(user.id, it) }
             SessionManager.login(user)
             Result.success(user)
