@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.voucher_management_fragment,
                     R.id.admin_management_fragment,
                     R.id.admin_feed_detail_fragment,
+                    R.id.post_feed_fragment,
                 R.id.feed_detail_fragment,
                 R.id.OTPFragment -> {
                     bottomNav.visibility = View.GONE
