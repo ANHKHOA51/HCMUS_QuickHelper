@@ -1,6 +1,7 @@
 package com.example.hcmus_quickhelper.features.auth.ui
 
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var viewModel: AuthViewModel
     private lateinit var credentialManager: CredentialManager
+    private var isPasswordVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -115,6 +117,22 @@ class LoginFragment : Fragment() {
 
         binding.tvTabRegister.setOnClickListener {
             findNavController().navigate(R.id.action_login_to_register)
+        }
+
+        binding.ivPasswordToggle.setOnClickListener {
+            isPasswordVisible = !isPasswordVisible
+            if (isPasswordVisible) {
+                binding.etPassword.transformationMethod = null
+                binding.ivPasswordToggle.setImageResource(android.R.drawable.ic_menu_view)
+            } else {
+                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.ivPasswordToggle.setImageResource(android.R.drawable.ic_menu_view)
+            }
+            binding.etPassword.setSelection(binding.etPassword.text.length)
+        }
+
+        binding.tvForgotPassword.setOnClickListener {
+            findNavController().navigate(R.id.action_login_to_forgot_password)
         }
     }
 
