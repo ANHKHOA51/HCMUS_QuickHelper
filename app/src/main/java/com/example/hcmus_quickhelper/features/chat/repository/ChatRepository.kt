@@ -39,11 +39,11 @@ class ChatRepository(
         }
     }
 
-    fun subscribeMessages(conversationId: Int): Flow<Message> {
-        return dataSource.subscribeMessages(conversationId)
-    }
+//    fun subscribeMessages(conversationId: Int): Flow<Message> {
+//        return dataSource.subscribeMessages(conversationId)
+//    }
 
-    fun subscribeAllMessages(): Flow<Message> {
-        return dataSource.subscribeAllMessages()
-    }
+//    fun subscribeAllMessages(): Flow<Message> {
+//        return dataSource.subscribeAllMessages()
+//    }
 }

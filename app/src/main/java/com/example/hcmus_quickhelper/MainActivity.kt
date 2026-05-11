@@ -13,8 +13,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.hcmus_quickhelper.core.auth.UserPreferences
 import com.example.hcmus_quickhelper.core.utils.LanguageUtils
+import com.example.hcmus_quickhelper.features.chat.ChatRealtimeManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val requestPermissionLauncher =
@@ -36,6 +40,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            ChatRealtimeManager.connect()
+        }
 
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->

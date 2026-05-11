@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.chat.datasource
 
+import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.features.chat.model.ConversationItem
 import io.github.jan.supabase.postgrest.postgrest
@@ -42,6 +43,7 @@ class ChatRemoteDataSource {
         senderId: Int,
         content: String
     ): Message {
+        Log.d("REALTIME", "SEND ROOM = $conversationId")
         val message = SupabaseClient.client.postgrest
             .from("chat_messages")
             .insert(
@@ -58,62 +60,62 @@ class ChatRemoteDataSource {
         return message
     }
 
-    fun subscribeMessages(conversationId: Int): Flow<Message> = callbackFlow {
-
-        val client = SupabaseClient.client
-        val channel = client.realtime.channel("chat-$conversationId")
-
-        val job = launch {
-            channel.postgresChangeFlow<PostgresAction.Insert>(
-                schema = "public"
-            ) {
-                table = "chat_messages"
-                filter("conversation_id", FilterOperator.EQ, conversationId)
-            }.collect { change ->
-
-                val message = change.decodeRecord<Message>()
-                trySend(message)
-            }
-        }
-
-
-        channel.subscribe()
-
-
-        awaitClose {
-            job.cancel()
-
-            launch {
-                client.realtime.removeChannel(channel)
-            }
-        }
-    }
-    fun subscribeAllMessages(): Flow<Message> = callbackFlow {
-
-        val client = SupabaseClient.client
-        val channel = client.realtime.channel("all-messages")
-
-        val job = launch {
-            channel.postgresChangeFlow<PostgresAction.Insert>(
-                schema = "public"
-            ) {
-                table = "chat_messages"
-            }.collect { change ->
-
-                val message = change.decodeRecord<Message>()
-                trySend(message)
-            }
-        }
-
-        channel.subscribe()
-
-
-        awaitClose {
-            job.cancel()
-
-            launch {
-                client.realtime.removeChannel(channel)
-            }
-        }
-    }
+//    fun subscribeMessages(conversationId: Int): Flow<Message> = callbackFlow {
+//        Log.d("REALTIME", "SUBSCRIBE ROOM = $conversationId")
+//        val client = SupabaseClient.client
+//        val channel = client.realtime.channel("chat-$conversationId")
+//
+//        val job = launch {
+//            channel.postgresChangeFlow<PostgresAction.Insert>(
+//                schema = "public"
+//            ) {
+//                table = "chat_messages"
+//                filter("conversation_id", FilterOperator.EQ, conversationId)
+//            }.collect { change ->
+//
+//                val message = change.decodeRecord<Message>()
+//                trySend(message)
+//            }
+//        }
+//
+//
+//        channel.subscribe()
+//
+//
+//        awaitClose {
+//            job.cancel()
+//
+////            launch {
+////                client.realtime.removeChannel(channel)
+////            }
+//        }
+//    }
+//    fun subscribeAllMessages(): Flow<Message> = callbackFlow {
+//
+//        val client = SupabaseClient.client
+//        val channel = client.realtime.channel("all-messages")
+//
+//        val job = launch {
+//            channel.postgresChangeFlow<PostgresAction.Insert>(
+//                schema = "public"
+//            ) {
+//                table = "chat_messages"
+//            }.collect { change ->
+//
+//                val message = change.decodeRecord<Message>()
+//                trySend(message)
+//            }
+//        }
+//
+//        channel.subscribe()
+//
+//
+//        awaitClose {
+//            job.cancel()
+//
+////            launch {
+////                client.realtime.removeChannel(channel)
+////            }
+//        }
+//    }
 }

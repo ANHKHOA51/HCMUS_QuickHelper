@@ -1,8 +1,10 @@
 package com.example.hcmus_quickhelper.features.chat.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hcmus_quickhelper.features.chat.ChatRealtimeManager
 import com.example.hcmus_quickhelper.features.chat.model.Message
 import com.example.hcmus_quickhelper.features.chat.repository.ChatRepository
 import kotlinx.coroutines.Job
@@ -25,36 +27,55 @@ class ChatViewModel(
         }
     }
 
-    fun subscribeMessages(conversationId: Int) {
-        subscribeJob?.cancel()
+    fun subscribeMessages(
+        conversationId: Int
+    ) {
 
-        subscribeJob = viewModelScope.launch {
-            repository.subscribeMessages(conversationId)
-                .collect { newMsg ->
+        viewModelScope.launch {
 
-                    val current = messageList.value ?: emptyList()
+            ChatRealtimeManager.messages
+                .collect { message ->
 
-                    val exists = current.any { it.messageId == newMsg.messageId }
-                    if (exists) return@collect
+                    if (
+                        message.conversationId
+                        == conversationId
+                    ) {
 
-                    messageList.value = current + newMsg
+                        val current =
+                            messageList.value
+                                ?.toMutableList()
+                                ?: mutableListOf()
+
+                        current.add(message)
+
+                        messageList.value = current
+                    }
                 }
         }
     }
 
-    fun sendMessage(conversationId: Int, senderId: Int, content: String) {
-        if (senderId == -1) return;
+    fun sendMessage(
+        conversationId: Int,
+        senderId: Int,
+        content: String
+    ) {
+
         viewModelScope.launch {
 
-            val result = repository.sendMessage(conversationId, senderId, content)
+            try {
 
-            result.onSuccess { newMessage ->
+                repository.sendMessage(
+                    conversationId,
+                    senderId,
+                    content
+                )
 
-                val current = messageList.value?.toMutableList() ?: mutableListOf()
+            } catch (e: Exception) {
 
-                current.add(newMessage)
-
-                messageList.value = current
+                Log.e(
+                    "SEND_MESSAGE",
+                    e.stackTraceToString()
+                )
             }
         }
     }

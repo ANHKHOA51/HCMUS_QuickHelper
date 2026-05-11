@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hcmus_quickhelper.features.chat.ChatRealtimeManager
 import com.example.hcmus_quickhelper.features.chat.model.ConversationItem
 import com.example.hcmus_quickhelper.features.chat.repository.ChatRepository
 import kotlinx.coroutines.Job
@@ -34,10 +35,14 @@ class ConversationViewModel(
         subscribeJob?.cancel()
 
         subscribeJob = viewModelScope.launch {
-            repository.subscribeAllMessages()
+
+            ChatRealtimeManager.messages
                 .collect { newMsg ->
 
-                    val current = conversationList.value?.toMutableList() ?: mutableListOf()
+                    val current =
+                        conversationList.value
+                            ?.toMutableList()
+                            ?: mutableListOf()
 
                     val index = current.indexOfFirst {
                         it.conversationId == newMsg.conversationId
@@ -52,7 +57,7 @@ class ConversationViewModel(
                         lastMessageTime = newMsg.createdAt
                     )
 
-                    // move lên đầu
+                    // move conversation lên đầu
                     current.removeAt(index)
                     current.add(0, updatedItem)
 
