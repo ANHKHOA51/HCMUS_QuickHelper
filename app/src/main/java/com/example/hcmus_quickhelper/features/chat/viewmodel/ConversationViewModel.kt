@@ -19,13 +19,17 @@ class ConversationViewModel(
     private var subscribeJob: Job? = null
 
     fun fetchConversations(userId: Int) {
-        Log.d("fetchConversations", "userId: $userId")
-        if (userId == -1) return;
+
         viewModelScope.launch {
-            val result = repository.getConversations(userId)
+
+            val result =
+                repository.getConversations(userId)
 
             result.onSuccess { list ->
+
                 conversationList.value = list
+
+                subscribeAllMessages()
             }
         }
     }
