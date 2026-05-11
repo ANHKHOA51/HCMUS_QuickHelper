@@ -78,30 +78,15 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.login_fragment,
-                R.id.chat_fragment,
-                R.id.register_fragment,
-                R.id.payment_fragment,
-                R.id.rating_fragment,
-                R.id.receipt_fragment,
-                R.id.voucher_fragment,
-                R.id.booking_fragment,
-                R.id.booking_request_detail_fragment,
-                R.id.booking_process_helper_fragment,
-                R.id.dashboard_helper_fragment,
-                R.id.booking_request_list_fragment,
-                R.id.fragment_admin_statistic,
-                R.id.payment_admin_fragment,
-                R.id.voucher_management_fragment,
-                    R.id.admin_management_fragment,
-                    R.id.admin_feed_detail_fragment,
-                    R.id.post_feed_fragment,
-                R.id.feed_detail_fragment,
-                R.id.OTPFragment -> {
-                    bottomNav.visibility = View.GONE
+                R.id.home_fragment,
+                R.id.service_list_fragment,
+                R.id.chat_list_fragment,
+                R.id.booking_history_fragment,
+                R.id.community_fragment-> {
+                    bottomNav.visibility = View.VISIBLE
                 }
             else -> {
-                bottomNav.visibility = View.VISIBLE
+                bottomNav.visibility = View.GONE
             }
         }
         }
