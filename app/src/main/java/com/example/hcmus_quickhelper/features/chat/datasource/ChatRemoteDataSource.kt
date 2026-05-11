@@ -1,6 +1,5 @@
 package com.example.hcmus_quickhelper.features.chat.datasource
 
-import android.util.Log
 import com.example.hcmus_quickhelper.core.database.SupabaseClient
 import com.example.hcmus_quickhelper.features.chat.model.ConversationItem
 import com.example.hcmus_quickhelper.features.chat.model.Message
@@ -33,7 +32,6 @@ class ChatRemoteDataSource {
         senderId: Int,
         content: String
     ): Message {
-        Log.d("REALTIME", "SEND ROOM = $conversationId")
         val message = SupabaseClient.client.postgrest
             .from("chat_messages")
             .insert(
@@ -41,6 +39,7 @@ class ChatRemoteDataSource {
                     put("conversation_id", conversationId)
                     put("sender_id", senderId)
                     put("message", content)
+                    put("is_read", false)
                 }
             ) {
                 select()
@@ -48,5 +47,27 @@ class ChatRemoteDataSource {
             .decodeSingle<Message>()
 
         return message
+    }
+
+    suspend fun markMessagesAsRead(
+        conversationId: Int,
+        currentUserId: Int
+    ) {
+
+        SupabaseClient.client.postgrest
+            .from("chat_messages")
+            .update(
+                {
+                    set("is_read", true)
+                }
+            ) {
+                filter {
+                    eq("conversation_id", conversationId)
+
+                    neq("sender_id", currentUserId)
+
+                    eq("is_read", false)
+                }
+            }
     }
 }

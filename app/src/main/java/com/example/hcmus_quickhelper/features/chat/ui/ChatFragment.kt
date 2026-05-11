@@ -46,6 +46,11 @@ class ChatFragment : Fragment() {
         if (conversationId != null) {
             viewModel.fetchMessage(conversationId!!)
             viewModel.subscribeMessages(conversationId!!)
+
+            viewModel.markMessagesAsRead(
+                conversationId!!,
+                currentUserId
+            )
         }
     }
 
@@ -69,7 +74,6 @@ class ChatFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-//        val senderId = arguments?.getInt("senderId")
         val senderName = arguments?.getString("senderName")
         val senderAvtUrl = arguments?.getString("senderAvtUrl")
 

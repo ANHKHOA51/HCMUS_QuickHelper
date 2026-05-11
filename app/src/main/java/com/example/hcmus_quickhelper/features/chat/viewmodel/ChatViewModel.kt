@@ -80,6 +80,20 @@ class ChatViewModel(
         }
     }
 
+    fun markMessagesAsRead(
+        conversationId: Int,
+        currentUserId: Int
+    ) {
+
+        viewModelScope.launch {
+
+            repository.markMessagesAsRead(
+                conversationId,
+                currentUserId
+            )
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         subscribeJob?.cancel()

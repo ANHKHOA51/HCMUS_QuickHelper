@@ -38,4 +38,24 @@ class ChatRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun markMessagesAsRead(
+        conversationId: Int,
+        currentUserId: Int
+    ): Result<Unit> {
+
+        return try {
+
+            dataSource.markMessagesAsRead(
+                conversationId,
+                currentUserId
+            )
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+        }
+    }
 }

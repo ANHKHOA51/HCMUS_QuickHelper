@@ -5,18 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.hcmus_quickhelper.features.chat.datasource.ChatRemoteDataSource
-import com.example.hcmus_quickhelper.features.chat.repository.ChatRepository
-import com.example.hcmus_quickhelper.features.chat.viewmodel.ConversationViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
-import com.example.hcmus_quickhelper.databinding.FragmentChatListBinding
 import androidx.navigation.findNavController
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.auth.SessionManager
-import com.example.hcmus_quickhelper.core.model.User
+import com.example.hcmus_quickhelper.databinding.FragmentChatListBinding
+import com.example.hcmus_quickhelper.features.chat.datasource.ChatRemoteDataSource
+import com.example.hcmus_quickhelper.features.chat.repository.ChatRepository
+import com.example.hcmus_quickhelper.features.chat.viewmodel.ConversationViewModel
 
 class ChatListFragment : Fragment() {
     private var _binding: FragmentChatListBinding? = null
@@ -65,8 +63,6 @@ class ChatListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-
-
         chatAdapter = ChatListAdapter(
             emptyList(),
             currentUserId

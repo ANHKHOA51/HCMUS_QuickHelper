@@ -1,17 +1,15 @@
 package com.example.hcmus_quickhelper.features.chat.ui
 
-import android.annotation.SuppressLint
-import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import android.view.View
 import com.example.hcmus_quickhelper.R
 import com.example.hcmus_quickhelper.core.utils.toSmartTime
 import com.example.hcmus_quickhelper.databinding.ItemChatBinding
 import com.example.hcmus_quickhelper.features.chat.model.ConversationItem
-import androidx.recyclerview.widget.DiffUtil
 
 class ChatListAdapter(
     private var items: List<ConversationItem>,
@@ -52,7 +50,7 @@ class ChatListAdapter(
 
         holder.binding.tvTime.text = item.lastMessageTime.toSmartTime()
 
-        if (item.isRead) {
+        if (item.isRead || item.senderId == currentUserId) {
             holder.binding.ivUnreadBadge.visibility = View.GONE
         } else {
             holder.binding.ivUnreadBadge.visibility = View.VISIBLE

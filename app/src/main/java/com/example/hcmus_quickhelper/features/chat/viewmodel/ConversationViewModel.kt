@@ -58,7 +58,10 @@ class ConversationViewModel(
 
                     val updatedItem = oldItem.copy(
                         latestMessage = newMsg.message,
-                        lastMessageTime = newMsg.createdAt
+                        lastMessageTime = newMsg.createdAt,
+
+                        isRead = newMsg.isRead,
+                        senderId = newMsg.senderId
                     )
 
                     // move conversation lên đầu
