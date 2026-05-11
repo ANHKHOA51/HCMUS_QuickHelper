@@ -166,24 +166,21 @@ class SettingsFragment : Fragment() {
 
     private fun logout() {
         viewLifecycleOwner.lifecycleScope.launch {
+            // 1. Delete from server FIRST while SessionManager still has the User object
+            viewModel.clearFcmTokenOnServer()
+
+            // 2. Now clear local state
             viewModel.logout()
+
             try {
                 credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            } catch (e: Exception) {
-                // Ignore errors
-            }
-            
+            } catch (e: Exception) { /* ignore */ }
+
+            // 3. Navigation
             val navOptions = navOptions {
-                popUpTo(findNavController().graph.id) {
-                    inclusive = true
-                }
+                popUpTo(findNavController().graph.id) { inclusive = true }
             }
-            
-            try {
-                findNavController().navigate(R.id.login_fragment, null, navOptions)
-            } catch (e: Exception) {
-                findNavController().navigate(R.id.login_fragment)
-            }
+            findNavController().navigate(R.id.login_fragment, null, navOptions)
         }
     }
 

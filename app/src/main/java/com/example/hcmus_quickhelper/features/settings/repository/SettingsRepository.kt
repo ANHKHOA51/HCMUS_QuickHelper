@@ -1,6 +1,8 @@
 package com.example.hcmus_quickhelper.features.settings.repository
 
 import com.example.hcmus_quickhelper.core.auth.UserPreferences
+import com.example.hcmus_quickhelper.core.database.SupabaseClient
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.flow.Flow
 
 class SettingsRepository(private val userPreferences: UserPreferences) {
@@ -18,5 +20,13 @@ class SettingsRepository(private val userPreferences: UserPreferences) {
 
     suspend fun setEmailNotificationsEnabled(enabled: Boolean) {
         userPreferences.setEmailNotificationsEnabled(enabled)
+    }
+
+    suspend fun deleteFcmToken(userId: Int) {
+        SupabaseClient.client.postgrest["fcm_tokens"].delete {
+            filter {
+                eq("user_id", userId)
+            }
+        }
     }
 }

@@ -85,6 +85,12 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         tvLocationName = view.findViewById(R.id.tvLocationName)
         tvLocationAddress = view.findViewById(R.id.tvLocationAddress)
 
+        // Localization
+        btnDate.text = getString(R.string.select_date)
+        btnTime.text = getString(R.string.select_time)
+        confirmBtn.text = getString(R.string.confirm_booking)
+        view.findViewById<TextView>(R.id.tvTitle)?.text = getString(R.string.booking_title)
+
         view.findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             findNavController().navigateUp()
         }
@@ -115,7 +121,7 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         }
 
         viewModel.totalPrice.observe(viewLifecycleOwner) { total ->
-            tvTotalPrice.text = "${total.toLong()}đ"
+            tvTotalPrice.text = getString(R.string.total_price, "${total.toLong()}đ")
         }
     }
 

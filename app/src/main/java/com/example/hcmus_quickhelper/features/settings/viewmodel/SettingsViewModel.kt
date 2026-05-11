@@ -1,5 +1,6 @@
 package com.example.hcmus_quickhelper.features.settings.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hcmus_quickhelper.core.auth.SessionManager
@@ -28,6 +29,19 @@ class SettingsViewModel(
     fun toggleEmailNotifications(enabled: Boolean) {
         viewModelScope.launch {
             repository.setEmailNotificationsEnabled(enabled)
+        }
+    }
+
+    suspend fun clearFcmTokenOnServer() {
+        // Ensure we get the ID before anything clears the session
+        val userId = SessionManager.currentUser.value?.id
+        // Only proceed if userId is valid and not 0 (common default for uninitialized ints)
+        if (userId != null && userId != 0) {
+            try {
+                repository.deleteFcmToken(userId)
+            } catch (e: Exception) {
+                Log.e("SettingsViewModel", "Failed to delete FCM token", e)
+            }
         }
     }
 

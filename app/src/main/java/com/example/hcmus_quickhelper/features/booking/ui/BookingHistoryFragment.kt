@@ -32,6 +32,7 @@ class BookingHistoryFragment : Fragment(R.layout.fragment_booking_history) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBookingHistoryBinding.bind(view)
 
+        setupTabNames()
         setupListeners()
         setupDependencies()
         setupRecyclerView()
@@ -39,6 +40,12 @@ class BookingHistoryFragment : Fragment(R.layout.fragment_booking_history) {
         observeViewModel()
 
         viewModel.loadHistories()
+    }
+
+    private fun setupTabNames() {
+        binding.tvTabOngoing.text = getString(R.string.tab_ongoing)
+        binding.tvTabCompleted.text = getString(R.string.tab_completed)
+        binding.tvTabCancelled.text = getString(R.string.tab_cancelled)
     }
 
     private fun setupListeners() {
