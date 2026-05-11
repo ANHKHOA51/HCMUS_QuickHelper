@@ -1,6 +1,7 @@
 package com.example.hcmus_quickhelper
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             ChatRealtimeManager.connect()
         }
+
+        handleNotification(intent)
 
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
@@ -141,5 +144,35 @@ class MainActivity : AppCompatActivity() {
                 val token = task.result
                 Log.d("FCM_TOKEN", token)
             }
+    }
+
+    private fun handleNotification(intent: Intent?) {
+
+        val screen = intent?.getStringExtra("screen") ?: return
+
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host) as NavHostFragment
+
+        val navController = navHostFragment.navController
+
+        when (screen) {
+
+            "conversations" -> {
+
+                // tránh navigate lại chính nó
+                if (navController.currentDestination?.id
+                    != R.id.chat_list_fragment
+                ) {
+
+                    navController.navigate(R.id.chat_list_fragment)
+                }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        handleNotification(intent)
     }
 }

@@ -39,9 +39,10 @@ object NotificationHelper {
         val pendingIntent = intent?.let {
             PendingIntent.getActivity(
                 context,
-                0,
-                it,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                        PendingIntent.FLAG_IMMUTABLE
             )
         }
 
