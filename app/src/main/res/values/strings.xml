@@ -130,6 +130,8 @@
     <string name="title_post_detail">Post Detail</string>
     <string name="hint_write_comment">Write a comment...</string>
     <string name="label_share">Share</string>
+    <string name="filter_all">All</string>
+    <string name="filter_popular">Popular</string>
 
     <!-- Booking -->
     <string name="title_booking">Book Service</string>
@@ -142,6 +144,11 @@
     <string name="hint_search_address">Search address...</string>
     <string name="label_total_price">Total (Estimated)</string>
     <string name="btn_confirm">Confirm</string>
+    <string name="booking_title">Booking</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
+    <string name="confirm_booking">Confirm</string>
+    <string name="total_price">Total: %1$s</string>
 
     <!-- Booking History -->
     <string name="title_history">History</string>

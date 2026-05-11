@@ -130,6 +130,8 @@
     <string name="title_post_detail">Chi tiết bài đăng</string>
     <string name="hint_write_comment">Viết bình luận...</string>
     <string name="label_share">Chia sẻ</string>
+    <string name="filter_all">Tất cả</string>
+    <string name="filter_popular">Phổ biến</string>
 
     <!-- Booking -->
     <string name="title_booking">Đặt dịch vụ</string>
@@ -142,13 +144,18 @@
     <string name="hint_search_address">Tìm kiếm địa chỉ...</string>
     <string name="label_total_price">Tổng tiền tạm tính</string>
     <string name="btn_confirm">Xác nhận</string>
+    <string name="booking_title">Đặt lịch</string>
+    <string name="select_date">Chọn ngày</string>
+    <string name="select_time">Chọn giờ</string>
+    <string name="confirm_booking">Xác nhận</string>
+    <string name="total_price">Tổng cộng: %1$s</string>
 
     <!-- Booking History -->
     <string name="title_history">Lịch sử</string>
     <string name="title_booking_history">Lịch sử đặt lịch</string>
     <string name="history_subtitle">Theo dõi và quản lý các dịch vụ nhà cửa của bạn.</string>
-    <string name="tab_ongoing">Đang thực hiện</string>
-    <string name="tab_completed">Đã hoàn thành</string>
+    <string name="tab_ongoing">Đang đến</string>
+    <string name="tab_completed">Hoàn thành</string>
     <string name="tab_cancelled">Đã hủy</string>
 
     <!-- Tracking -->

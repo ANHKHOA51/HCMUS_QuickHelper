@@ -36,13 +36,13 @@ class CommunityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupChips()
         setupViewModel()
         setupRecyclerView()
         observeViewModel()
 
         lifecycleScope.launch {
             SessionManager.currentUser
-                // 🔥 thêm dòng này
                 .collect { user ->
                     val newUserId = user?.id ?: -1
 
@@ -54,6 +54,11 @@ class CommunityFragment : Fragment() {
 
     private lateinit var viewModel: CommunityViewModel
     private lateinit var feedAdapter: FeedAdapter
+
+    private fun setupChips() {
+        binding.chipAll.text = getString(R.string.filter_all)
+        binding.chipPopular.text = getString(R.string.filter_popular)
+    }
 
     private fun setupViewModel() {
         val dataSource = CommunityRemoteDataSource()
