@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_login_admin"
             app:destination="@id/admin_management_fragment" />
+        <action
+            android:id="@+id/action_login_to_forgot_password"
+            app:destination="@id/forgot_password_fragment" />
     </fragment>
 
     <fragment
@@ -34,6 +37,15 @@
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_register_to_otp"
+            app:destination="@id/OTPFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgot_password_fragment"
+        android:name="com.example.hcmus_quickhelper.features.auth.ui.ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password">
+        <action
+            android:id="@+id/action_forgot_to_otp"
             app:destination="@id/OTPFragment" />
     </fragment>
 

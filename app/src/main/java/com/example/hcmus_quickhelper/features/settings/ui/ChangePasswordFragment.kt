@@ -94,8 +94,8 @@ class ChangePasswordFragment : Fragment() {
             val newPass = binding.etNewPassword.text.toString()
             val confirmPass = binding.etConfirmPassword.text.toString()
 
-            if (newPass.length < 6) {
-                Toast.makeText(context, getString(R.string.error_password_min_length), Toast.LENGTH_SHORT).show()
+            if (newPass.isEmpty()) {
+                Toast.makeText(context, "Please enter a new password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -126,7 +126,11 @@ class ChangePasswordFragment : Fragment() {
                 is ChangePasswordUiState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(context, getString(R.string.password_updated_success), Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
+                    if (args.isFromOtp) {
+                        findNavController().popBackStack(R.id.login_fragment, false)
+                    } else {
+                        findNavController().popBackStack()
+                    }
                 }
                 is ChangePasswordUiState.Error -> {
                     binding.progressBar.visibility = View.GONE
